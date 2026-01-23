@@ -1,0 +1,1 @@
+npm install @radix-ui/react-dialog @radix-ui/react-label @radix-ui/react-select
