@@ -52,6 +52,7 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
     try {
       const records = await pb.collection("users").getFullList({
         sort: "created",
+        filter: "role != 'Admin'"
       });
 
       const mapped: PBUser[] = records.map((r: any) => ({

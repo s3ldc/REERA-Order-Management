@@ -38,7 +38,13 @@ const AppContent: React.FC = () => {
                 B2B Order Management
               </h1>
               <p className="text-sm text-gray-500">
-                Welcome, {user.name} ({user.role.charAt(0).toUpperCase() + user.role.slice(1)})
+                Welcome, {user.name} (
+                {user.role === "Admin"
+                  ? "Admin"
+                  : user.role === "Salesperson"
+                    ? "Salesperson"
+                    : "Distributor"}
+                )
               </p>
             </div>
             <Button
@@ -55,22 +61,21 @@ const AppContent: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <pre className="bg-yellow-100 p-4 rounded mb-4">
-    DEBUG ROLE: {JSON.stringify(user, null, 2)}
-  </pre>
+        {/* <pre className="bg-yellow-100 p-4 rounded mb-4">
+          DEBUG ROLE: {JSON.stringify(user, null, 2)}
+        </pre> */}
 
-  {user.role === "salesperson" && <SalespersonDashboard />}
-  {user.role === "distributor" && <DistributorDashboard />}
-  {user.role === "admin" && <AdminDashboard />}
+        {user.role === "Salesperson" && <SalespersonDashboard />}
+        {user.role === "Distributor" && <DistributorDashboard />}
+        {user.role === "Admin" && <AdminDashboard />}
 
-  {/* Fallback if role doesn't match */}
-  {!["salesperson", "distributor", "admin"].includes(user.role) && (
-    <div className="text-red-600 font-bold">
-      Unknown role: {String(user.role)}
-    </div>
-  )}
-</main>
-
+        {/* Fallback if role doesn't match */}
+        {!["Salesperson", "Distributor", "Admin"].includes(user.role) && (
+          <div className="text-red-600 font-bold">
+            Unknown role: {String(user.role)}
+          </div>
+        )}
+      </main>
     </div>
   );
 };

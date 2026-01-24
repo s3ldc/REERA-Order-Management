@@ -12,14 +12,14 @@ import {
 } from "./ui/card";
 import { UserPlus } from "lucide-react";
 
-type Role = "salesperson" | "distributor";
+type Role = "Salesperson" | "Distributor";
 
 const Signup: React.FC<{ onBackToLogin: () => void }> = ({ onBackToLogin }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "salesperson" as Role,
+    role: "Salesperson" as Role,
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
