@@ -61,9 +61,9 @@ const AppContent: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <pre className="bg-yellow-100 p-4 rounded mb-4">
+        {/* <pre className="bg-yellow-100 p-4 rounded mb-4">
           DEBUG ROLE: {JSON.stringify(user, null, 2)}
-        </pre>
+        </pre> */}
 
         {user.role === "Salesperson" && <SalespersonDashboard />}
         {user.role === "Distributor" && <DistributorDashboard />}
