@@ -21,7 +21,7 @@ interface AuthContextType {
   signUp: (
     email: string,
     password: string,
-    userData: { name: string; role: "Salesperson" | "Distributor" }
+    userData: { name: string; role: "Salesperson" | "Distributor" },
   ) => Promise<boolean>;
 }
 
@@ -35,20 +35,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // Restore session on page refresh
   useEffect(() => {
-    if (pb.authStore.isValid && pb.authStore.model) {
-      const model = pb.authStore.model as any;
+    const restoreSession = async () => {
+      if (pb.authStore.isValid && pb.authStore.model) {
+        const model = pb.authStore.model as any;
 
-      const mappedUser: User = {
-        id: model.id,
-        email: model.email,
-        name: model.name || model.email,
-        role: model.role, // must be "admin" | "salesperson" | "distributor"
-      };
+        // 🔴 HARD BLOCK SUPERUSER
+        if (model.collectionName === "_superusers") {
+          console.warn("Superuser session detected. Clearing.");
+          pb.authStore.clear();
+          setUser(null);
+          setLoading(false);
+          return;
+        }
 
-      setUser(mappedUser);
-    }
+        try {
+          const fullUser = await pb.collection("users").getOne(model.id);
 
-    setLoading(false);
+          const mappedUser: User = {
+            id: fullUser.id,
+            email: fullUser.email,
+            name: fullUser.name || fullUser.email,
+            role: fullUser.role,
+          };
+
+          setUser(mappedUser);
+        } catch (err) {
+          console.error("Failed to restore session", err);
+          pb.authStore.clear();
+          setUser(null);
+        }
+      }
+
+      setLoading(false);
+    };
+
+    restoreSession();
   }, []);
 
   // --- LOGIN ---
@@ -85,7 +106,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const signUp = async (
     email: string,
     password: string,
-    userData: { name: string; role: "Salesperson" | "Distributor" }
+    userData: { name: string; role: "Salesperson" | "Distributor" },
   ): Promise<boolean> => {
     try {
       await pb.collection("users").create({

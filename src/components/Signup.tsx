@@ -124,8 +124,8 @@ const Signup: React.FC<{ onBackToLogin: () => void }> = ({ onBackToLogin }) => {
                   }
                   className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="salesperson">Salesperson</option>
-                  <option value="distributor">Distributor</option>
+                  <option value="Salesperson">Salesperson</option>
+                  <option value="Distributor">Distributor</option>
                 </select>
               </div>
 
