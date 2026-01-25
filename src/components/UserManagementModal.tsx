@@ -33,12 +33,12 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
   const { toast } = useToast();
 
   const [users, setUsers] = useState<PBUser[]>([]);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newUser, setNewUser] = useState({
-    name: "",
-    email: "",
-    role: "salesperson" as "salesperson" | "distributor",
-  });
+  // const [showAddForm, setShowAddForm] = useState(false);
+  // const [newUser, setNewUser] = useState({
+  //   name: "",
+  //   email: "",
+  //   role: "salesperson" as "salesperson" | "distributor",
+  // });
 
   const [generatedPassword, setGeneratedPassword] = useState("");
   const [showPasswordAlert, setShowPasswordAlert] = useState(false);
@@ -80,50 +80,50 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
   // -------------------------------
   // Admin creates a new user
   // -------------------------------
-  const handleAddUser = async () => {
-    if (!newUser.name || !newUser.email) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
-    }
+  // const handleAddUser = async () => {
+  //   if (!newUser.name || !newUser.email) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Please fill in all fields",
+  //       variant: "destructive",
+  //     });
+  //     return;
+  //   }
 
-    try {
-      const password = generatePassword(10);
+  //   try {
+  //     const password = generatePassword(10);
 
-      await pb.collection("users").create({
-        email: newUser.email,
-        password: password,
-        passwordConfirm: password,
-        name: newUser.name,
-        role: newUser.role,
-      });
+  //     await pb.collection("users").create({
+  //       email: newUser.email,
+  //       password: password,
+  //       passwordConfirm: password,
+  //       name: newUser.name,
+  //       role: newUser.role,
+  //     });
 
-      setGeneratedPassword(password);
-      setCreatedEmail(newUser.email);
-      setShowPasswordAlert(true);
-      setCopied(false);
-      setShowAddForm(false);
+  //     setGeneratedPassword(password);
+  //     setCreatedEmail(newUser.email);
+  //     setShowPasswordAlert(true);
+  //     setCopied(false);
+  //     setShowAddForm(false);
 
-      toast({
-        title: "User Created",
-        description: `${newUser.name} has been created successfully.`,
-      });
+  //     toast({
+  //       title: "User Created",
+  //       description: `${newUser.name} has been created successfully.`,
+  //     });
 
-      setNewUser({ name: "", email: "", role: "salesperson" });
+  //     setNewUser({ name: "", email: "", role: "salesperson" });
 
-      await fetchUsers();
-    } catch (err: any) {
-      console.error(err);
-      toast({
-        title: "Error",
-        description: err.message || "Failed to create user",
-        variant: "destructive",
-      });
-    }
-  };
+  //     await fetchUsers();
+  //   } catch (err: any) {
+  //     console.error(err);
+  //     toast({
+  //       title: "Error",
+  //       description: err.message || "Failed to create user",
+  //       variant: "destructive",
+  //     });
+  //   }
+  // };
 
   // -------------------------------
   // Delete user
@@ -181,9 +181,9 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
                 Manage system users and their roles
               </DialogDescription>
             </div>
-            <Button variant="ghost" size="sm" onClick={onClose}>
+            {/* <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="w-4 h-4" />
-            </Button>
+            </Button> */}
           </div>
         </DialogHeader>
 
@@ -192,17 +192,17 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
             <h3 className="text-lg font-semibold">
               All Users ({users.length})
             </h3>
-            <Button
+            {/* <Button
               onClick={() => setShowAddForm(!showAddForm)}
               className="flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Add User
-            </Button>
+            </Button> */}
           </div>
 
           {/* Password Alert */}
-          {showPasswordAlert && (
+          {/* {showPasswordAlert && (
             <Alert className="bg-blue-50 border-blue-200">
               <AlertDescription className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -239,9 +239,9 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
                 </div>
               </AlertDescription>
             </Alert>
-          )}
+          )} */}
 
-          {showAddForm && (
+          {/* {showAddForm && (
             <div className="bg-slate-50 p-4 rounded-lg space-y-4">
               <h4 className="font-medium">Add New User</h4>
 
@@ -298,7 +298,7 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
                 </Button>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Users List */}
           <div className="space-y-2">
