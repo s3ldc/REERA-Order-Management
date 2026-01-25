@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { generateUUID } from "../utils/uuid";
+import pb from "../lib/pocketbase";
 
 interface Order {
   id: string;
@@ -16,13 +16,15 @@ interface Order {
   status: "Pending" | "Dispatched" | "Delivered";
   payment_status: "Unpaid" | "Paid";
   salesperson_id: string;
-  distributor_id?: number;
-  created_at: string;
+  distributor_id?: string;
+  created: string;
 }
 
 interface OrderContextType {
   orders: Order[];
-  createOrder: (order: Omit<Order, "id" | "created_at">) => Promise<void>;
+  createOrder: (
+    order: Omit<Order, "id" | "created">,
+  ) => Promise<void>;
   updateOrderStatus: (
     orderId: string,
     status: Order["status"],
@@ -40,38 +42,88 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [orders, setOrders] = useState<Order[]>([]);
 
-  const createOrder = async (orderData: Omit<Order, "id" | "created_at">) => {
-    const newOrder: Order = {
-      ...orderData,
-      id: generateUUID(),
-      created_at: new Date().toISOString(),
-    };
+  // 🔹 Fetch orders from PocketBase on load
+  const fetchOrders = async () => {
+    try {
+      const records = await pb.collection("orders").getFullList({
+        sort: "-created",
+        expand: "salesperson_id,distributor_id",
+      });
 
-    setOrders((prev) => [...prev, newOrder]);
+      const mapped: Order[] = records.map((r: any) => ({
+        id: r.id,
+        spa_name: r.spa_name,
+        address: r.address,
+        product_name: r.product_name,
+        quantity: r.quantity,
+        status: r.status,
+        payment_status: r.payment_status,
+        salesperson_id: r.salesperson_id,
+        distributor_id: r.distributor_id,
+        created: r.created,
+      }));
+
+      setOrders(mapped);
+    } catch (err) {
+      console.error("Failed to fetch orders", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  // 🔹 Create order in PocketBase
+  const createOrder = async (
+    orderData: Omit<Order, "id" | "created">,
+  ) => {
+    try {
+      await pb.collection("orders").create({
+        spa_name: orderData.spa_name,
+        address: orderData.address,
+        product_name: orderData.product_name,
+        quantity: orderData.quantity,
+        status: orderData.status,
+        payment_status: orderData.payment_status,
+        salesperson_id: orderData.salesperson_id,
+        distributor_id: orderData.distributor_id || null,
+      });
+
+      await fetchOrders(); // refresh list after create
+    } catch (err) {
+      console.error("Failed to create order", err);
+      throw err;
+    }
   };
 
   const updateOrderStatus = async (
     orderId: string,
     status: Order["status"],
   ) => {
-    setOrders((prev) =>
-      prev.map((order) =>
-        order.id === orderId ? { ...order, status } : order,
-      ),
-    );
+    try {
+      await pb.collection("orders").update(orderId, {
+        status,
+      });
+
+      await fetchOrders();
+    } catch (err) {
+      console.error("Failed to update order status", err);
+    }
   };
 
   const updatePaymentStatus = async (
     orderId: string,
     paymentStatus: Order["payment_status"],
   ) => {
-    setOrders((prev) =>
-      prev.map((order) =>
-        order.id === orderId
-          ? { ...order, payment_status: paymentStatus }
-          : order,
-      ),
-    );
+    try {
+      await pb.collection("orders").update(orderId, {
+        payment_status: paymentStatus,
+      });
+
+      await fetchOrders();
+    } catch (err) {
+      console.error("Failed to update payment status", err);
+    }
   };
 
   return (
@@ -85,7 +137,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useOrderContext = () => {
   const context = useContext(OrderContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useOrderContext must be used within an OrderProvider");
   }
   return context;
