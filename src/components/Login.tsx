@@ -73,8 +73,10 @@ const Login: React.FC<{ onShowSignup: () => void }> = ({ onShowSignup }) => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                     placeholder="Enter your password"
                     required
                     className="pr-10"
