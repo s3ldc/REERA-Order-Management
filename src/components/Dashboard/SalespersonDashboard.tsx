@@ -24,7 +24,7 @@ const SalespersonDashboard: React.FC = () => {
     spa_name: "",
     address: "",
     product_name: "",
-    quantity: "",
+    quantity: 0,
   });
 
   const myOrders =
@@ -36,11 +36,13 @@ const SalespersonDashboard: React.FC = () => {
 
     const qty = Number(formData.quantity);
 
+    // 🔹 Correct validation
     if (
-      !formData.spa_name ||
-      !formData.address ||
-      !formData.product_name ||
-      formData.quantity || qty <= 0
+      !formData.spa_name.trim() ||
+      !formData.address.trim() ||
+      !formData.product_name.trim() ||
+      isNaN(qty) ||
+      qty <= 0
     ) {
       toast({
         title: "Error",
@@ -50,23 +52,33 @@ const SalespersonDashboard: React.FC = () => {
       return;
     }
 
-    await createOrder({
-      spa_name: formData.spa_name,
-      address: formData.address,
-      product_name: formData.product_name,
-      quantity: qty,
-      status: "Pending",
-      payment_status: "Unpaid",
-      salesperson_id: user.id,
-    });
+    try {
+      await createOrder({
+        spa_name: formData.spa_name,
+        address: formData.address,
+        product_name: formData.product_name,
+        quantity: qty,
+        status: "Pending",
+        payment_status: "Unpaid",
+        salesperson_id: user.id,
+      });
 
-    setFormData({ spa_name: "", address: "", product_name: "", quantity: "" });
-    setShowForm(false);
+      setFormData({ spa_name: "", address: "", product_name: "", quantity: 1 });
+      setShowForm(false);
 
-    toast({
-      title: "Success",
-      description: "Order created successfully",
-    });
+      toast({
+        title: "Success",
+        description: "Order created successfully",
+      });
+    } catch (err: any) {
+      console.error("CREATE ORDER ERROR:", err);
+
+      toast({
+        title: "Order Creation Failed",
+        description: err?.message || "Backend rejected order",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -136,19 +148,19 @@ const SalespersonDashboard: React.FC = () => {
                   <Input
                     id="quantity"
                     type="number"
-                    value={formData.quantity}
+                    min="1"
+                    value={formData.quantity === 0 ? "" : formData.quantity}
                     onChange={(e) => {
-                      const value = e.target.value;
+                      const val = e.target.value;
 
-                      // Allow empty field while typing
-                      if (value === "") {
-                        setFormData({ ...formData, quantity: "" });
-                        return;
-                      }
-
-                      // Only allow positive integers
-                      if (/^\d+$/.test(value)) {
-                        setFormData({ ...formData, quantity: value });
+                      // Allow empty while typing
+                      if (val === "") {
+                        setFormData({ ...formData, quantity: 0 });
+                      } else {
+                        const num = Number(val);
+                        if (!isNaN(num)) {
+                          setFormData({ ...formData, quantity: num });
+                        }
                       }
                     }}
                     placeholder="Enter quantity"
