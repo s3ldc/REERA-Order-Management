@@ -52,7 +52,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, onClose }) =
 
   const getDistributorName = (distributorId: number | null) => {
     if (!distributorId) return 'Not Assigned';
-    const distributor = users?.find(u => u.id === distributorId && u.role === 'distributor');
+    const distributor = users?.find(u => u.id === distributorId && u.role === 'Distributor');
     return distributor?.name || 'Unknown';
   };
 

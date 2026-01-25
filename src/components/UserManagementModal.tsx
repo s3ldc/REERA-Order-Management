@@ -24,7 +24,7 @@ interface PBUser {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "salesperson" | "distributor";
+  role: "Admin" | "Salesperson" | "Distributor";
 }
 
 const UserManagementModal: React.FC<UserManagementModalProps> = ({
@@ -52,7 +52,7 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
     try {
       const records = await pb.collection("users").getFullList({
         sort: "created",
-        filter: "role != 'Admin'"
+        filter: "role = 'Salesperson' || role = 'Distributor'",
       });
 
       const mapped: PBUser[] = records.map((r: any) => ({
@@ -74,7 +74,16 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
   };
 
   useEffect(() => {
-    fetchUsers();
+    const waitForAuth = async () => {
+      // wait until authStore is ready
+      if (!pb.authStore.isValid) {
+        return;
+      }
+
+      await fetchUsers();
+    };
+
+    waitForAuth();
   }, []);
 
   // -------------------------------
@@ -161,9 +170,9 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
 
   const getRoleBadge = (role: string) => {
     const variants = {
-      admin: "bg-purple-100 text-purple-800",
-      salesperson: "bg-blue-100 text-blue-800",
-      distributor: "bg-green-100 text-green-800",
+      Admin: "bg-purple-100 text-purple-800",
+      Salesperson: "bg-blue-100 text-blue-800",
+      Distributor: "bg-green-100 text-green-800",
     };
     return (
       <Badge className={variants[role as keyof typeof variants]}>{role}</Badge>

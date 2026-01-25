@@ -18,7 +18,7 @@ const AccountSettings: React.FC = () => {
     distributorId: user?.distributorId?.toString() || '',
   });
 
-  const distributors = users?.filter(u => u.role === 'distributor') || [];
+  const distributors = users?.filter(u => u.role === 'Distributor') || [];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ const AccountSettings: React.FC = () => {
       email: formData.email,
     };
 
-    if (user.role === 'salesperson' && formData.distributorId) {
+    if (user.role === 'Salesperson' && formData.distributorId) {
       updates.distributorId = parseInt(formData.distributorId);
     }
 
@@ -95,7 +95,7 @@ const AccountSettings: React.FC = () => {
           </CardContent>
         </Card>
 
-        {user?.role === 'salesperson' && (
+        {user?.role === 'Salesperson' && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -166,7 +166,7 @@ const AccountSettings: React.FC = () => {
                 <Label className="text-sm font-medium text-slate-600">User ID</Label>
                 <p className="mt-1 text-slate-900 font-mono">#{user?.id}</p>
               </div>
-              {user?.role === 'salesperson' && (
+              {user?.role === 'Salesperson' && (
                 <div>
                   <Label className="text-sm font-medium text-slate-600">Distributor ID</Label>
                   <p className="mt-1 text-slate-900 font-mono">

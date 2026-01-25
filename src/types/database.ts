@@ -1,7 +1,7 @@
 export interface DatabaseUser {
   id: string;
   email: string;
-  role: 'salesperson' | 'distributor' | 'admin';
+  role: 'Salesperson' | 'Distributor' | 'Admin';
   name: string;
   distributor_id?: string;
   created_at: string;
