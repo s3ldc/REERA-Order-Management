@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useOrderContext } from '../../context/OrderContext';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Badge } from '../ui/badge';
-import { Package, Truck, CheckCircle } from 'lucide-react';
-import { useToast } from '../../hooks/useToast';
+import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useOrderContext } from "../../context/OrderContext";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Package, Truck, CheckCircle } from "lucide-react";
+import { useToast } from "../../hooks/useToast";
 
 const DistributorDashboard: React.FC = () => {
   const { user } = useAuth();
   const { orders, updateOrderStatus } = useOrderContext();
   const { toast } = useToast();
 
-  // For demo, show all orders to distributor
-  const assignedOrders = orders || [];
+  const assignedOrders =
+    orders?.filter((o) => o.distributor_id === user?.id) || [];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'Pending':
+      case "Pending":
         return <Package className="w-4 h-4" />;
-      case 'Dispatched':
+      case "Dispatched":
         return <Truck className="w-4 h-4" />;
-      case 'Delivered':
+      case "Delivered":
         return <CheckCircle className="w-4 h-4" />;
       default:
         return <Package className="w-4 h-4" />;
@@ -30,10 +36,10 @@ const DistributorDashboard: React.FC = () => {
 
   const getNextStatus = (currentStatus: string) => {
     switch (currentStatus) {
-      case 'Pending':
-        return 'Dispatched';
-      case 'Dispatched':
-        return 'Delivered';
+      case "Pending":
+        return "Dispatched";
+      case "Dispatched":
+        return "Delivered";
       default:
         return currentStatus;
     }
@@ -44,7 +50,7 @@ const DistributorDashboard: React.FC = () => {
     if (nextStatus !== currentStatus) {
       await updateOrderStatus(orderId, nextStatus as any);
       toast({
-        title: 'Success',
+        title: "Success",
         description: `Order status updated to ${nextStatus}`,
       });
     }
@@ -53,7 +59,9 @@ const DistributorDashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Distributor Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Distributor Dashboard
+        </h1>
         <p className="text-gray-600 mt-1">Manage order deliveries</p>
       </div>
 
@@ -61,12 +69,14 @@ const DistributorDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Orders
+            </CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {assignedOrders.filter(o => o.status === 'Pending').length}
+              {assignedOrders.filter((o) => o.status === "Pending").length}
             </div>
           </CardContent>
         </Card>
@@ -78,7 +88,7 @@ const DistributorDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {assignedOrders.filter(o => o.status === 'Dispatched').length}
+              {assignedOrders.filter((o) => o.status === "Dispatched").length}
             </div>
           </CardContent>
         </Card>
@@ -90,7 +100,7 @@ const DistributorDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {assignedOrders.filter(o => o.status === 'Delivered').length}
+              {assignedOrders.filter((o) => o.status === "Delivered").length}
             </div>
           </CardContent>
         </Card>
@@ -111,29 +121,46 @@ const DistributorDashboard: React.FC = () => {
           ) : (
             <div className="space-y-4">
               {assignedOrders.map((order) => (
-                <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={order.id}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {getStatusIcon(order.status)}
                       <p className="font-medium">{order.spa_name}</p>
                     </div>
-                    <p className="text-sm text-gray-600">{order.product_name} - {order.quantity} units</p>
+                    <p className="text-sm text-gray-600">
+                      {order.product_name} - {order.quantity} units
+                    </p>
                     <p className="text-xs text-gray-500">{order.address}</p>
                     <p className="text-xs text-gray-500">
                       Created: {new Date(order.created).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant={order.status === 'Pending' ? 'secondary' : 'default'}>
+                    <Badge
+                      variant={
+                        order.status === "Pending" ? "secondary" : "default"
+                      }
+                    >
                       {order.status}
                     </Badge>
-                    <Badge variant={order.payment_status === 'Paid' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        order.payment_status === "Paid"
+                          ? "default"
+                          : "secondary"
+                      }
+                    >
                       {order.payment_status}
                     </Badge>
-                    {order.status !== 'Delivered' && (
+                    {order.status !== "Delivered" && (
                       <Button
                         size="sm"
-                        onClick={() => handleStatusUpdate(order.id, order.status)}
+                        onClick={() =>
+                          handleStatusUpdate(order.id, order.status)
+                        }
                       >
                         Mark {getNextStatus(order.status)}
                       </Button>
