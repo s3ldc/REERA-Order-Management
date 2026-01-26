@@ -120,7 +120,7 @@ const DistributorDashboard: React.FC = () => {
                     <p className="text-sm text-gray-600">{order.product_name} - {order.quantity} units</p>
                     <p className="text-xs text-gray-500">{order.address}</p>
                     <p className="text-xs text-gray-500">
-                      Created: {new Date(order.created_at).toLocaleDateString()}
+                      Created: {new Date(order.created).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
