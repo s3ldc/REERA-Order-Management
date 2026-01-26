@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useOrderContext } from "../../context/OrderContext";
 import { Button } from "../ui/button";
@@ -14,6 +14,9 @@ import {
 import { Badge } from "../ui/badge";
 import { Plus, Package } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
+import pb from "../../lib/pocketbase";
+
+
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -25,10 +28,37 @@ const SalespersonDashboard: React.FC = () => {
     address: "",
     product_name: "",
     quantity: 0,
+    distributor_id: "",
   });
+  const [distributors, setDistributors] = useState<
+  { id: string; name: string; email: string }[]
+>([]);
 
   const myOrders =
     orders?.filter((order) => order.salesperson_id === user?.id) || [];
+
+  useEffect(() => {
+    const fetchDistributors = async () => {
+      try {
+        const records = await pb.collection("users").getFullList({
+          filter: 'role = "Distributor"',
+          sort: "name",
+        });
+
+        const mapped = records.map((r: any) => ({
+          id: r.id,
+          name: r.name || r.email,
+          email: r.email,
+        }));
+
+        setDistributors(mapped);
+      } catch (err) {
+        console.error("Failed to fetch distributors", err);
+      }
+    };
+
+    fetchDistributors();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +71,7 @@ const SalespersonDashboard: React.FC = () => {
       !formData.spa_name.trim() ||
       !formData.address.trim() ||
       !formData.product_name.trim() ||
+      !formData.distributor_id ||
       isNaN(qty) ||
       qty <= 0
     ) {
@@ -61,9 +92,10 @@ const SalespersonDashboard: React.FC = () => {
         status: "Pending",
         payment_status: "Unpaid",
         salesperson_id: user.id,
+        distributor_id: formData.distributor_id,
       });
 
-      setFormData({ spa_name: "", address: "", product_name: "", quantity: 1 });
+      setFormData({ spa_name: "", address: "", product_name: "", quantity: 1, distributor_id: "" });
       setShowForm(false);
 
       toast({
@@ -166,6 +198,29 @@ const SalespersonDashboard: React.FC = () => {
                     placeholder="Enter quantity"
                     required
                   />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="distributor">Assign Distributor</Label>
+                  <select
+                    id="distributor"
+                    value={formData.distributor_id}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        distributor_id: e.target.value,
+                      })
+                    }
+                    className="w-full border rounded-md px-3 py-2"
+                    required
+                  >
+                    <option value="">Select a distributor</option>
+                    {distributors.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="flex gap-2">
