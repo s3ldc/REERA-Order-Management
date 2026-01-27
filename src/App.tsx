@@ -30,25 +30,31 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">
-                B2B Order Management
-              </h1>
-              <p className="text-sm text-gray-500">
-                Welcome, {user.name} (
-                {user.role === "Admin"
-                  ? "Admin"
-                  : user.role === "Salesperson"
-                    ? "Salesperson"
-                    : "Distributor"}
-                )
+      <header className="bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          {/* Left: App name + role badge */}
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-semibold text-gray-900">
+              B2B Order Management
+            </h1>
+
+            <span className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">
+              {user.role}
+            </span>
+          </div>
+
+          {/* Right: User info + logout */}
+          <div className="flex items-center gap-4">
+            <div className="text-right leading-tight hidden sm:block">
+              <p className="text-sm font-medium text-gray-800">
+                {user.name || user.email}
               </p>
+              <p className="text-xs text-gray-500">{user.role}</p>
             </div>
+
             <Button
               variant="outline"
+              size="sm"
               onClick={handleLogout}
               className="flex items-center gap-2"
             >
