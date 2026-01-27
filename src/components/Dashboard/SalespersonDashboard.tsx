@@ -342,8 +342,10 @@ const SalespersonDashboard: React.FC = () => {
                           {order.payment_status}
                         </Badge>
                       </td>
-                      <td className="py-2 px-3 text-sm text-gray-500">
-                        {order.distributor_id || "—"}
+                      <td className="py-2 px-3 text-sm text-gray-700">
+                        {order.expand?.distributor_id?.name ||
+                          order.expand?.distributor_id?.email ||
+                          "—"}
                       </td>
                     </tr>
                   ))}

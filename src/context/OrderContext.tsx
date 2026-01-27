@@ -19,6 +19,20 @@ interface Order {
   salesperson_id: string;
   distributor_id?: string;
   created: string;
+
+  // 🔹 PocketBase expand support
+  expand?: {
+    distributor_id?: {
+      id: string;
+      name?: string;
+      email?: string;
+    };
+    salesperson_id?: {
+      id: string;
+      name?: string;
+      email?: string;
+    };
+  };
 }
 
 interface OrderContextType {
@@ -61,6 +75,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
         salesperson_id: r.salesperson_id,
         distributor_id: r.distributor_id,
         created: r.created,
+        expand: r.expand,
       }));
 
       setOrders(mapped);
