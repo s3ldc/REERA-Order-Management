@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useOrderContext } from '../../context/OrderContext';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Badge } from '../ui/badge';
-import { Package, Truck, CheckCircle, DollarSign, Users, Calendar } from 'lucide-react';
-import UserManagementModal from '../UserManagementModal';
-import { useToast } from '../../hooks/useToast';
+import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useOrderContext } from "../../context/OrderContext";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Badge } from "../ui/badge";
+import {
+  Package,
+  Truck,
+  CheckCircle,
+  DollarSign,
+  Users,
+  Calendar,
+} from "lucide-react";
+import UserManagementModal from "../UserManagementModal";
+import { useToast } from "../../hooks/useToast";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -16,25 +29,32 @@ const AdminDashboard: React.FC = () => {
   const { toast } = useToast();
   const [showUserModal, setShowUserModal] = useState(false);
   const [filters, setFilters] = useState({
-    status: 'all',
-    dateFrom: '',
-    dateTo: '',
+    status: "all",
+    dateFrom: "",
+    dateTo: "",
   });
 
-  const filteredOrders = orders?.filter(order => {
-    if (filters.status !== 'all' && order.status !== filters.status) return false;
-    if (filters.dateFrom && new Date(order.created_at) < new Date(filters.dateFrom)) return false;
-    if (filters.dateTo && new Date(order.created_at) > new Date(filters.dateTo)) return false;
-    return true;
-  }) || [];
+  const filteredOrders =
+    orders?.filter((order) => {
+      if (filters.status !== "all" && order.status !== filters.status)
+        return false;
+      if (
+        filters.dateFrom &&
+        new Date(order.created) < new Date(filters.dateFrom)
+      )
+        return false;
+      if (filters.dateTo && new Date(order.created) > new Date(filters.dateTo))
+        return false;
+      return true;
+    }) || [];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'Pending':
+      case "Pending":
         return <Package className="w-4 h-4" />;
-      case 'Dispatched':
+      case "Dispatched":
         return <Truck className="w-4 h-4" />;
-      case 'Delivered':
+      case "Delivered":
         return <CheckCircle className="w-4 h-4" />;
       default:
         return <Package className="w-4 h-4" />;
@@ -43,10 +63,10 @@ const AdminDashboard: React.FC = () => {
 
   const getNextStatus = (currentStatus: string) => {
     switch (currentStatus) {
-      case 'Pending':
-        return 'Dispatched';
-      case 'Dispatched':
-        return 'Delivered';
+      case "Pending":
+        return "Dispatched";
+      case "Dispatched":
+        return "Delivered";
       default:
         return currentStatus;
     }
@@ -57,78 +77,85 @@ const AdminDashboard: React.FC = () => {
     if (nextStatus !== currentStatus) {
       await updateOrderStatus(orderId, nextStatus as any);
       toast({
-        title: 'Success',
+        title: "Success",
         description: `Order status updated to ${nextStatus}`,
       });
     }
   };
 
-  const handlePaymentToggle = async (orderId: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+  const handlePaymentToggle = async (
+    orderId: string,
+    currentStatus: string,
+  ) => {
+    const newStatus = currentStatus === "Paid" ? "Unpaid" : "Paid";
     await updatePaymentStatus(orderId, newStatus as any);
     toast({
-      title: 'Success',
+      title: "Success",
       description: `Payment status updated to ${newStatus}`,
     });
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage all orders and users</p>
+          <p className="text-gray-500 text-sm mt-1">
+            System overview & user management
+          </p>
         </div>
-        <Button onClick={() => setShowUserModal(true)} className="flex items-center gap-2">
+
+        <Button
+          onClick={() => setShowUserModal(true)}
+          className="flex items-center gap-2 self-start md:self-auto"
+        >
           <Users className="w-4 h-4" />
           Manage Users
         </Button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="border border-gray-200 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-500">
+              Total Orders
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{orders?.length || 0}</div>
+            <div className="text-3xl font-bold">{orders?.length || 0}</div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+        <Card className="border border-yellow-200 bg-yellow-50/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-500">Pending</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {orders?.filter(o => o.status === 'Pending').length || 0}
+            <div className="text-3xl font-bold text-yellow-700">
+              {orders?.filter((o) => o.status === "Pending").length || 0}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Paid Orders</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Card className="border border-green-200 bg-green-50/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-500">Paid</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {orders?.filter(o => o.payment_status === 'Paid').length || 0}
+            <div className="text-3xl font-bold text-green-700">
+              {orders?.filter((o) => o.payment_status === "Paid").length || 0}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Delivered</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+        <Card className="border border-blue-200 bg-blue-50/40">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-500">Delivered</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {orders?.filter(o => o.status === 'Delivered').length || 0}
+            <div className="text-3xl font-bold text-blue-700">
+              {orders?.filter((o) => o.status === "Delivered").length || 0}
             </div>
           </CardContent>
         </Card>
@@ -146,7 +173,9 @@ const AdminDashboard: React.FC = () => {
               <select
                 id="status"
                 value={filters.status}
-                onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
                 className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white"
               >
                 <option value="all">All</option>
@@ -161,7 +190,9 @@ const AdminDashboard: React.FC = () => {
                 id="dateFrom"
                 type="date"
                 value={filters.dateFrom}
-                onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, dateFrom: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -170,7 +201,9 @@ const AdminDashboard: React.FC = () => {
                 id="dateTo"
                 type="date"
                 value={filters.dateTo}
-                onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, dateTo: e.target.value })
+                }
               />
             </div>
           </div>
@@ -178,8 +211,8 @@ const AdminDashboard: React.FC = () => {
       </Card>
 
       {/* Orders List */}
-      <Card>
-        <CardHeader>
+      <Card className="border-2 border-gray-200 shadow-md">
+        <CardHeader className="bg-gray-50 rounded-t-lg">
           <CardTitle>All Orders</CardTitle>
           <CardDescription>Manage all system orders</CardDescription>
         </CardHeader>
@@ -190,45 +223,80 @@ const AdminDashboard: React.FC = () => {
               <p className="text-gray-600">No orders found</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {filteredOrders.map((order) => (
-                <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      {getStatusIcon(order.status)}
-                      <p className="font-medium">{order.spa_name}</p>
-                    </div>
-                    <p className="text-sm text-gray-600">{order.product_name} - {order.quantity} units</p>
-                    <p className="text-xs text-gray-500">{order.address}</p>
-                    <p className="text-xs text-gray-500">
-                      Created: {new Date(order.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={order.status === 'Pending' ? 'secondary' : 'default'}>
-                      {order.status}
-                    </Badge>
-                    <Badge variant={order.payment_status === 'Paid' ? 'default' : 'secondary'}>
-                      {order.payment_status}
-                    </Badge>
-                    {order.status !== 'Delivered' && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleStatusUpdate(order.id, order.status)}
-                      >
-                        Mark {getNextStatus(order.status)}
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handlePaymentToggle(order.id, order.payment_status)}
-                    >
-                      {order.payment_status === 'Paid' ? 'Mark Unpaid' : 'Mark Paid'}
-                    </Button>
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b bg-gray-50 text-left text-sm text-gray-600">
+                    <th className="py-2 px-3">Spa</th>
+                    <th className="py-2 px-3">Product</th>
+                    <th className="py-2 px-3">Qty</th>
+                    <th className="py-2 px-3">Status</th>
+                    <th className="py-2 px-3">Payment</th>
+                    <th className="py-2 px-3">Created</th>
+                    <th className="py-2 px-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredOrders.map((order) => (
+                    <tr key={order.id} className="border-b hover:bg-gray-50">
+                      <td className="py-2 px-3 font-medium">
+                        {order.spa_name}
+                      </td>
+                      <td className="py-2 px-3 text-sm text-gray-600">
+                        {order.product_name}
+                      </td>
+                      <td className="py-2 px-3">{order.quantity}</td>
+                      <td className="py-2 px-3">
+                        <Badge
+                          variant={
+                            order.status === "Pending" ? "secondary" : "default"
+                          }
+                        >
+                          {order.status}
+                        </Badge>
+                      </td>
+                      <td className="py-2 px-3">
+                        <Badge
+                          variant={
+                            order.payment_status === "Paid"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
+                          {order.payment_status}
+                        </Badge>
+                      </td>
+                      <td className="py-2 px-3 text-sm text-gray-500">
+                        {new Date(order.created).toLocaleDateString()}
+                      </td>
+                      <td className="py-2 px-3 text-right space-x-2">
+                        {order.status !== "Delivered" && (
+                          <Button
+                            size="sm"
+                            onClick={() =>
+                              handleStatusUpdate(order.id, order.status)
+                            }
+                          >
+                            Mark {getNextStatus(order.status)}
+                          </Button>
+                        )}
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            handlePaymentToggle(order.id, order.payment_status)
+                          }
+                        >
+                          {order.payment_status === "Paid"
+                            ? "Mark Unpaid"
+                            : "Mark Paid"}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </CardContent>
