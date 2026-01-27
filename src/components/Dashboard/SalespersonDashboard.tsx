@@ -137,39 +137,37 @@ const SalespersonDashboard: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="border border-blue-200 bg-blue-50/40">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">
+            <CardTitle className="text-sm text-gray-500">
               Total Orders
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{myOrders.length}</div>
+            <div className="text-3xl font-bold text-blue-700">
+              {myOrders.length}
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-yellow-200 bg-yellow-50/40">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">
-              Pending
-            </CardTitle>
+            <CardTitle className="text-sm text-gray-500">Pending</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-yellow-700">
               {myOrders.filter((o) => o.status === "Pending").length}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-green-200 bg-green-50/40">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">
-              Paid
-            </CardTitle>
+            <CardTitle className="text-sm text-gray-500">Paid</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-green-700">
               {myOrders.filter((o) => o.payment_status === "Paid").length}
             </div>
           </CardContent>
@@ -310,6 +308,7 @@ const SalespersonDashboard: React.FC = () => {
                     <th className="py-2 px-3">Status</th>
                     <th className="py-2 px-3">Payment</th>
                     <th className="py-2 px-3">Distributor</th>
+                    <th className="py-2 px-3">Created</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -346,6 +345,9 @@ const SalespersonDashboard: React.FC = () => {
                         {order.expand?.distributor_id?.name ||
                           order.expand?.distributor_id?.email ||
                           "—"}
+                      </td>
+                      <td className="py-2 px-3 text-sm text-gray-500">
+                        {new Date(order.created).toLocaleDateString()}
                       </td>
                     </tr>
                   ))}
