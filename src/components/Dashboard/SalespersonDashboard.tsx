@@ -16,8 +16,6 @@ import { Plus, Package } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import pb from "../../lib/pocketbase";
 
-
-
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
   const { orders, createOrder } = useOrderContext();
@@ -31,8 +29,8 @@ const SalespersonDashboard: React.FC = () => {
     distributor_id: "",
   });
   const [distributors, setDistributors] = useState<
-  { id: string; name: string; email: string }[]
->([]);
+    { id: string; name: string; email: string }[]
+  >([]);
 
   const myOrders =
     orders?.filter((order) => order.salesperson_id === user?.id) || [];
@@ -95,7 +93,13 @@ const SalespersonDashboard: React.FC = () => {
         distributor_id: formData.distributor_id,
       });
 
-      setFormData({ spa_name: "", address: "", product_name: "", quantity: 1, distributor_id: "" });
+      setFormData({
+        spa_name: "",
+        address: "",
+        product_name: "",
+        quantity: 1,
+        distributor_id: "",
+      });
       setShowForm(false);
 
       toast({
@@ -115,18 +119,61 @@ const SalespersonDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Sales Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage your orders</p>
+          <p className="text-gray-500 text-sm mt-1">
+            Welcome back, {user?.name || user?.email}
+          </p>
         </div>
+
         <Button
-          onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2"
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 self-start md:self-auto"
         >
           <Plus className="w-4 h-4" />
           New Order
         </Button>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">
+              Total Orders
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{myOrders.length}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">
+              Pending
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {myOrders.filter((o) => o.status === "Pending").length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">
+              Paid
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {myOrders.filter((o) => o.payment_status === "Paid").length}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Order Form */}
@@ -239,8 +286,8 @@ const SalespersonDashboard: React.FC = () => {
       )}
 
       {/* Orders List */}
-      <Card>
-        <CardHeader>
+      <Card className="border-2 border-blue-100 shadow-md">
+        <CardHeader className="bg-gray-50 rounded-t-lg">
           <CardTitle>My Orders</CardTitle>
           <CardDescription>Orders you have created</CardDescription>
         </CardHeader>
@@ -253,39 +300,55 @@ const SalespersonDashboard: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {myOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
-                >
-                  <div>
-                    <p className="font-medium">{order.spa_name}</p>
-                    <p className="text-sm text-gray-600">
-                      {order.product_name} - {order.quantity} units
-                    </p>
-                    <p className="text-xs text-gray-500">{order.address}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant={
-                        order.status === "Pending" ? "secondary" : "default"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                    <Badge
-                      variant={
-                        order.payment_status === "Paid"
-                          ? "default"
-                          : "secondary"
-                      }
-                    >
-                      {order.payment_status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b bg-gray-50 text-left text-sm text-gray-600">
+                    <th className="py-2 px-3">Spa</th>
+                    <th className="py-2 px-3">Product</th>
+                    <th className="py-2 px-3">Qty</th>
+                    <th className="py-2 px-3">Status</th>
+                    <th className="py-2 px-3">Payment</th>
+                    <th className="py-2 px-3">Distributor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {myOrders.map((order) => (
+                    <tr key={order.id} className="border-b hover:bg-gray-50">
+                      <td className="py-2 px-3 font-medium">
+                        {order.spa_name}
+                      </td>
+                      <td className="py-2 px-3 text-sm text-gray-600">
+                        {order.product_name}
+                      </td>
+                      <td className="py-2 px-3">{order.quantity}</td>
+                      <td className="py-2 px-3">
+                        <Badge
+                          variant={
+                            order.status === "Pending" ? "secondary" : "default"
+                          }
+                        >
+                          {order.status}
+                        </Badge>
+                      </td>
+                      <td className="py-2 px-3">
+                        <Badge
+                          variant={
+                            order.payment_status === "Paid"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
+                          {order.payment_status}
+                        </Badge>
+                      </td>
+                      <td className="py-2 px-3 text-sm text-gray-500">
+                        {order.distributor_id || "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </CardContent>
