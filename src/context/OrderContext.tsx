@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import pb from "../lib/pocketbase";
+import { useAuth } from "./AuthContext";
 
 interface Order {
   id: string;
@@ -22,9 +23,7 @@ interface Order {
 
 interface OrderContextType {
   orders: Order[];
-  createOrder: (
-    order: Omit<Order, "id" | "created">,
-  ) => Promise<void>;
+  createOrder: (order: Omit<Order, "id" | "created">) => Promise<void>;
   updateOrderStatus: (
     orderId: string,
     status: Order["status"],
@@ -41,6 +40,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const { user, loading } = useAuth();
 
   // 🔹 Fetch orders from PocketBase on load
   const fetchOrders = async () => {
@@ -70,13 +70,18 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
+    // Wait until auth is fully restored and user exists
+    if (loading) return;
+    if (!user) {
+      setOrders([]);
+      return;
+    }
+
     fetchOrders();
-  }, []);
+  }, [loading, user]);
 
   // 🔹 Create order in PocketBase
-  const createOrder = async (
-    orderData: Omit<Order, "id" | "created">,
-  ) => {
+  const createOrder = async (orderData: Omit<Order, "id" | "created">) => {
     try {
       await pb.collection("orders").create({
         spa_name: orderData.spa_name,
