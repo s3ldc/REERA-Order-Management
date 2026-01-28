@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import pb from "../lib/pocketbase";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
-import { UserPlus, Mail, Lock, Eye, EyeOff, ArrowRight, User, Briefcase } from "lucide-react";
+import { UserPlus, Mail, Lock, Eye, EyeOff, ArrowRight, User, Briefcase, Zap, ShieldCheck } from "lucide-react";
 import { cn } from "../lib/utils";
+import { Button } from "./ui/button";
 
 type Role = "Salesperson" | "Distributor";
 
@@ -10,14 +11,13 @@ interface SignupProps {
   onBackToLogin: () => void;
 }
 
-// Reusable custom input for the glass theme
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       type={type}
       className={cn(
-        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-10 w-full rounded-lg border bg-transparent px-3 py-1 text-sm shadow transition outline-none",
-        "focus-visible:border-white/30 focus-visible:ring-2 focus-visible:ring-white/20",
+        "flex h-11 w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-sm text-white transition-all outline-none",
+        "placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10",
         className
       )}
       {...props}
@@ -37,11 +37,10 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // 3D card effect logic
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
+  const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
+  const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -69,157 +68,164 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
         role: formData.role,
       });
 
-      setSuccess("Account created successfully!");
-      // Optional: auto redirect after success
+      setSuccess("Protocol Accepted. Redirecting to terminal...");
       setTimeout(onBackToLogin, 2000);
     } catch (err: any) {
-      setError(err.message || "Signup failed");
+      setError(err.message || "Credential registration failed");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-screen bg-black relative overflow-hidden flex items-center justify-center py-10">
-      {/* Background Gradient matching Login */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-500/40 via-purple-700/50 to-black" />
+    <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
+      
+      {/* Left Decoration - Brand Side */}
+      <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-slate-800/50">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-emerald-500/5" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px]" />
+        
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="bg-indigo-600 p-2 rounded-lg shadow-xl shadow-indigo-500/20">
+            <Zap className="w-6 h-6 text-white fill-white" />
+          </div>
+          <span className="text-xl font-black text-white uppercase tracking-tighter">Core OS</span>
+        </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full max-w-sm relative z-10"
-        style={{ perspective: 1500 }}
-      >
+        <div className="relative z-10">
+          <h2 className="text-5xl font-extrabold text-white leading-[1.1] tracking-tight">
+            Join the <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400">
+              Future of B2B
+            </span>
+          </h2>
+          <p className="mt-6 text-slate-400 text-lg max-w-md leading-relaxed">
+            Create your institutional account to begin managing inventory, 
+            tracking distribution cycles, and scaling your sales operations.
+          </p>
+        </div>
+
+        <div className="relative z-10 flex items-center gap-6 text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">
+          <span>Institutional Registration</span>
+          <div className="h-1 w-1 bg-slate-700 rounded-full" />
+          <span>v2.0 Stable</span>
+        </div>
+      </div>
+
+      {/* Right Content - Form Side */}
+      <div className="flex-1 flex items-center justify-center p-6 relative overflow-y-auto">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+            <div className="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-emerald-500/20 rounded-full blur-[80px]" />
+        </div>
+
         <motion.div
-          className="relative"
-          style={{ rotateX, rotateY }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-md"
+          style={{ perspective: 1200 }}
         >
-          <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/[0.05] shadow-2xl">
-            
-            {/* Header */}
-            <div className="text-center space-y-1 mb-6">
-              <div className="mx-auto w-10 h-10 rounded-full border border-white/10 flex items-center justify-center">
-                <UserPlus className="w-5 h-5 text-white" />
+          <motion.div
+            style={{ rotateX, rotateY }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-10 border border-slate-800 shadow-2xl"
+          >
+            <div className="mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-4">
+                <UserPlus className="w-3 h-3" />
+                New Registration
               </div>
-              <h1 className="text-xl font-bold text-white">Create Account</h1>
-              <p className="text-white/60 text-xs">Join B2B Order Management</p>
+              <h3 className="text-3xl font-bold text-white tracking-tight">Create Profile</h3>
+              <p className="text-slate-500 text-sm mt-2 font-medium">Initialize your system credentials.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Full Name */}
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                <Input
-                  type="text"
-                  placeholder="Full Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                  required
-                />
+              <div className="space-y-1.5">
+                <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">Full Name</label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+                  <Input
+                    type="text"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="pl-12"
+                    required
+                  />
+                </div>
               </div>
 
-              {/* Email */}
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                <Input
-                  type="email"
-                  placeholder="Email address"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                  required
-                />
+              <div className="space-y-1.5">
+                <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">Work Email</label>
+                <div className="relative group">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+                  <Input
+                    type="email"
+                    placeholder="name@company.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="pl-12"
+                    required
+                  />
+                </div>
               </div>
 
-              {/* Password */}
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="pl-10 pr-10 bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+              <div className="space-y-1.5">
+                <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">Password</label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="pl-12 pr-12"
+                    required
+                  />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors">
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
-              {/* Role Selection */}
-              <div className="relative">
-                <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
-                <select
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
-                  className="w-full h-10 pl-10 pr-3 rounded-lg border border-white/10 bg-white/5 text-white text-sm outline-none transition focus:ring-2 focus:ring-white/20 appearance-none"
-                >
-                  <option className="bg-zinc-900" value="Salesperson">Salesperson</option>
-                  <option className="bg-zinc-900" value="Distributor">Distributor</option>
-                </select>
+              <div className="space-y-1.5">
+                <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">Operational Role</label>
+                <div className="relative group">
+                  <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors pointer-events-none" />
+                  <select
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
+                    className="flex h-11 w-full rounded-xl border border-slate-800 bg-slate-900/50 pl-12 pr-4 py-2 text-sm text-white transition-all outline-none appearance-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 font-bold"
+                  >
+                    <option className="bg-slate-900" value="Salesperson">Salesperson</option>
+                    <option className="bg-slate-900" value="Distributor">Distributor</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Feedback Messages */}
-              {error && <div className="text-red-400 text-xs text-center">{error}</div>}
-              {success && <div className="text-emerald-400 text-xs text-center">{success}</div>}
+              {error && <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-bold text-center animate-in fade-in slide-in-from-top-1">{error}</div>}
+              {success && <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded-xl text-xs font-bold text-center animate-in fade-in slide-in-from-top-1">{success}</div>}
 
-              {/* Submit Button */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full mt-2"
+                className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2 mt-4"
               >
-                <div className="relative overflow-hidden bg-white text-black font-medium h-10 rounded-lg flex items-center justify-center">
-                  <AnimatePresence mode="wait">
-                    {isLoading ? (
-                      <motion.div
-                        key="loading"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="w-4 h-4 border-2 border-black/70 border-t-transparent rounded-full animate-spin"
-                      />
-                    ) : (
-                      <motion.span
-                        key="text"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex items-center gap-1 text-sm font-bold"
-                      >
-                        Create Account
-                        <ArrowRight className="w-3 h-3" />
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.button>
+                {isLoading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <>Register Account <ArrowRight className="w-4 h-4" /></>}
+              </Button>
+            </form>
 
-              {/* Back to Login */}
-              <p className="text-center text-xs text-white/60 mt-4">
-                Already have an account?{" "}
-                <button
-                  type="button"
-                  onClick={onBackToLogin}
-                  className="text-white hover:underline font-medium"
-                >
-                  Sign in
+            <div className="mt-8 pt-6 border-t border-slate-800 text-center">
+              <p className="text-xs text-slate-500 font-medium">
+                Already registered?{" "}
+                <button type="button" onClick={onBackToLogin} className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors ml-1">
+                  Access Terminal
                 </button>
               </p>
-            </form>
-          </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 };
