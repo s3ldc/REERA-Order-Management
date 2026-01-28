@@ -8,13 +8,15 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Badge } from "./ui/badge";
-import { Alert, AlertDescription } from "./ui/alert";
-import { Trash2, Plus, X, Copy, Check } from "lucide-react";
+import { 
+  Trash2, 
+  X, 
+  Mail, 
+  UserCircle2,
+  Users
+} from "lucide-react";
 import { useToast } from "../hooks/useToast";
-import { generatePassword } from "../utils/password";
 
 interface UserManagementModalProps {
   onClose: () => void;
@@ -27,312 +29,129 @@ interface PBUser {
   role: "Admin" | "Salesperson" | "Distributor";
 }
 
-const UserManagementModal: React.FC<UserManagementModalProps> = ({
-  onClose,
-}) => {
+const UserManagementModal: React.FC<UserManagementModalProps> = ({ onClose }) => {
   const { toast } = useToast();
-
   const [users, setUsers] = useState<PBUser[]>([]);
-  // const [showAddForm, setShowAddForm] = useState(false);
-  // const [newUser, setNewUser] = useState({
-  //   name: "",
-  //   email: "",
-  //   role: "salesperson" as "salesperson" | "distributor",
-  // });
 
-  const [generatedPassword, setGeneratedPassword] = useState("");
-  const [showPasswordAlert, setShowPasswordAlert] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [createdEmail, setCreatedEmail] = useState("");
-
-  // -------------------------------
-  // Fetch all users from PocketBase
-  // -------------------------------
   const fetchUsers = async () => {
     try {
       const records = await pb.collection("users").getFullList({
         sort: "created",
         filter: "role = 'Salesperson' || role = 'Distributor'",
       });
-
       const mapped: PBUser[] = records.map((r: any) => ({
         id: r.id,
         email: r.email,
         name: r.name,
         role: r.role,
       }));
-
       setUsers(mapped);
     } catch (err) {
       console.error("Failed to fetch users", err);
-      toast({
-        title: "Error",
-        description: "Failed to load users",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to load users", variant: "destructive" });
     }
   };
 
   useEffect(() => {
-    const waitForAuth = async () => {
-      // wait until authStore is ready
-      if (!pb.authStore.isValid) {
-        return;
-      }
-
-      await fetchUsers();
-    };
-
-    waitForAuth();
+    if (pb.authStore.isValid) fetchUsers();
   }, []);
 
-  // -------------------------------
-  // Admin creates a new user
-  // -------------------------------
-  // const handleAddUser = async () => {
-  //   if (!newUser.name || !newUser.email) {
-  //     toast({
-  //       title: "Error",
-  //       description: "Please fill in all fields",
-  //       variant: "destructive",
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-  //     const password = generatePassword(10);
-
-  //     await pb.collection("users").create({
-  //       email: newUser.email,
-  //       password: password,
-  //       passwordConfirm: password,
-  //       name: newUser.name,
-  //       role: newUser.role,
-  //     });
-
-  //     setGeneratedPassword(password);
-  //     setCreatedEmail(newUser.email);
-  //     setShowPasswordAlert(true);
-  //     setCopied(false);
-  //     setShowAddForm(false);
-
-  //     toast({
-  //       title: "User Created",
-  //       description: `${newUser.name} has been created successfully.`,
-  //     });
-
-  //     setNewUser({ name: "", email: "", role: "salesperson" });
-
-  //     await fetchUsers();
-  //   } catch (err: any) {
-  //     console.error(err);
-  //     toast({
-  //       title: "Error",
-  //       description: err.message || "Failed to create user",
-  //       variant: "destructive",
-  //     });
-  //   }
-  // };
-
-  // -------------------------------
-  // Delete user
-  // -------------------------------
   const handleDeleteUser = async (userId: string) => {
     try {
       await pb.collection("users").delete(userId);
-
-      toast({
-        title: "Success",
-        description: "User deleted successfully",
-      });
-
+      toast({ title: "Success", description: "User removed from system" });
       await fetchUsers();
     } catch (err: any) {
-      console.error(err);
-      toast({
-        title: "Error",
-        description: "Failed to delete user",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to delete user", variant: "destructive" });
     }
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(generatedPassword);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-
-    toast({
-      title: "Copied",
-      description: "Password copied to clipboard",
-    });
   };
 
   const getRoleBadge = (role: string) => {
     const variants = {
-      Admin: "bg-purple-100 text-purple-800",
-      Salesperson: "bg-blue-100 text-blue-800",
-      Distributor: "bg-green-100 text-green-800",
+      Admin: "bg-purple-100 text-purple-700 border-purple-200",
+      Salesperson: "bg-blue-100 text-blue-700 border-blue-200",
+      Distributor: "bg-emerald-100 text-emerald-700 border-emerald-200",
     };
     return (
-      <Badge className={variants[role as keyof typeof variants]}>{role}</Badge>
+      <Badge variant="outline" className={`font-bold border shadow-sm ${variants[role as keyof typeof variants]}`}>
+        {role}
+      </Badge>
     );
   };
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <div className="flex justify-between items-center">
-            <div>
-              <DialogTitle>User Management</DialogTitle>
-              <DialogDescription>
-                Manage system users and their roles
-              </DialogDescription>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-none shadow-2xl bg-[#FAFBFC] rounded-3xl p-0">
+        
+        {/* Header */}
+        <DialogHeader className="p-8 bg-white border-b border-slate-100 rounded-t-3xl sticky top-0 z-10">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-4">
+              <div className="bg-indigo-600 p-3 rounded-2xl shadow-lg shadow-indigo-200">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <DialogTitle className="text-2xl font-bold text-slate-900">User Intelligence</DialogTitle>
+                <DialogDescription className="text-slate-500 font-medium">
+                  Review and manage institutional access roles
+                </DialogDescription>
+              </div>
             </div>
-            {/* <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button> */}
+            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-slate-100">
+              <X className="w-5 h-5 text-slate-400" />
+            </Button>
           </div>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="p-8 space-y-8">
+          
+          {/* Top Actions */}
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">
-              All Users ({users.length})
-            </h3>
-            {/* <Button
-              onClick={() => setShowAddForm(!showAddForm)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Add User
-            </Button> */}
+            <div className="flex items-center gap-2">
+               <h3 className="text-lg font-extrabold text-slate-800">Directory</h3>
+               <Badge variant="secondary" className="bg-slate-200 text-slate-600 border-none px-2.5 font-bold">
+                 {users.length} Total
+               </Badge>
+            </div>
           </div>
 
-          {/* Password Alert */}
-          {/* {showPasswordAlert && (
-            <Alert className="bg-blue-50 border-blue-200">
-              <AlertDescription className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-blue-900">
-                      New User Credentials
-                    </p>
-                    <p className="text-sm text-blue-800">
-                      <strong>Email:</strong> {createdEmail}
-                      <br />
-                      <strong>Password:</strong>{" "}
-                      <span className="font-mono bg-blue-100 px-2 py-1 rounded">
-                        {generatedPassword}
-                      </span>
-                    </p>
-                    <p className="text-xs text-blue-700 mt-1">
-                      Please save these credentials securely. This will not be
-                      shown again.
-                    </p>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={copyToClipboard}
-                    className="flex items-center gap-2"
-                  >
-                    {copied ? (
-                      <Check className="w-4 h-4" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                    {copied ? "Copied!" : "Copy"}
-                  </Button>
-                </div>
-              </AlertDescription>
-            </Alert>
-          )} */}
-
-          {/* {showAddForm && (
-            <div className="bg-slate-50 p-4 rounded-lg space-y-4">
-              <h4 className="font-medium">Add New User</h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label>Name</Label>
-                  <Input
-                    value={newUser.name}
-                    onChange={(e) =>
-                      setNewUser({ ...newUser, name: e.target.value })
-                    }
-                    placeholder="Enter name"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Email</Label>
-                  <Input
-                    type="email"
-                    value={newUser.email}
-                    onChange={(e) =>
-                      setNewUser({ ...newUser, email: e.target.value })
-                    }
-                    placeholder="Enter email"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Role</Label>
-                  <select
-                    value={newUser.role}
-                    onChange={(e) =>
-                      setNewUser({ ...newUser, role: e.target.value as any })
-                    }
-                    className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white"
-                  >
-                    <option value="salesperson">Salesperson</option>
-                    <option value="distributor">Distributor</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="bg-amber-50 p-3 rounded-md">
-                <p className="text-sm text-amber-800">
-                  <strong>Note:</strong> A secure password will be automatically
-                  generated and shown once.
-                </p>
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={handleAddUser}>Add User</Button>
-                <Button variant="outline" onClick={() => setShowAddForm(false)}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          )} */}
-
           {/* Users List */}
-          <div className="space-y-2">
-            {users.map((user) => (
-              <div
-                key={user.id}
-                className="flex items-center justify-between p-4 border rounded-lg"
-              >
-                <div>
-                  <p className="font-medium">{user.name}</p>
-                  <p className="text-sm text-gray-600">{user.email}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {users.length > 0 ? (
+              users.map((user) => (
+                <div
+                  key={user.id}
+                  className="group flex items-center justify-between p-5 bg-white border border-slate-100 rounded-2xl transition-all hover:shadow-lg hover:shadow-slate-200/50 hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-colors border border-slate-100">
+                      <UserCircle2 className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 leading-none mb-1.5">{user.name}</p>
+                      <p className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5 uppercase tracking-tight">
+                        <Mail className="w-3 h-3" /> {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {getRoleBadge(user.role)}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteUser(user.id)}
+                      className="h-9 w-9 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {getRoleBadge(user.role)}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDeleteUser(user.id)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-slate-200">
+                <p className="text-slate-400 font-medium">No institutional members found.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </DialogContent>
