@@ -8,13 +8,12 @@ import SalespersonDashboard from "./components/Dashboard/SalespersonDashboard";
 import DistributorDashboard from "./components/Dashboard/DistributorDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
 
-  // Not logged in → show Login or Signup
   if (!user) {
     return showSignup ? (
       <Signup onBackToLogin={() => setShowSignup(false)} />
@@ -28,37 +27,49 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Left: App name + role badge */}
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-semibold text-gray-900">
-              B2B Order Management
-            </h1>
-
-            <span className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">
-              {user.role}
-            </span>
+    <div className="min-h-screen bg-[#FAFBFC]">
+      {/* Premium Sticky Header */}
+      <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
+          
+          {/* Left: Branding */}
+          <div className="flex items-center gap-4">
+            <div className="bg-indigo-600 p-2 rounded-xl">
+               <LayoutDashboard className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-sm font-black text-slate-900 uppercase tracking-tighter leading-none">
+                B2B Order Hub
+              </h1>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                Enterprise v2.0
+              </span>
+            </div>
           </div>
 
-          {/* Right: User info + logout */}
-          <div className="flex items-center gap-4">
-            <div className="text-right leading-tight hidden sm:block">
-              <p className="text-sm font-medium text-gray-800">
-                {user.name || user.email}
-              </p>
-              <p className="text-xs text-gray-500">{user.role}</p>
+          {/* Right: User Profile & Logout */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 pr-6 border-r border-slate-100 hidden sm:flex">
+              <div className="text-right">
+                <p className="text-sm font-bold text-slate-900 leading-none">
+                  {user.name || user.email?.split('@')[0]}
+                </p>
+                <Badge className="mt-1 h-4 text-[9px] bg-slate-100 text-slate-500 border-none font-bold uppercase tracking-tight">
+                  {user.role}
+                </Badge>
+              </div>
+              <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-50 to-blue-50 flex items-center justify-center border border-slate-100">
+                <UserCircle className="w-6 h-6 text-indigo-500" />
+              </div>
             </div>
 
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2"
+              className="group text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold text-xs flex items-center gap-2"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Logout
             </Button>
           </div>
@@ -66,25 +77,32 @@ const AppContent: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* <pre className="bg-yellow-100 p-4 rounded mb-4">
-          DEBUG ROLE: {JSON.stringify(user, null, 2)}
-        </pre> */}
-
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {user.role === "Salesperson" && <SalespersonDashboard />}
         {user.role === "Distributor" && <DistributorDashboard />}
         {user.role === "Admin" && <AdminDashboard />}
 
-        {/* Fallback if role doesn't match */}
+        {/* Fallback */}
         {!["Salesperson", "Distributor", "Admin"].includes(user.role) && (
-          <div className="text-red-600 font-bold">
-            Unknown role: {String(user.role)}
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="text-center p-10 bg-white rounded-3xl shadow-xl border border-red-50">
+              <p className="text-red-500 font-black uppercase text-xs tracking-widest mb-2">Access Denied</p>
+              <h2 className="text-2xl font-bold text-slate-900">Unknown Role: {String(user.role)}</h2>
+              <p className="text-slate-500 mt-2">Please contact system administrator.</p>
+            </div>
           </div>
         )}
       </main>
     </div>
   );
 };
+
+// Sub-component helper for the badge inside header if you don't want to import Badge from UI
+const Badge = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <span className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 ${className}`}>
+    {children}
+  </span>
+);
 
 const App: React.FC = () => {
   return (
