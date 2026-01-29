@@ -74,4 +74,110 @@ A role-based **B2B Order Management System** built with **React, PocketBase, and
 
 ## 📁 Project Structure
 
+```
+src/
+│
+├── components/
+│ ├── Dashboard/
+│ │ ├── SalespersonDashboard.tsx
+│ │ ├── DistributorDashboard.tsx
+│ │ └── AdminDashboard.tsx
+│ ├── ui/ # Reusable UI components
+│ ├── Login.tsx
+│ └── Signup.tsx
+│
+├── context/
+│ ├── AuthContext.tsx
+│ └── OrderContext.tsx
+│
+├── hooks/
+│ └── useToast.tsx
+│
+├── lib/
+│ └── pocketbase.ts
+│
+└── App.tsx
 
+```
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone the Repository
+```bash
+git clone <your-repo-url>
+cd <project-folder>
+```
+---
+
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
+
+---
+
+### 3️⃣ Start Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+### 🗄️ PocketBase Setup
+
+1.  Download and run **PocketBase**
+2.  Create collections:
+    - `users`
+    - `orders`
+3. Required fields for `orders`:
+   - `spa_name`
+   - `address`
+   - `product_name`
+   - `quantity`
+   - `status`
+   - `payment_status`
+   - `salesperson_id` (relation → users)
+   - `distributor_id` (relation → users)
+4. Assign roles in `users` collection:
+   - `Admin`
+   - `Salesperson`
+   - `Distributor`
+     
+---
+
+### 🔒 Access Control Logic
+
+| Role | Access |
+|------------|--------|
+| Salesperson | Create & view own orders |
+| Distributor | View assigned orders only |
+| Admin | Full access (orders + users) |
+
+---
+
+### 🧪 Known Improvements (Planned)
+
+- Global loading skeletons (remove first-load empty state)
+- Pagination for large order lists
+- Advanced search & filtering
+- Sidebar navigation layout
+- Audit logs for Admin actions
+
+---
+
+### 📌 Status
+
+- ✅ Core functionality complete.
+- 🚧 UI/UX enhancements in progress.
+- 🔜 Performance & scalability improvements planned.
+
+---
+
+👤 Author
+
+- Sunil Biriya
+- Full Stack Developer
+- Focused on building scalable, production-ready systems.
