@@ -40,15 +40,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (pb.authStore.isValid && pb.authStore.model) {
         const model = pb.authStore.model as any;
 
-        // 🔴 HARD BLOCK SUPERUSER
-        // if (model.collectionName === "_superusers") {
-        //   console.warn("Superuser session detected. Clearing.");
-        //   pb.authStore.clear();
-        //   setUser(null);
-        //   setLoading(false);
-        //   return;
-        // }
-
         try {
           const fullUser = await pb.collection("users").getOne(model.id);
 
