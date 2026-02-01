@@ -9,12 +9,12 @@ import DistributorDashboard from "./components/Dashboard/DistributorDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
-import ProfileModal from "./components/ProfileModal";
+import ProfileDrawer from "./components/ProfileDrawer";
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   if (!user) {
     return showSignup ? (
@@ -59,12 +59,12 @@ const AppContent: React.FC = () => {
                   {user.role}
                 </Badge>
               </div>
-              <div
-                onClick={() => setShowProfile(true)}
-                className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-50 to-blue-50 flex items-center justify-center border border-slate-100 cursor-pointer hover:ring-2 hover:ring-indigo-200 transition"
+              <button
+                onClick={() => setProfileOpen(true)}
+                className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-50 to-blue-50 flex items-center justify-center border border-slate-100 hover:ring-2 hover:ring-indigo-500 transition"
               >
                 <UserCircle className="w-6 h-6 text-indigo-500" />
-              </div>
+              </button>
             </div>
 
             <Button
@@ -103,7 +103,8 @@ const AppContent: React.FC = () => {
           </div>
         )}
       </main>
-      {showProfile && <ProfileModal onClose={() => setShowProfile(false)} />}
+      {/* Profile Drawer */}
+      <ProfileDrawer open={profileOpen} onClose={() => setProfileOpen(false)} />
     </div>
   );
 };
