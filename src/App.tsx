@@ -9,10 +9,12 @@ import DistributorDashboard from "./components/Dashboard/DistributorDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
+import ProfileModal from "./components/ProfileModal";
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   if (!user) {
     return showSignup ? (
@@ -31,11 +33,10 @@ const AppContent: React.FC = () => {
       {/* Premium Sticky Header */}
       <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
-          
           {/* Left: Branding */}
           <div className="flex items-center gap-4">
             <div className="bg-indigo-600 p-2 rounded-xl">
-               <LayoutDashboard className="w-5 h-5 text-white" />
+              <LayoutDashboard className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col">
               <h1 className="text-sm font-black text-slate-900 uppercase tracking-tighter leading-none">
@@ -52,13 +53,16 @@ const AppContent: React.FC = () => {
             <div className="flex items-center gap-3 pr-6 border-r border-slate-100 hidden sm:flex">
               <div className="text-right">
                 <p className="text-sm font-bold text-slate-900 leading-none">
-                  {user.name || user.email?.split('@')[0]}
+                  {user.name || user.email?.split("@")[0]}
                 </p>
                 <Badge className="mt-1 h-4 text-[9px] bg-slate-100 text-slate-500 border-none font-bold uppercase tracking-tight">
                   {user.role}
                 </Badge>
               </div>
-              <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-50 to-blue-50 flex items-center justify-center border border-slate-100">
+              <div
+                onClick={() => setShowProfile(true)}
+                className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-50 to-blue-50 flex items-center justify-center border border-slate-100 cursor-pointer hover:ring-2 hover:ring-indigo-200 transition"
+              >
                 <UserCircle className="w-6 h-6 text-indigo-500" />
               </div>
             </div>
@@ -86,20 +90,35 @@ const AppContent: React.FC = () => {
         {!["Salesperson", "Distributor", "Admin"].includes(user.role) && (
           <div className="flex items-center justify-center min-h-[50vh]">
             <div className="text-center p-10 bg-white rounded-3xl shadow-xl border border-red-50">
-              <p className="text-red-500 font-black uppercase text-xs tracking-widest mb-2">Access Denied</p>
-              <h2 className="text-2xl font-bold text-slate-900">Unknown Role: {String(user.role)}</h2>
-              <p className="text-slate-500 mt-2">Please contact system administrator.</p>
+              <p className="text-red-500 font-black uppercase text-xs tracking-widest mb-2">
+                Access Denied
+              </p>
+              <h2 className="text-2xl font-bold text-slate-900">
+                Unknown Role: {String(user.role)}
+              </h2>
+              <p className="text-slate-500 mt-2">
+                Please contact system administrator.
+              </p>
             </div>
           </div>
         )}
       </main>
+      {showProfile && <ProfileModal onClose={() => setShowProfile(false)} />}
     </div>
   );
 };
 
 // Sub-component helper for the badge inside header if you don't want to import Badge from UI
-const Badge = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <span className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 ${className}`}>
+const Badge = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <span
+    className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 ${className}`}
+  >
     {children}
   </span>
 );
