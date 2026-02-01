@@ -12,6 +12,7 @@ interface User {
   email: string;
   role: "Salesperson" | "Distributor" | "Admin";
   name: string;
+  avatar? : string;
 }
 
 interface AuthContextType {
@@ -78,6 +79,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email: record.email,
         name: record.name || record.email,
         role: record.role,
+        avatar: record.avatar || null,
       };
 
       setUser(mappedUser);

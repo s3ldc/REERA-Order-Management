@@ -1,5 +1,7 @@
 import { X, UserCircle, Camera } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import pb from "../lib/pocketbase";
+import { getAvatarUrl } from "../lib/getAvatarUrl";
 
 interface ProfileDrawerProps {
   open: boolean;
@@ -9,7 +11,28 @@ interface ProfileDrawerProps {
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
   const { user } = useAuth();
 
+  const avatarUrl = user?.avatar
+    ? getAvatarUrl(user.id, user.avatar, 160)
+    : null;
+
   if (!open) return null;
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      await pb.collection("users").update(user.id, formData);
+      await pb.collection("users").authRefresh();
+
+      window.location.reload(); // safe & simple for now
+    } catch (err) {
+      console.error("Avatar upload failed", err);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50">
@@ -35,17 +58,31 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
         <div className="px-6 py-6 flex-1 space-y-6">
           {/* Avatar */}
           <div className="flex flex-col items-center gap-3">
-            <button className="relative group">
-              <div className="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
-                {/* Later: replace with <img src={user.avatarUrl} /> */}
-                <UserCircle className="w-16 h-16 text-slate-400" />
+            <label className="relative group cursor-pointer">
+              <div className="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt="Avatar"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <UserCircle className="w-16 h-16 text-slate-400" />
+                )}
               </div>
 
               {/* Hover overlay */}
               <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                 <Camera className="w-5 h-5 text-white" />
               </div>
-            </button>
+
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarUpload}
+              />
+            </label>
 
             <p className="text-xs text-slate-500">
               Click to change profile photo
