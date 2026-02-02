@@ -29,6 +29,7 @@ import UserManagementModal from "../UserManagementModal";
 import { useToast } from "../../hooks/useToast";
 import OrdersByStatusChart from "../charts/admin/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/admin/PaymentStatusChart";
+import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -192,6 +193,10 @@ const AdminDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <OrdersByStatusChart orders={orders} />
         <PaymentStatusChart orders={orders} />
+      </div>
+
+      <div className="mt-6">
+        <OrdersOverTimeChart orders={orders} />
       </div>
 
       {/* Advanced Filters */}
