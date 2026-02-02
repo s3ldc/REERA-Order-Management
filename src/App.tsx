@@ -66,7 +66,7 @@ const AppContent: React.FC = () => {
               >
                 {user.avatar ? (
                   <img
-                    src={getAvatarUrl(user)}
+                    src={getAvatarUrl(user, 40)}
                     alt={user.name}
                     className="h-full w-full object-cover"
                   />

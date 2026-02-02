@@ -1,11 +1,13 @@
 // lib/getAvatarUrl.ts
 import pb from "./pocketbase";
 
-export const getAvatarUrl = (user: { id: string; avatar?: string }) => {
+interface AvatarUser {
+  id: string;
+  avatar?: string;
+}
+
+export const getAvatarUrl = (user: AvatarUser, size = 160) => {
   if (!user.avatar) return "";
-  return pb.files.getUrl(
-    { id: user.id, avatar: user.avatar },
-    user.avatar,
-    { thumb: "100x100" }
-  );
+
+  return `${pb.baseUrl}/api/files/users/${user.id}/${user.avatar}?thumb=${size}x${size}`;
 };

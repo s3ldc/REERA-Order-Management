@@ -12,8 +12,8 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
   const { user, refreshUser } = useAuth();
 
   const avatarUrl = user?.avatar
-    ? getAvatarUrl(user.id, user.avatar, 160)
-    : null;
+    ? getAvatarUrl(user, 160)
+    : "";
 
   if (!open) return null;
 
