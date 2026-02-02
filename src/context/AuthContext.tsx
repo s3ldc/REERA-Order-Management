@@ -12,7 +12,7 @@ interface User {
   email: string;
   role: "Salesperson" | "Distributor" | "Admin";
   name: string;
-  avatar? : string;
+  avatar?: string;
 }
 
 interface AuthContextType {
@@ -25,6 +25,7 @@ interface AuthContextType {
     password: string,
     userData: { name: string; role: "Salesperson" | "Distributor" },
   ) => Promise<boolean>;
+  refreshUser: () => Promise<void>; // 👈 ADD THIS
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -49,6 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             email: fullUser.email,
             name: fullUser.name || fullUser.email,
             role: fullUser.role,
+            avatar: fullUser.avatar || null,
           };
 
           setUser(mappedUser);
@@ -118,6 +120,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const refreshUser = async () => {
+    if (!pb.authStore.isValid || !pb.authStore.model) return;
+
+    const fullUser = await pb.collection("users").getOne(pb.authStore.model.id);
+
+    const mappedUser: User = {
+      id: fullUser.id,
+      email: fullUser.email,
+      name: fullUser.name || fullUser.email,
+      role: fullUser.role,
+      avatar: fullUser.avatar || null,
+    };
+
+    setUser(mappedUser);
+  };
+
   // if (loading) return null;
 
   return (
@@ -128,6 +146,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         logout,
         signUp,
         loading,
+        refreshUser, // 👈 ADD THIS
       }}
     >
       {children}

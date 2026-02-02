@@ -9,7 +9,7 @@ interface ProfileDrawerProps {
 }
 
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const avatarUrl = user?.avatar
     ? getAvatarUrl(user.id, user.avatar, 160)
@@ -26,9 +26,8 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
       formData.append("avatar", file);
 
       await pb.collection("users").update(user.id, formData);
-      await pb.collection("users").authRefresh();
 
-      window.location.reload(); // safe & simple for now
+      await refreshUser(); // 🔥 LIVE UPDATE
     } catch (err) {
       console.error("Avatar upload failed", err);
     }
