@@ -196,10 +196,10 @@ const AdminDashboard: React.FC = () => {
         <PaymentStatusChart orders={orders} />
       </div>
 
-      {/* <div className="mt-6">
+      <div className="mt-6">
         <OrdersOverTimeChart orders={orders} />
-        <OrdersByRoleChart orders={orders} />
-      </div> */}
+        {/* <OrdersByRoleChart orders={orders} /> */}
+      </div>
 
       {/* Advanced Filters */}
       <Card className="border-none shadow-sm bg-white rounded-2xl">
