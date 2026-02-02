@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import UserManagementModal from "../UserManagementModal";
 import { useToast } from "../../hooks/useToast";
+import { AdminOrderStatusChart } from "../charts/AdminOrderStatusChart";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -146,6 +147,11 @@ const AdminDashboard: React.FC = () => {
           </Card>
         ))}
       </div>
+
+      {/* Charts Section */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <AdminOrderStatusChart orders={orders} />
+</div>
 
       {/* Advanced Filters */}
       <Card className="border-none shadow-sm bg-white rounded-2xl">
