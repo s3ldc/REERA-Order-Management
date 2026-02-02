@@ -85,14 +85,63 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    // Wait until auth is fully restored and user exists
     if (loading) return;
+
     if (!user) {
       setOrders([]);
       return;
     }
 
     fetchOrders();
+
+    // 🔥 REALTIME SUBSCRIPTION
+    const subscribe = async () => {
+      await pb.collection("orders").subscribe("*", (e) => {
+        if (e.action === "create") {
+          const normalize = (r: any) => ({
+            id: r.id,
+            spa_name: r.spa_name,
+            address: r.address,
+            product_name: r.product_name,
+            quantity: r.quantity,
+            status: r.status,
+            payment_status: r.payment_status,
+            salesperson_id: r.salesperson_id,
+            distributor_id: r.distributor_id,
+            created: r.created,
+          });
+
+          setOrders((prev) => [normalize(e.record), ...prev]);
+        }
+
+        if (e.action === "update") {
+          const normalize = (r: any) => ({
+            id: r.id,
+            spa_name: r.spa_name,
+            address: r.address,
+            product_name: r.product_name,
+            quantity: r.quantity,
+            status: r.status,
+            payment_status: r.payment_status,
+            salesperson_id: r.salesperson_id,
+            distributor_id: r.distributor_id,
+            created: r.created,
+          });
+
+          setOrders((prev) => [normalize(e.record), ...prev]);
+        }
+
+        if (e.action === "delete") {
+          setOrders((prev) => prev.filter((o) => o.id !== e.record.id));
+        }
+      });
+    };
+
+    subscribe();
+
+    return () => {
+      pb.collection("orders").unsubscribe("*");
+    };
   }, [loading, user]);
 
   // 🔹 Create order in PocketBase
