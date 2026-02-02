@@ -22,6 +22,7 @@ import {
 import { useToast } from "../../hooks/useToast";
 import OrdersByStatusChart from "../charts/distributor/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/distributor/PaymentStatusChart";
+import DeliveriesOverTimeChart from "../charts/distributor/DeliveriesOverTimeChart";
 
 const DistributorDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -146,6 +147,10 @@ const DistributorDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <OrdersByStatusChart />
         <PaymentStatusChart/>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DeliveriesOverTimeChart />
       </div>
 
       {/* Orders Table */}
