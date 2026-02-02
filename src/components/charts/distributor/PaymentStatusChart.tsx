@@ -11,7 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const COLORS = {
   Paid: "#22c55e",   // green
-  Unpaid: "#f59e0b", // amber
+  Unpaid: "#ef4444", // amber
 };
 
 const PaymentStatusChart = () => {

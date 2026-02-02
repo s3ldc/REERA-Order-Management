@@ -149,7 +149,7 @@ const DistributorDashboard: React.FC = () => {
         <PaymentStatusChart/>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="mt-6">
         <DeliveriesOverTimeChart />
       </div>
 
