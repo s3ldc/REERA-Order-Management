@@ -12,6 +12,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Package, Truck, CheckCircle, Clock, MapPin, ArrowRightCircle, LayoutDashboard } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
+import OrdersByStatusChart from "../charts/distributor/OrdersByStatusChart";
 
 const DistributorDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -96,6 +97,10 @@ const DistributorDashboard: React.FC = () => {
           </Card>
         ))}
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <OrdersByStatusChart />
+</div>
 
       {/* Orders Table */}
       <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden">
