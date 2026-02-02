@@ -36,6 +36,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const normalizeAvatar = (avatar: unknown): string | undefined =>
+  typeof avatar === "string" && avatar.length > 0 ? avatar : undefined;
+
+
   // Restore session on page refresh
   useEffect(() => {
     const restoreSession = async () => {
@@ -50,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             email: fullUser.email,
             name: fullUser.name || fullUser.email,
             role: fullUser.role,
-            avatar: fullUser.avatar || null,
+            avatar: normalizeAvatar(fullUser.avatar),
           };
 
           setUser(mappedUser);
@@ -81,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email: record.email,
         name: record.name || record.email,
         role: record.role,
-        avatar: record.avatar || undefined,
+        avatar: normalizeAvatar(record.avatar),
       };
 
       setUser(mappedUser);
@@ -130,7 +134,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       email: fullUser.email,
       name: fullUser.name || fullUser.email,
       role: fullUser.role,
-      avatar: fullUser.avatar || undefined,
+      avatar: normalizeAvatar(fullUser.avatar),
     };
 
     setUser(mappedUser);
