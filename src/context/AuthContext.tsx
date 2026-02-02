@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         email: record.email,
         name: record.name || record.email,
         role: record.role,
-        avatar: record.avatar || null,
+        avatar: record.avatar || undefined,
       };
 
       setUser(mappedUser);
@@ -130,7 +130,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       email: fullUser.email,
       name: fullUser.name || fullUser.email,
       role: fullUser.role,
-      avatar: fullUser.avatar || null,
+      avatar: fullUser.avatar || undefined,
     };
 
     setUser(mappedUser);

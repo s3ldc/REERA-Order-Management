@@ -10,6 +10,7 @@ import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
+import { getAvatarUrl } from "./lib/getAvatarUrl";
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
@@ -61,9 +62,17 @@ const AppContent: React.FC = () => {
               </div>
               <button
                 onClick={() => setProfileOpen(true)}
-                className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-50 to-blue-50 flex items-center justify-center border border-slate-100 hover:ring-2 hover:ring-indigo-500 transition"
+                className="relative h-10 w-10 rounded-full overflow-hidden border border-slate-100 hover:ring-2 hover:ring-indigo-500 transition bg-slate-100 flex items-center justify-center"
               >
-                <UserCircle className="w-6 h-6 text-indigo-500" />
+                {user.avatar ? (
+                  <img
+                    src={getAvatarUrl(user)}
+                    alt={user.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <UserCircle className="w-6 h-6 text-indigo-500" />
+                )}
               </button>
             </div>
 
