@@ -30,6 +30,7 @@ import { useToast } from "../../hooks/useToast";
 import OrdersByStatusChart from "../charts/admin/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/admin/PaymentStatusChart";
 import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
+import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -195,9 +196,10 @@ const AdminDashboard: React.FC = () => {
         <PaymentStatusChart orders={orders} />
       </div>
 
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <OrdersOverTimeChart orders={orders} />
-      </div>
+        <OrdersByRoleChart orders={orders} />
+      </div> */}
 
       {/* Advanced Filters */}
       <Card className="border-none shadow-sm bg-white rounded-2xl">
