@@ -1,38 +1,48 @@
+import React from "react";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ChartCard } from "@/components/ui/chart-card";
 import { useOrderContext } from "@/context/OrderContext";
 import { useAuth } from "@/context/AuthContext";
-import dayjs from "dayjs"; 
+import dayjs from "dayjs";
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
+        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+          {dayjs(label).format("MMM DD, YYYY")}
+        </p>
+        <p className="text-sm font-bold text-slate-900">
+          {payload[0].value} <span className="text-slate-400 font-medium text-xs">Deliveries</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
 
 const DeliveriesOverTimeChart = () => {
   const { orders } = useOrderContext();
   const { user } = useAuth();
 
-  // 1️⃣ Only delivered orders for this distributor
-  const deliveredOrders =
-    orders?.filter(
-      (o) =>
-        o.distributor_id === user?.id &&
-        o.status === "Delivered"
-    ) || [];
+  const deliveredOrders = orders?.filter(
+    (o) => o.distributor_id === user?.id && o.status === "Delivered"
+  ) || [];
 
-  // 2️⃣ Group by date
   const groupedByDate: Record<string, number> = {};
-
   deliveredOrders.forEach((order) => {
     const date = dayjs(order.created).format("YYYY-MM-DD");
     groupedByDate[date] = (groupedByDate[date] || 0) + 1;
   });
 
-  // 3️⃣ Convert to chart data
   const data = Object.keys(groupedByDate)
     .sort()
     .map((date) => ({
@@ -41,46 +51,72 @@ const DeliveriesOverTimeChart = () => {
     }));
 
   return (
-    <Card className="rounded-2xl shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-sm font-bold uppercase tracking-wide text-slate-700">
-          Deliveries Over Time
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent className="h-[300px]">
+    <ChartCard 
+      title="Performance Trends" 
+      // subtitle="Historical delivery volume and growth"
+    >
+      <div className="h-[300px] w-full mt-4 -ml-4">
         {data.length === 0 ? (
-          <p className="text-center text-slate-400 text-sm mt-16">
-            No delivery history available
-          </p>
+          <div className="h-full flex flex-col items-center justify-center text-center">
+            <span className="text-2xl mb-2">📈</span>
+            <p className="text-xs text-slate-400 font-medium tracking-tight">
+              No delivery history available
+            </p>
+          </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="colorDeliveries" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 12 }}
-                stroke="#94a3b8"
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(str) => dayjs(str).format("MMM DD")}
+                tick={{ fontSize: 10, fontWeight: 600, fill: "#94a3b8" }}
+                dy={10}
               />
+
               <YAxis
                 allowDecimals={false}
-                tick={{ fontSize: 12 }}
-                stroke="#94a3b8"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 10, fontWeight: 600, fill: "#94a3b8" }}
+                dx={-10}
               />
-              <Tooltip />
-              <Line
+
+              <Tooltip 
+                content={<CustomTooltip />} 
+                cursor={{ stroke: "#e2e8f0", strokeWidth: 2 }} 
+              />
+
+              <Area
                 type="monotone"
                 dataKey="deliveries"
                 stroke="#6366f1"
-                strokeWidth={2.5}
-                dot={{ r: 4 }}
-                activeDot={{ r: 6 }}
+                strokeWidth={3}
+                fillOpacity={1}
+                fill="url(#colorDeliveries)"
+                animationDuration={1500}
+                activeDot={{ 
+                  r: 6, 
+                  fill: "#6366f1", 
+                  stroke: "#fff", 
+                  strokeWidth: 2,
+                }}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </ChartCard>
   );
 };
 
