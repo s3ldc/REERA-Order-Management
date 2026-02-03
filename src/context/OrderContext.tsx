@@ -128,7 +128,9 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({
             created: r.created,
           });
 
-          setOrders((prev) => [normalize(e.record), ...prev]);
+          setOrders((prev) =>
+            prev.map((o) => (o.id === e.record.id ? normalize(e.record) : o)),
+          );
         }
 
         if (e.action === "delete") {
