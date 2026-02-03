@@ -49,7 +49,7 @@ export default function OrdersOverTimeChart({ orders }: Props) {
   return (
     <ChartCard 
       title="Demand Velocity" 
-      subtitle="Order volume trends over current period"
+      // subtitle="Order volume trends over current period"
     >
       <div className="h-[300px] w-full mt-4 -ml-4">
         <ResponsiveContainer width="100%" height="100%">
