@@ -30,7 +30,7 @@ import { useToast } from "../../hooks/useToast";
 import OrdersByStatusChart from "../charts/admin/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/admin/PaymentStatusChart";
 import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
-import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
+// import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();

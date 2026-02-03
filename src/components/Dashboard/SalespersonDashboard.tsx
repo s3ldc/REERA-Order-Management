@@ -26,6 +26,7 @@ import {
 import { useToast } from "../../hooks/useToast";
 import pb from "../../lib/pocketbase";
 import OrdersByStatusChart from "@/components/charts/salesperson/OrdersByStatusChart";
+import PaymentStatusChart from "../charts/salesperson/PaymentStatusChart";
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -212,6 +213,7 @@ const SalespersonDashboard: React.FC = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <OrdersByStatusChart />
+        <PaymentStatusChart />
       </div>
 
       {/* Modern Form Overlay */}
