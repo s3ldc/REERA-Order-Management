@@ -27,6 +27,7 @@ import { useToast } from "../../hooks/useToast";
 import pb from "../../lib/pocketbase";
 import OrdersByStatusChart from "@/components/charts/salesperson/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/salesperson/PaymentStatusChart";
+import OrdersOverTimeChart from "@/components/charts/salesperson/OrdersOverTimeChart";
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -215,6 +216,10 @@ const SalespersonDashboard: React.FC = () => {
         <OrdersByStatusChart />
         <PaymentStatusChart />
       </div>
+
+      <div className="mt-6">
+  <OrdersOverTimeChart />
+</div>
 
       {/* Modern Form Overlay */}
       {showForm && (
