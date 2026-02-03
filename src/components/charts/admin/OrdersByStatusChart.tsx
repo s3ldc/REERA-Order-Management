@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -18,12 +18,30 @@ interface Props {
 }
 
 const COLORS = {
-  Pending: "#f59e0b",    // amber-500
-  Dispatched: "#3b82f6",  // blue-500
-  Delivered: "#10b981",   // emerald-500
+  Pending: "#f59e0b",
+  Dispatched: "#3b82f6",
+  Delivered: "#10b981",
 };
 
-// --- Premium Tooltip Component ---
+// --- Custom Active Shape for SaaS feel ---
+const renderActiveShape = (props: any) => {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 6} // Slightly larger on hover
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        cornerRadius={12}
+      />
+    </g>
+  );
+};
+
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
@@ -48,18 +66,21 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export default function OrdersByStatusChart({ orders }: Props) {
+  const [activeIndex, setActiveIndex] = useState(-1);
   const total = orders.length;
   
   const data = [
     { name: "Pending", value: orders.filter((o) => o.status === "Pending").length },
     { name: "Dispatched", value: orders.filter((o) => o.status === "Dispatched").length },
     { name: "Delivered", value: orders.filter((o) => o.status === "Delivered").length },
-  ].filter(d => d.value > 0); // Hide empty segments for cleaner look
+  ].filter(d => d.value > 0);
+
+  const onPieEnter = (_: any, index: number) => setActiveIndex(index);
+  const onPieLeave = () => setActiveIndex(-1);
 
   return (
     <ChartCard title="Logistics Distribution">
       <div className="relative h-[280px] w-full mt-4">
-        {/* Center Label for Donut */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Total Assets</span>
           <span className="text-3xl font-black text-slate-900 leading-none">{total}</span>
@@ -68,22 +89,25 @@ export default function OrdersByStatusChart({ orders }: Props) {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
               data={data}
               dataKey="value"
               nameKey="name"
               innerRadius={70}
               outerRadius={95}
               paddingAngle={8}
-              cornerRadius={12} // Smooth SaaS corners
+              cornerRadius={12}
               stroke="none"
-              animationBegin={0}
-              animationDuration={1200}
+              onMouseEnter={onPieEnter}
+              onMouseLeave={onPieLeave}
+              animationDuration={1000}
             >
               {data.map((entry) => (
                 <Cell
                   key={entry.name}
                   fill={COLORS[entry.name as keyof typeof COLORS]}
-                  className="hover:opacity-80 transition-opacity outline-none"
+                  className="transition-all duration-300 outline-none"
                 />
               ))}
             </Pie>
@@ -92,12 +116,13 @@ export default function OrdersByStatusChart({ orders }: Props) {
         </ResponsiveContainer>
       </div>
 
-      {/* Modern Grid Legend */}
       <div className="mt-6 grid grid-cols-3 gap-2">
-        {data.map((d) => (
+        {data.map((d, index) => (
           <div 
             key={d.name} 
-            className="group flex flex-col items-center p-3 rounded-2xl bg-slate-50/50 border border-transparent hover:border-slate-200 transition-all"
+            className={`group flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+              activeIndex === index ? 'bg-white border-slate-200 shadow-sm ring-1 ring-slate-100' : 'bg-slate-50/50 border-transparent'
+            }`}
           >
             <div 
               className="h-1.5 w-8 rounded-full mb-2" 
@@ -107,7 +132,7 @@ export default function OrdersByStatusChart({ orders }: Props) {
               {d.name}
             </span>
             <span className="text-sm font-black text-slate-800">
-              {((d.value / total) * 100).toFixed(0)}%
+              {total > 0 ? ((d.value / total) * 100).toFixed(0) : 0}%
             </span>
           </div>
         ))}

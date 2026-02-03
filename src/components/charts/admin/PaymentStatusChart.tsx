@@ -55,7 +55,7 @@ export default function PaymentStatusChart({ orders }: Props) {
   return (
     <ChartCard 
       title="Revenue Health" 
-      subtitle="Overview of payment collection status"
+      // subtitle="Overview of payment collection status"
     >
       <div className="relative h-[280px] w-full mt-4">
         {/* Metric Centerpiece */}
