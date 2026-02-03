@@ -12,9 +12,20 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Plus, Package, Search, ShoppingBag, Clock, CheckCircle2, MapPin, User, X } from "lucide-react";
+import {
+  Plus,
+  Package,
+  Search,
+  ShoppingBag,
+  Clock,
+  CheckCircle2,
+  MapPin,
+  User,
+  X,
+} from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import pb from "../../lib/pocketbase";
+import OrdersByStatusChart from "@/components/charts/salesperson/OrdersByStatusChart";
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -124,7 +135,8 @@ const SalespersonDashboard: React.FC = () => {
           </h1>
           <p className="text-slate-500 font-medium mt-2 flex items-center gap-2">
             <User className="w-4 h-4 text-blue-500" />
-            Welcome back, <span className="text-slate-900">{user?.name || user?.email}</span>
+            Welcome back,{" "}
+            <span className="text-slate-900">{user?.name || user?.email}</span>
           </p>
         </div>
 
@@ -140,16 +152,20 @@ const SalespersonDashboard: React.FC = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden relative group">
-            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
+          <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Orders</p>
-                    <h3 className="text-3xl font-bold text-slate-900 mt-1">{myOrders.length}</h3>
-                </div>
-                <div className="p-3 bg-blue-50 rounded-xl group-hover:bg-blue-100 transition-colors">
-                    <ShoppingBag className="w-6 h-6 text-blue-600" />
-                </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                  Total Orders
+                </p>
+                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                  {myOrders.length}
+                </h3>
+              </div>
+              <div className="p-3 bg-blue-50 rounded-xl group-hover:bg-blue-100 transition-colors">
+                <ShoppingBag className="w-6 h-6 text-blue-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -158,15 +174,17 @@ const SalespersonDashboard: React.FC = () => {
           <div className="absolute top-0 left-0 w-1 h-full bg-amber-400" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Pending Fulfillment</p>
-                    <h3 className="text-3xl font-bold text-slate-900 mt-1">
-                        {myOrders.filter((o) => o.status === "Pending").length}
-                    </h3>
-                </div>
-                <div className="p-3 bg-amber-50 rounded-xl group-hover:bg-amber-100 transition-colors">
-                    <Clock className="w-6 h-6 text-amber-600" />
-                </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                  Pending Fulfillment
+                </p>
+                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                  {myOrders.filter((o) => o.status === "Pending").length}
+                </h3>
+              </div>
+              <div className="p-3 bg-amber-50 rounded-xl group-hover:bg-amber-100 transition-colors">
+                <Clock className="w-6 h-6 text-amber-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -175,18 +193,25 @@ const SalespersonDashboard: React.FC = () => {
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Payments Received</p>
-                    <h3 className="text-3xl font-bold text-slate-900 mt-1">
-                        {myOrders.filter((o) => o.payment_status === "Paid").length}
-                    </h3>
-                </div>
-                <div className="p-3 bg-emerald-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
-                    <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-                </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                  Payments Received
+                </p>
+                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                  {myOrders.filter((o) => o.payment_status === "Paid").length}
+                </h3>
+              </div>
+              <div className="p-3 bg-emerald-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <OrdersByStatusChart />
       </div>
 
       {/* Modern Form Overlay */}
@@ -195,10 +220,19 @@ const SalespersonDashboard: React.FC = () => {
           <Card className="w-full max-w-2xl shadow-2xl border-none rounded-3xl animate-in zoom-in-95 duration-200">
             <CardHeader className="flex flex-row items-center justify-between border-b border-slate-100 pb-6 px-8">
               <div>
-                <CardTitle className="text-2xl font-bold text-slate-900">New Order Entry</CardTitle>
-                <CardDescription>Fill in the client and product requirements</CardDescription>
+                <CardTitle className="text-2xl font-bold text-slate-900">
+                  New Order Entry
+                </CardTitle>
+                <CardDescription>
+                  Fill in the client and product requirements
+                </CardDescription>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} className="rounded-full">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowForm(false)}
+                className="rounded-full"
+              >
                 <X className="w-5 h-5 text-slate-400" />
               </Button>
             </CardHeader>
@@ -206,69 +240,103 @@ const SalespersonDashboard: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Spa/Salon Name</Label>
+                    <Label className="text-slate-700 font-semibold">
+                      Spa/Salon Name
+                    </Label>
                     <Input
                       id="spa_name"
                       value={formData.spa_name}
-                      onChange={(e) => setFormData({ ...formData, spa_name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, spa_name: e.target.value })
+                      }
                       placeholder="e.g. Zen Retreat"
                       className="rounded-xl border-slate-200 h-11 focus:ring-blue-500 focus:border-blue-500"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Address</Label>
+                    <Label className="text-slate-700 font-semibold">
+                      Address
+                    </Label>
                     <Input
                       id="address"
                       value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, address: e.target.value })
+                      }
                       placeholder="Street, City, Zip"
                       className="rounded-xl border-slate-200 h-11"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Product</Label>
+                    <Label className="text-slate-700 font-semibold">
+                      Product
+                    </Label>
                     <Input
                       id="product_name"
                       value={formData.product_name}
-                      onChange={(e) => setFormData({ ...formData, product_name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          product_name: e.target.value,
+                        })
+                      }
                       placeholder="Search products..."
                       className="rounded-xl border-slate-200 h-11"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Quantity</Label>
+                    <Label className="text-slate-700 font-semibold">
+                      Quantity
+                    </Label>
                     <Input
                       id="quantity"
                       type="number"
                       min="1"
                       value={formData.quantity === 0 ? "" : formData.quantity}
-                      onChange={(e) => setFormData({ ...formData, quantity: Number(e.target.value) })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          quantity: Number(e.target.value),
+                        })
+                      }
                       className="rounded-xl border-slate-200 h-11"
                       required
                     />
                   </div>
 
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-slate-700 font-semibold">Assign Distributor</Label>
+                    <Label className="text-slate-700 font-semibold">
+                      Assign Distributor
+                    </Label>
                     <select
                       id="distributor"
                       value={formData.distributor_id}
-                      onChange={(e) => setFormData({ ...formData, distributor_id: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          distributor_id: e.target.value,
+                        })
+                      }
                       className="w-full border border-slate-200 rounded-xl px-4 h-11 bg-white text-sm focus:ring-2 focus:ring-blue-500 outline-none appearance-none"
                       required
                     >
                       <option value="">Choose a distributor</option>
                       {distributors.map((d) => (
-                        <option key={d.id} value={d.id}>{d.name}</option>
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
                       ))}
                     </select>
                   </div>
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button type="submit" className="flex-1 bg-blue-600 h-12 rounded-xl text-lg font-bold shadow-lg shadow-blue-200">
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-blue-600 h-12 rounded-xl text-lg font-bold shadow-lg shadow-blue-200"
+                  >
                     Confirm Order
                   </Button>
                 </div>
@@ -281,16 +349,23 @@ const SalespersonDashboard: React.FC = () => {
       {/* Orders Table Section */}
       <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden">
         <CardHeader className="bg-white border-b border-slate-100 p-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <CardTitle className="text-xl font-bold text-slate-900">Recent Activity</CardTitle>
-                    <CardDescription className="text-slate-400 font-medium">Tracking your most recent order submissions</CardDescription>
-                </div>
-                <div className="relative group">
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
-                    <Input placeholder="Filter orders..." className="pl-10 h-10 w-full md:w-64 rounded-lg bg-slate-50 border-none focus:bg-white transition-all ring-0 focus-visible:ring-1 focus-visible:ring-blue-200" />
-                </div>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-xl font-bold text-slate-900">
+                Recent Activity
+              </CardTitle>
+              <CardDescription className="text-slate-400 font-medium">
+                Tracking your most recent order submissions
+              </CardDescription>
             </div>
+            <div className="relative group">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+              <Input
+                placeholder="Filter orders..."
+                className="pl-10 h-10 w-full md:w-64 rounded-lg bg-slate-50 border-none focus:bg-white transition-all ring-0 focus-visible:ring-1 focus-visible:ring-blue-200"
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           {myOrders.length === 0 ? (
@@ -298,8 +373,12 @@ const SalespersonDashboard: React.FC = () => {
               <div className="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Package className="w-10 h-10 text-slate-200" />
               </div>
-              <p className="text-slate-900 font-bold text-lg">No orders found</p>
-              <p className="text-slate-400">Start by creating a new order above.</p>
+              <p className="text-slate-900 font-bold text-lg">
+                No orders found
+              </p>
+              <p className="text-slate-400">
+                Start by creating a new order above.
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -316,25 +395,32 @@ const SalespersonDashboard: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {myOrders.map((order) => (
-                    <tr key={order.id} className="group hover:bg-slate-50/80 transition-all duration-200">
+                    <tr
+                      key={order.id}
+                      className="group hover:bg-slate-50/80 transition-all duration-200"
+                    >
                       <td className="py-6 px-8">
-                        <div className="font-bold text-slate-900">{order.spa_name}</div>
+                        <div className="font-bold text-slate-900">
+                          {order.spa_name}
+                        </div>
                         <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium italic">
-                            <MapPin className="w-3 h-3" /> {order.address}
+                          <MapPin className="w-3 h-3" /> {order.address}
                         </div>
                       </td>
                       <td className="py-6 px-4">
                         <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2 py-1 inline-block">
-                            {order.product_name}
+                          {order.product_name}
                         </div>
                       </td>
-                      <td className="py-6 px-4 text-center font-bold text-slate-900">{order.quantity}</td>
+                      <td className="py-6 px-4 text-center font-bold text-slate-900">
+                        {order.quantity}
+                      </td>
                       <td className="py-6 px-4">
-                        <Badge 
+                        <Badge
                           variant="outline"
                           className={`rounded-full px-3 py-1 font-bold border-none ${
-                            order.status === "Pending" 
-                              ? "bg-amber-100 text-amber-600" 
+                            order.status === "Pending"
+                              ? "bg-amber-100 text-amber-600"
                               : "bg-blue-100 text-blue-600"
                           }`}
                         >
@@ -343,17 +429,27 @@ const SalespersonDashboard: React.FC = () => {
                       </td>
                       <td className="py-6 px-4">
                         <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${order.payment_status === "Paid" ? "bg-emerald-500" : "bg-slate-300"}`} />
-                            <span className={`text-xs font-bold uppercase ${order.payment_status === "Paid" ? "text-emerald-600" : "text-slate-400"}`}>
-                                {order.payment_status}
-                            </span>
+                          <div
+                            className={`w-2 h-2 rounded-full ${order.payment_status === "Paid" ? "bg-emerald-500" : "bg-slate-300"}`}
+                          />
+                          <span
+                            className={`text-xs font-bold uppercase ${order.payment_status === "Paid" ? "text-emerald-600" : "text-slate-400"}`}
+                          >
+                            {order.payment_status}
+                          </span>
                         </div>
                       </td>
                       <td className="py-6 px-4 text-right pr-8">
                         <div className="text-sm font-bold text-slate-700">
-                          {new Date(order.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          {new Date(order.created).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
                         </div>
-                        <div className="text-[10px] font-medium text-slate-400 uppercase mt-1">ID: #{order.id.slice(-4)}</div>
+                        <div className="text-[10px] font-medium text-slate-400 uppercase mt-1">
+                          ID: #{order.id.slice(-4)}
+                        </div>
                       </td>
                     </tr>
                   ))}
