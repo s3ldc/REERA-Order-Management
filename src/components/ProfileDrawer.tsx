@@ -72,7 +72,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-8 py-10 space-y-10">
+        <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10">
           {/* Avatar Section with Pulse Loading */}
           <div className="flex flex-col items-center">
             <div className="relative group">
@@ -112,6 +112,10 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
               <h3 className="font-black text-slate-900 text-lg">
                 {user?.name}
               </h3>
+              <p className="text-xs font-medium text-slate-500 mt-0.5">
+                {user?.role} · Active
+              </p>
+
               {/* <p className="text-xs font-medium text-slate-400 mt-0.5">{user?.email}</p> */}
             </div>
           </div>
@@ -121,7 +125,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
             <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-2">
               Information
             </h4>
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="p-2.5 bg-blue-50 rounded-xl">
                   <Mail className="w-4 h-4 text-blue-600" />
@@ -148,8 +152,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
     bg-emerald-100 text-emerald-700 border-none
     px-2 py-0 text-[10px] uppercase font-black
     transition-all duration-200
-    hover:bg-emerald-600 hover:text-white
-    active:scale-95
+    hover:bg-emerald-600 hover:text-white hover:shadow-sm
   "
                   >
                     {user?.role}
@@ -178,7 +181,10 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
             Sign Out
           </Button> */}
           <p className="text-center text-[10px] text-slate-400 mt-4 font-medium uppercase tracking-tight">
-            Enterprise ID: {user?.id.slice(0, 8)} • System Secure
+            <p className="text-center text-[10px] text-slate-400 font-medium uppercase tracking-wide">
+  🔒 Enterprise ID: <span className="font-mono">{user?.id.slice(0, 8)}</span> · Managed Identity
+</p>
+
           </p>
         </div>
       </div>
