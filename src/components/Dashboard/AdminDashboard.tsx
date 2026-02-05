@@ -31,6 +31,8 @@ import OrdersByStatusChart from "../charts/admin/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/admin/PaymentStatusChart";
 import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
 // import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
+import type { Order } from "../../context/OrderContext";
+import OrderTimelineDrawer from "../orders/OrderTimelineDrawer";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -42,6 +44,7 @@ const AdminDashboard: React.FC = () => {
     dateFrom: "",
     dateTo: "",
   });
+  const [activeOrder, setActiveOrder] = useState<Order | null>(null);
 
   const filteredOrders =
     orders?.filter((order) => {
@@ -337,6 +340,17 @@ const AdminDashboard: React.FC = () => {
                       </td>
                       <td className="py-6 px-8 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => setActiveOrder(order)}
+                            className="group flex items-center gap-1"
+                          >
+                            <Calendar className="w-4 h-4" />
+                            <span className="hidden group-hover:inline text-xs">
+                              Timeline
+                            </span>
+                          </Button>
                           {order.status !== "Delivered" && (
                             <Button
                               size="sm"
@@ -375,6 +389,13 @@ const AdminDashboard: React.FC = () => {
       {/* User Management Modal */}
       {showUserModal && (
         <UserManagementModal onClose={() => setShowUserModal(false)} />
+      )}
+
+      {activeOrder && (
+        <OrderTimelineDrawer
+          order={activeOrder}
+          onClose={() => setActiveOrder(null)}
+        />
       )}
     </div>
   );
