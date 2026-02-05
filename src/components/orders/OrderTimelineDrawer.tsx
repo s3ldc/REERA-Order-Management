@@ -11,7 +11,7 @@ interface Props {
 }
 
 const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
-  const events = useOrderTimeline(order.id);
+  const { events, loading } = useOrderTimeline(order.id);
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40">
@@ -31,11 +31,23 @@ const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
           </CardHeader>
 
           <CardContent className="p-6 overflow-y-auto">
-            {events.length === 0 ? (
+            {/* Loading */}
+            {loading && (
               <p className="text-sm text-slate-400 text-center mt-10">
-                No activity recorded yet
+                Loading timeline…
               </p>
-            ) : (
+            )}
+
+            {/* Empty */}
+            {!loading && events.length === 0 && (
+              <p className="text-sm text-slate-400 text-center mt-10">
+                No activity recorded yet <br />
+                Timeline events will appear when this order is updated.
+              </p>
+            )}
+
+            {/* Timeline */}
+            {!loading && events.length > 0 && (
               <ol className="relative border-l border-slate-200 space-y-6">
                 {events.map((event) => (
                   <li key={event.id} className="ml-6">
@@ -44,7 +56,7 @@ const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
                     </span>
 
                     <div className="flex items-center justify-between">
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs capitalize">
                         {event.type.replace("_", " ")}
                       </Badge>
                       <span className="text-xs text-slate-400">

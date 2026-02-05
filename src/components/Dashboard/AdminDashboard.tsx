@@ -340,7 +340,7 @@ const AdminDashboard: React.FC = () => {
                       </td>
                       <td className="py-6 px-8 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <Button
+                          <Button title="View order timeline"
                             size="sm"
                             variant="ghost"
                             onClick={() => setActiveOrder(order)}
