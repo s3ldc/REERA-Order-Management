@@ -415,9 +415,9 @@ const SalespersonDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-6 px-4">
-                        <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2 py-1 inline-block">
-                          {order.product_name}
-                        </div>
+                         <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2.5 py-1 inline-flex items-center gap-2">
+                                                  <Package className="w-3.5 h-3.5" /> {order.product_name}
+                                                </div>
                       </td>
                       <td className="py-6 px-4 text-center font-bold text-slate-900">
                         {order.quantity}
