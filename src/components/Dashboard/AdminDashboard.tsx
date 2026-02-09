@@ -288,7 +288,7 @@ const AdminDashboard: React.FC = () => {
                     <th className="py-5 px-8">Account / Product</th>
                     <th className="py-5 px-4 text-center">Qty</th>
                     <th className="py-5 px-4">Status</th>
-                    <th className="py-5 px-4">Finance</th>
+                    <th className="py-5 px-4">Payment</th>
                     <th className="py-5 px-4">Creation Date</th>
                     <th className="py-5 px-8 text-right">
                       Operational Actions
