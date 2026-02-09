@@ -23,6 +23,9 @@ import { useToast } from "../../hooks/useToast";
 import OrdersByStatusChart from "../charts/distributor/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/distributor/PaymentStatusChart";
 import DeliveriesOverTimeChart from "../charts/distributor/DeliveriesOverTimeChart";
+import { Calendar } from "lucide-react";
+import DistributorOrderTimelineDrawer from "../orders/DistributorOrderTimelineDrawer";
+import type { Order } from "../../context/OrderContext";
 
 const DistributorDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -44,6 +47,8 @@ const DistributorDashboard: React.FC = () => {
         return <Package className="w-5 h-5 text-slate-500" />;
     }
   };
+
+  const [activeOrder, setActiveOrder] = React.useState<Order | null>(null);
 
   const getNextStatus = (currentStatus: string) => {
     switch (currentStatus) {
@@ -146,7 +151,7 @@ const DistributorDashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <OrdersByStatusChart />
-        <PaymentStatusChart/>
+        <PaymentStatusChart />
       </div>
 
       <div className="mt-6">
@@ -227,6 +232,7 @@ const DistributorDashboard: React.FC = () => {
                           </span>
                         </div>
                       </td>
+
                       <td className="py-6 px-4">
                         <Badge
                           variant="outline"
@@ -243,22 +249,35 @@ const DistributorDashboard: React.FC = () => {
                         {new Date(order.created).toLocaleDateString()}
                       </td>
                       <td className="py-6 px-8 text-right">
-                        {order.status !== "Delivered" ? (
+                        <div className="flex items-center justify-end gap-2">
+                          {/* Timeline */}
                           <Button
-                            size="sm"
-                            onClick={() =>
-                              handleStatusUpdate(order.id, order.status)
-                            }
-                            className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-100 rounded-lg h-9 px-4 font-bold transition-all hover:scale-105"
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => setActiveOrder(order)}
+                            className="rounded-lg hover:bg-slate-100 text-slate-500"
                           >
-                            Mark {getNextStatus(order.status)}
-                            <ArrowRightCircle className="w-4 h-4 ml-2" />
+                            <Calendar className="w-4 h-4" />
                           </Button>
-                        ) : (
-                          <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
-                            <CheckCircle className="w-4 h-4" /> Delivered
-                          </div>
-                        )}
+
+                          {/* Status action */}
+                          {order.status !== "Delivered" ? (
+                            <Button
+                              size="sm"
+                              onClick={() =>
+                                handleStatusUpdate(order.id, order.status)
+                              }
+                              className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-100 rounded-lg h-9 px-4 font-bold"
+                            >
+                              Mark {getNextStatus(order.status)}
+                              <ArrowRightCircle className="w-4 h-4 ml-2" />
+                            </Button>
+                          ) : (
+                            <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
+                              <CheckCircle className="w-4 h-4" /> Delivered
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -268,6 +287,12 @@ const DistributorDashboard: React.FC = () => {
           )}
         </CardContent>
       </Card>
+      {activeOrder && (
+  <DistributorOrderTimelineDrawer
+    order={activeOrder}
+    onClose={() => setActiveOrder(null)}
+  />
+)}
     </div>
   );
 };

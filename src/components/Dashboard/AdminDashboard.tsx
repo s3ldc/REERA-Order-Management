@@ -32,7 +32,7 @@ import PaymentStatusChart from "../charts/admin/PaymentStatusChart";
 import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
 // import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
 import type { Order } from "../../context/OrderContext";
-import OrderTimelineDrawer from "../orders/OrderTimelineDrawer";
+import OrderTimelineDrawer from "../orders/AdminOrderTimelineDrawer";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
