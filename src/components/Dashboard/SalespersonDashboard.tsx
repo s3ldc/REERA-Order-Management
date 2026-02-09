@@ -28,6 +28,7 @@ import pb from "../../lib/pocketbase";
 import OrdersByStatusChart from "@/components/charts/salesperson/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/salesperson/PaymentStatusChart";
 import OrdersOverTimeChart from "@/components/charts/salesperson/OrdersOverTimeChart";
+import SalespersonOrderTimelineDrawer from "../orders/SalespersonOrderTimelineDrawer";
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -44,6 +45,8 @@ const SalespersonDashboard: React.FC = () => {
   const [distributors, setDistributors] = useState<
     { id: string; name: string; email: string }[]
   >([]);
+
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
   const myOrders =
     orders?.filter((order) => order.salesperson_id === user?.id) || [];
@@ -404,7 +407,8 @@ const SalespersonDashboard: React.FC = () => {
                   {myOrders.map((order) => (
                     <tr
                       key={order.id}
-                      className="group hover:bg-slate-50/80 transition-all duration-200"
+                      onClick={() => setSelectedOrder(order)}
+                      className="group hover:bg-slate-50/80 transition-all duration-200 cursor-pointer"
                     >
                       <td className="py-6 px-8">
                         <div className="font-bold text-slate-900">
@@ -467,6 +471,13 @@ const SalespersonDashboard: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+      {selectedOrder && (
+        <SalespersonOrderTimelineDrawer
+          order={selectedOrder}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
     </div>
   );
 };
