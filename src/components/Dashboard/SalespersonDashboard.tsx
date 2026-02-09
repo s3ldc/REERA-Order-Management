@@ -218,8 +218,8 @@ const SalespersonDashboard: React.FC = () => {
       </div>
 
       <div className="mt-6">
-  <OrdersOverTimeChart />
-</div>
+        <OrdersOverTimeChart />
+      </div>
 
       {/* Modern Form Overlay */}
       {showForm && (
@@ -415,9 +415,10 @@ const SalespersonDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-6 px-4">
-                         <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2.5 py-1 inline-flex items-center gap-2">
-                                                  <Package className="w-3.5 h-3.5" /> {order.product_name}
-                                                </div>
+                        <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2.5 py-1 inline-flex items-center gap-2">
+                          <Package className="w-3.5 h-3.5" />{" "}
+                          {order.product_name}
+                        </div>
                       </td>
                       <td className="py-6 px-4 text-center font-bold text-slate-900">
                         {order.quantity}
@@ -454,9 +455,9 @@ const SalespersonDashboard: React.FC = () => {
                             year: "numeric",
                           })}
                         </div>
-                        <div className="text-[10px] font-medium text-slate-400 uppercase mt-1">
+                        {/* <div className="text-[10px] font-medium text-slate-400 uppercase mt-1">
                           ID: #{order.id.slice(-4)}
-                        </div>
+                        </div> */}
                       </td>
                     </tr>
                   ))}

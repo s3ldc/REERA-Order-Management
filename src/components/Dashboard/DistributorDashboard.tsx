@@ -204,7 +204,7 @@ const DistributorDashboard: React.FC = () => {
                           {order.spa_name}
                         </div>
                         <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium">
-                          <MapPin className="w-3 h-3 text-slate-300" /> {order.address}
+                          <MapPin className="w-3 h-3" /> {order.address}
                         </div>
                       </td>
                       <td className="py-6 px-4">
@@ -251,7 +251,7 @@ const DistributorDashboard: React.FC = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="py-6 px-4 text-sm font-medium text-slate-500">
+                      <td className="py-6 px-4 text-sm font-bold text-slate-700">
                         {new Date(order.created).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
