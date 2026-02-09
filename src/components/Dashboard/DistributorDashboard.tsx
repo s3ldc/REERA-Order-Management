@@ -159,122 +159,108 @@ const DistributorDashboard: React.FC = () => {
       </div>
 
       {/* Orders Table */}
-      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden">
-        <CardHeader className="bg-white border-b border-slate-100 p-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <Card className="border-none shadow-sm bg-white rounded-[2.5rem] overflow-hidden">
+        <CardHeader className="p-10 border-b border-slate-50">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-slate-900 rounded-2xl"><Boxes className="w-6 h-6 text-white" /></div>
             <div>
-              <CardTitle className="text-xl font-bold text-slate-900">
-                Delivery Pipeline
-              </CardTitle>
-              <CardDescription className="text-slate-400 font-medium">
-                Manage and track your assigned deliveries
-              </CardDescription>
+                <CardTitle className="text-2xl font-black text-slate-900 tracking-tight">Master Order Registry</CardTitle>
+                <CardDescription className="text-slate-400 font-medium mt-1">Cross-system oversight of all transactions</CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
           {assignedOrders.length === 0 ? (
-            <div className="text-center py-24">
-              <div className="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Package className="w-10 h-10 text-slate-200" />
-              </div>
-              <p className="text-slate-900 font-bold text-lg">
-                No assignments found
-              </p>
-              <p className="text-slate-400">
-                New orders will appear here once assigned.
-              </p>
+            <div className="py-32 text-center">
+              <Package className="w-16 h-16 text-slate-100 mx-auto mb-4" />
+              <p className="text-slate-400 font-bold">No active shipments in your queue</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              <table className="w-full">
                 <thead>
-                  <tr className="bg-slate-50/50 text-slate-500 uppercase text-[11px] font-bold tracking-widest">
-                    <th className="py-5 px-8">Destination (Spa)</th>
-                    <th className="py-5 px-4">Inventory Details</th>
-                    <th className="py-5 px-4">Current Status</th>
-                    <th className="py-5 px-4">Payment</th>
-                    <th className="py-5 px-4">Date Assigned</th>
-                    <th className="py-5 px-8 text-right">Action</th>
+                  <tr className="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">
+                    <th className="py-6 px-10 text-left">Destination (Spa)</th>
+                    <th className="py-6 px-6 text-left">Product Details</th>
+                    {/* NEW COLUMN HEADER */}
+                    <th className="py-6 px-6 text-center">QTY</th>
+                    <th className="py-6 px-6 text-left">Current Status</th>
+                    <th className="py-6 px-6 text-left">Finance</th>
+                    <th className="py-6 px-6 text-left">Date Assigned</th>
+                    <th className="py-6 px-10 text-right pr-12">Operations</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {assignedOrders.map((order) => (
-                    <tr
-                      key={order.id}
-                      className="group hover:bg-slate-50/80 transition-all duration-200"
-                    >
-                      <td className="py-6 px-8">
-                        <div className="font-bold text-slate-900">
-                          {order.spa_name}
-                        </div>
-                        <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium">
-                          <MapPin className="w-3 h-3 text-slate-300" />{" "}
-                          {order.address}
+                    <tr key={order.id} className="group hover:bg-slate-50/40 transition-colors">
+                      <td className="py-8 px-10">
+                        <p className="font-black text-slate-900 leading-none mb-1.5">{order.spa_name}</p>
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 italic">
+                          <MapPin className="w-3 h-3 text-slate-300" /> {order.address}
                         </div>
                       </td>
-                      <td className="py-6 px-4">
-                        <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2.5 py-1 inline-flex items-center gap-2">
-                          <Package className="w-3.5 h-3.5" />{" "}
+                      
+                      <td className="py-8 px-6">
+                        <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2.5 py-1.5 inline-flex items-center gap-2">
+                          <Package className="w-3.5 h-3.5 text-slate-400" />
                           {order.product_name}
-                          <span className="text-slate-400 font-normal ml-1">
-                            x{order.quantity}
-                          </span>
                         </div>
                       </td>
-                      <td className="py-6 px-4">
+
+                      {/* NEW QUANTITY COLUMN */}
+                      <td className="py-8 px-6 text-center">
+                        <div className="inline-flex flex-col items-center">
+                          <span className="text-lg font-black text-slate-900">{order.quantity}</span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Units</span>
+                        </div>
+                      </td>
+
+                      <td className="py-8 px-6">
                         <div className="flex items-center gap-3">
-                          <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100">
-                            {getStatusIcon(order.status)}
+                          <div className="p-2 bg-white rounded-xl shadow-sm border border-slate-100">
+                             {getStatusIcon(order.status)}
                           </div>
-                          <span className="text-sm font-bold text-slate-700">
-                            {order.status}
+                          <span className="text-sm font-black text-slate-700">{order.status}</span>
+                        </div>
+                      </td>
+
+                      <td className="py-8 px-6">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${order.payment_status === "Paid" ? "bg-emerald-500" : "bg-slate-300"}`} />
+                          <span className={`text-[10px] font-black uppercase tracking-tight ${
+                            order.payment_status === "Paid" ? "text-emerald-600" : "text-slate-400"
+                          }`}>
+                            {order.payment_status}
                           </span>
                         </div>
                       </td>
 
-                      <td className="py-6 px-4">
-                        <Badge
-                          variant="outline"
-                          className={`rounded-full px-3 py-0.5 font-bold border-none text-[10px] uppercase tracking-tighter ${
-                            order.payment_status === "Paid"
-                              ? "bg-emerald-100 text-emerald-700"
-                              : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          {order.payment_status}
-                        </Badge>
+                      <td className="py-8 px-6">
+                        <div className="text-[11px] font-black text-slate-400 uppercase tracking-tighter">
+                          {new Date(order.created).toLocaleDateString("en-US", {
+                            month: "short", day: "numeric", year: "numeric"
+                          })}
+                        </div>
                       </td>
-                      <td className="py-6 px-4 text-sm font-medium text-slate-500">
-                        {new Date(order.created).toLocaleDateString()}
-                      </td>
-                      <td className="py-6 px-8 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          {/* Timeline */}
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            onClick={() => setActiveOrder(order)}
-                            className="rounded-lg hover:bg-slate-100 text-slate-500"
-                          >
-                            <Calendar className="w-4 h-4" />
+
+                      <td className="py-8 px-10 text-right pr-12">
+                        <div className="flex items-center justify-end gap-3">
+                          <Button variant="outline" size="icon" onClick={() => setActiveOrder(order)} className="rounded-xl h-10 w-10 hover:bg-white hover:border-slate-200">
+                            <Calendar className="w-4 h-4 text-slate-400" />
                           </Button>
 
-                          {/* Status action */}
                           {order.status !== "Delivered" ? (
-                            <Button
-                              size="sm"
-                              onClick={() =>
-                                handleStatusUpdate(order.id, order.status)
-                              }
-                              className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-100 rounded-lg h-9 px-4 font-bold"
+                            <Button 
+                              size="sm" 
+                              onClick={() => handleStatusUpdate(order.id, order.status)} 
+                              className="bg-blue-600 hover:bg-blue-700 text-white shadow-xl shadow-blue-500/10 rounded-xl h-10 px-6 font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
                             >
-                              Mark {getNextStatus(order.status)}
-                              <ArrowRightCircle className="w-4 h-4 ml-2" />
+                              Ship To {getNextStatus(order.status)}
+                              <ArrowRightCircle className="w-3.5 h-3.5 ml-2" />
                             </Button>
                           ) : (
-                            <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
-                              <CheckCircle className="w-4 h-4" /> Delivered
+                            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl font-black text-[10px] uppercase tracking-widest border border-emerald-100/50">
+                              <CheckCircle className="w-3.5 h-3.5" /> Order Complete
                             </div>
                           )}
                         </div>
