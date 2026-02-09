@@ -22,6 +22,7 @@ import {
   MapPin,
   User,
   X,
+  Calendar,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import pb from "../../lib/pocketbase";
@@ -407,8 +408,7 @@ const SalespersonDashboard: React.FC = () => {
                   {myOrders.map((order) => (
                     <tr
                       key={order.id}
-                      onClick={() => setSelectedOrder(order)}
-                      className="group hover:bg-slate-50/80 transition-all duration-200 cursor-pointer"
+                      className="group hover:bg-slate-50/80 transition-all duration-200"
                     >
                       <td className="py-6 px-8">
                         <div className="font-bold text-slate-900">
@@ -451,17 +451,31 @@ const SalespersonDashboard: React.FC = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="py-6 px-4 text-right pr-8">
-                        <div className="text-sm font-bold text-slate-700">
-                          {new Date(order.created).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
+                      <td className="py-6 px-4 pr-8">
+                        <div className="flex items-center justify-end gap-3">
+                          {/* Timeline calendar icon */}
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => setSelectedOrder(order)}
+                            title="View timeline"
+                            className="text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                          >
+                            <Calendar className="w-4 h-4" />
+                          </Button>
+
+                          {/* Creation date */}
+                          <div className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                            {new Date(order.created).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}
+                          </div>
                         </div>
-                        {/* <div className="text-[10px] font-medium text-slate-400 uppercase mt-1">
-                          ID: #{order.id.slice(-4)}
-                        </div> */}
                       </td>
                     </tr>
                   ))}
