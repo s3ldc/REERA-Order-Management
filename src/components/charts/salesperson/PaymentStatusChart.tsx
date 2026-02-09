@@ -36,6 +36,29 @@ const renderActiveShape = (props: any) => {
   );
 };
 
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
+        <div className="flex items-center gap-2 mb-1">
+          <div 
+            className="w-2 h-2 rounded-full" 
+            style={{ backgroundColor: COLORS[data.name as keyof typeof COLORS] }}
+          />
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            {data.name}
+          </span>
+        </div>
+        <p className="text-sm font-bold text-slate-900">
+          {data.value} <span className="text-slate-400 font-medium text-xs">Invoices</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const PaymentStatusChart = () => {
   const { orders } = useOrderContext();
   const { user } = useAuth();
@@ -80,15 +103,15 @@ const PaymentStatusChart = () => {
                   activeIndex={activeIndex}
                   activeShape={renderActiveShape}
                   data={data}
-                  innerRadius={82} // Sleek thin ring geometry
-                  outerRadius={92}
-                  paddingAngle={3}
-                  cornerRadius={40}
+                  innerRadius={70} // Sleek thin ring geometry
+                  outerRadius={95}
+                  paddingAngle={10}
+                  cornerRadius={12}
                   dataKey="value"
                   stroke="none"
                   onMouseEnter={onPieEnter}
                   onMouseLeave={onPieLeave}
-                  animationDuration={800}
+                  animationDuration={1000}
                 >
                   {data.map((entry) => (
                     <Cell
@@ -98,21 +121,7 @@ const PaymentStatusChart = () => {
                     />
                   ))}
                 </Pie>
-                <Tooltip 
-                  cursor={false}
-                  content={({ active, payload }: any) => {
-                    if (active && payload && payload.length) {
-                      const d = payload[0].payload;
-                      return (
-                        <div className="bg-white/95 backdrop-blur-md border border-slate-100 px-3 py-2 shadow-xl rounded-xl">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{d.name}</p>
-                          <p className="text-sm font-black text-slate-900">{d.value} Invoices</p>
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
+                <Tooltip content={<CustomTooltip />} cursor={false} />
               </PieChart>
             </ResponsiveContainer>
           </>
