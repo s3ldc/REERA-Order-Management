@@ -288,11 +288,11 @@ const DistributorDashboard: React.FC = () => {
         </CardContent>
       </Card>
       {activeOrder && (
-  <DistributorOrderTimelineDrawer
-    order={activeOrder}
-    onClose={() => setActiveOrder(null)}
-  />
-)}
+        <DistributorOrderTimelineDrawer
+          order={activeOrder}
+          onClose={() => setActiveOrder(null)}
+        />
+      )}
     </div>
   );
 };
