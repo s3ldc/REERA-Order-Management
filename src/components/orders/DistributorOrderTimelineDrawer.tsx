@@ -1,5 +1,5 @@
 import React from "react";
-import { X, User, Truck, CheckCircle2, Package, Boxes, Loader2, AlertCircle } from "lucide-react";
+import { X, User, Truck, CheckCircle2, Package, Box, Loader2, AlertCircle } from "lucide-react";
 import { Card, CardHeader, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -26,7 +26,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => 
   const getEventConfig = (type: string, message: string) => {
     const msg = message.toLowerCase();
     if (type === "created" || msg.includes("created")) 
-      return { icon: Boxes, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" };
+      return { icon: Box, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" };
     if (type === "assigned" || msg.includes("assigned")) 
       return { icon: Package, color: "text-indigo-600", bg: "bg-indigo-50", border: "border-indigo-200" };
     if (msg.includes("dispatched") || msg.includes("shipped")) 
