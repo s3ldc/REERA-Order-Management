@@ -10,14 +10,15 @@ import {
 import { ChartCard } from "@/components/ui/chart-card";
 import { useOrderContext } from "@/context/OrderContext";
 import { useAuth } from "@/context/AuthContext";
+import { Package } from "lucide-react"; // Import for the center icon
 
 const COLORS = {
-  Pending: "#f59e0b",   // amber-500
-  Dispatched: "#3b82f6", // blue-500
-  Delivered: "#10b981",  // emerald-500
+  Pending: "#f59e0b",   // Amber-500
+  Dispatched: "#4f46e5", // Indigo-600
+  Delivered: "#10b981",  // Emerald-500
 };
 
-// --- Custom Active Shape for SaaS Tactile Feel ---
+// --- Custom Active Shape for High-Fidelity UI ---
 const renderActiveShape = (props: any) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
   return (
@@ -25,38 +26,15 @@ const renderActiveShape = (props: any) => {
       <Sector
         cx={cx}
         cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius + 6} // Expands segment on hover
+        innerRadius={innerRadius - 2}
+        outerRadius={outerRadius + 4}
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
-        cornerRadius={12}
+        cornerRadius={40} // Fully rounded ends as per image_cf7a7e.png
       />
     </g>
   );
-};
-
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    const data = payload[0].payload;
-    return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
-        <div className="flex items-center gap-2 mb-1">
-          <div 
-            className="w-2 h-2 rounded-full" 
-            style={{ backgroundColor: COLORS[data.name as keyof typeof COLORS] }}
-          />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-            {data.name}
-          </span>
-        </div>
-        <p className="text-sm font-bold text-slate-900">
-          {data.value} <span className="text-slate-400 font-medium text-xs">Orders</span>
-        </p>
-      </div>
-    );
-  }
-  return null;
 };
 
 const OrdersByStatusChart = () => {
@@ -64,7 +42,6 @@ const OrdersByStatusChart = () => {
   const { user } = useAuth();
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  // 🔹 Only orders created by this salesperson
   const myOrders = orders?.filter((o) => o.salesperson_id === user?.id) || [];
   const total = myOrders.length;
 
@@ -78,22 +55,24 @@ const OrdersByStatusChart = () => {
   const onPieLeave = () => setActiveIndex(-1);
 
   return (
-    <ChartCard 
-      title="Order Distribution" 
-      // subtitle="Lifecycle breakdown of your generated sales"
-    >
-      <div className="relative h-[280px] w-full mt-4">
+    <ChartCard title="Order Distribution">
+      <div className="relative h-[260px] w-full mt-2">
         {total === 0 ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <div className="bg-slate-50 p-4 rounded-full mb-3 text-2xl">📊</div>
-            <p className="text-xs text-slate-400 font-medium">No sales orders generated yet</p>
+            {/* Matches placeholder style in image_755f65.png */}
+            <div className="bg-slate-50 p-5 rounded-full mb-4">
+               <Package className="w-8 h-8 text-slate-200" /> 
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">No orders found</h3>
+            <p className="text-xs text-slate-400 mt-1">Start by creating a new order above.</p>
           </div>
         ) : (
           <>
-            {/* Center Label for Donut Hole */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Total Created</span>
-              <span className="text-3xl font-black text-slate-900 leading-none">{total}</span>
+            {/* Center Content: Icon + Count + Label */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
+              <Package className="w-5 h-5 text-slate-300 mb-1" />
+              <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{total}</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total Orders</span>
             </div>
 
             <ResponsiveContainer width="100%" height="100%">
@@ -104,54 +83,69 @@ const OrdersByStatusChart = () => {
                   data={data}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={70}
-                  outerRadius={95}
-                  paddingAngle={8}
-                  cornerRadius={12}
+                  innerRadius={82} // Matches thin ring in image_cf7a7e.png
+                  outerRadius={92}
+                  paddingAngle={3} // Subtle gap between segments
+                  cornerRadius={40}
                   stroke="none"
                   onMouseEnter={onPieEnter}
                   onMouseLeave={onPieLeave}
-                  animationDuration={1000}
+                  animationDuration={800}
                 >
                   {data.map((entry) => (
                     <Cell
                       key={entry.name}
                       fill={COLORS[entry.name as keyof typeof COLORS]}
-                      className="transition-all duration-300 outline-none hover:opacity-90"
+                      className="transition-all duration-300 outline-none cursor-pointer hover:opacity-90"
                     />
                   ))}
                 </Pie>
-                <Tooltip content={<CustomTooltip />} cursor={false} />
+                <Tooltip 
+                  cursor={false} 
+                  content={({ active, payload }: any) => {
+                    if (active && payload && payload.length) {
+                      const d = payload[0].payload;
+                      return (
+                        <div className="bg-white/95 backdrop-blur-md border border-slate-100 px-3 py-2 shadow-xl rounded-xl">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{d.name}</p>
+                          <p className="text-sm font-black text-slate-900">{d.value} Orders</p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </>
         )}
       </div>
 
-      {/* Synchronized Legend Grid */}
-      <div className="mt-6 grid grid-cols-3 gap-2">
-        {["Pending", "Dispatched", "Delivered"].map((status, index) => {
+      {/* Legend Grid Matching the Card Style */}
+      <div className="mt-4 grid grid-cols-3 gap-3">
+        {["Pending", "Dispatched", "Delivered"].map((status) => {
           const count = myOrders.filter(o => o.status === status).length;
+          const percentage = total > 0 ? ((count / total) * 100).toFixed(0) : 0;
           const isSelected = data[activeIndex]?.name === status;
           
           return (
             <div 
               key={status} 
-              className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+              className={`flex flex-col items-center p-2.5 rounded-2xl border transition-all duration-300 ${
                 isSelected 
-                  ? 'bg-white border-slate-200 shadow-sm ring-1 ring-slate-100' 
-                  : 'bg-slate-50/50 border-transparent'
+                  ? 'bg-slate-50 border-slate-200 shadow-sm' 
+                  : 'bg-transparent border-transparent'
               }`}
             >
               <div 
-                className="h-1.5 w-8 rounded-full mb-2" 
+                className="h-1 w-6 rounded-full mb-2" 
                 style={{ backgroundColor: COLORS[status as keyof typeof COLORS] }}
               />
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">
                 {status}
               </span>
-              <span className="text-sm font-black text-slate-800">
-                {total > 0 ? ((count / total) * 100).toFixed(0) : 0}%
+              <span className="text-xs font-black text-slate-800">
+                {percentage}%
               </span>
             </div>
           );
