@@ -129,8 +129,8 @@ const PaymentStatusChart = () => {
           return (
             <div 
               key={status} 
-              className={`flex flex-col items-center p-2.5 rounded-2xl border transition-all duration-300 ${
-                isSelected ? 'bg-slate-50 border-slate-200 shadow-sm' : 'bg-transparent border-transparent'
+              className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+                isSelected ? 'bg-white border-slate-200 shadow-sm ring-1 ring-slate-100' : 'bg-slate-50/50 border-slate-100'
               }`}
             >
               <div 
