@@ -11,6 +11,7 @@ import {
 import { ChartCard } from "@/components/ui/chart-card";
 import { useOrderContext } from "@/context/OrderContext";
 import { useAuth } from "@/context/AuthContext";
+import { Activity } from "lucide-react"; // Relevant icon for Velocity/Trends
 import dayjs from "dayjs";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -36,29 +37,30 @@ const OrdersOverTimeChart = () => {
   const myOrders = orders?.filter((o) => o.salesperson_id === user?.id) || [];
 
   const ordersByDate = myOrders.reduce<Record<string, number>>((acc, order) => {
-  const dateKey = dayjs(order.created).format("YYYY-MM-DD"); // sortable
-  acc[dateKey] = (acc[dateKey] || 0) + 1;
-  return acc;
-}, {});
+    const dateKey = dayjs(order.created).format("YYYY-MM-DD");
+    acc[dateKey] = (acc[dateKey] || 0) + 1;
+    return acc;
+  }, {});
 
- const data = Object.entries(ordersByDate)
-  .sort(([a], [b]) => dayjs(a).unix() - dayjs(b).unix())
-  .map(([date, count]) => ({
-    date: dayjs(date).format("DD MMM"), // format AFTER sorting
-    orders: count,
-  }));
+  const data = Object.entries(ordersByDate)
+    .sort(([a], [b]) => dayjs(a).unix() - dayjs(b).unix())
+    .map(([date, count]) => ({
+      date: dayjs(date).format("DD MMM"),
+      orders: count,
+    }));
 
   return (
-    <ChartCard 
-      title="Sales Velocity" 
-      // subtitle="Order generation trends over the current period"
-    >
+    <ChartCard title="Sales Velocity">
       <div className="h-[300px] w-full mt-4 -ml-4">
         {data.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center">
-            <div className="bg-slate-50 p-4 rounded-full mb-3 text-2xl">📈</div>
-            <p className="text-xs text-slate-400 font-medium tracking-tight">
-              No order activity recorded yet
+          <div className="h-full flex flex-col items-center justify-center text-center p-6 -ml-4">
+            {/* Optimized Placeholder following image_755f65.png style */}
+            <div className="bg-slate-50 p-5 rounded-full mb-4 shadow-sm border border-slate-100/50">
+               <Activity className="w-10 h-10 text-slate-200 stroke-[1.5]" /> 
+            </div>
+            <h3 className="text-sm font-bold text-slate-900 tracking-tight">No activity recorded yet</h3>
+            <p className="text-[11px] text-slate-400 mt-1 max-w-[200px] leading-relaxed">
+              Fulfillment velocity and order trends will populate once shipments are processed.
             </p>
           </div>
         ) : (
