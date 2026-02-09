@@ -455,13 +455,15 @@ const SalespersonDashboard: React.FC = () => {
                         <div className="flex items-center justify-end gap-3">
                           {/* Timeline calendar icon */}
                           <Button
-                            size="icon"
+                            size="sm"
                             variant="ghost"
                             onClick={() => setSelectedOrder(order)}
-                            title="View timeline"
-                            className="text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                            className="group flex items-center gap-1"
                           >
                             <Calendar className="w-4 h-4" />
+                            <span className="hidden group-hover:inline text-xs">
+                              Timeline
+                            </span>
                           </Button>
 
                           {/* Creation date */}

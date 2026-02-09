@@ -36,13 +36,15 @@ const OrdersOverTimeChart = () => {
   const myOrders = orders?.filter((o) => o.salesperson_id === user?.id) || [];
 
   const ordersByDate = myOrders.reduce<Record<string, number>>((acc, order) => {
-    const date = dayjs(order.created).format("DD MMM");
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {});
+  const dateKey = dayjs(order.created).format("YYYY-MM-DD"); // sortable
+  acc[dateKey] = (acc[dateKey] || 0) + 1;
+  return acc;
+}, {});
 
-  const data = Object.entries(ordersByDate).map(([date, count]) => ({
-    date,
+ const data = Object.entries(ordersByDate)
+  .sort(([a], [b]) => dayjs(a).unix() - dayjs(b).unix())
+  .map(([date, count]) => ({
+    date: dayjs(date).format("DD MMM"), // format AFTER sorting
     orders: count,
   }));
 
