@@ -108,12 +108,13 @@ const OrdersByStatusChart = () => {
             {/* Center Content: Icon + Count + Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
               {/* <Package className="w-5 h-5 text-slate-300 mb-1" /> */}
+               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                Total Orders
+              </span>
               <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">
                 {total}
               </span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                Total Orders
-              </span>
+             
             </div>
 
             <ResponsiveContainer width="100%" height="100%">

@@ -103,9 +103,9 @@ export default function OrdersByStatusChart() {
     >
       <div className="relative h-[280px] w-full mt-4">
         {/* Metric Centerpiece: The "Big Number" */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Total Assigned</span>
-          <span className="text-3xl font-black text-slate-900 leading-none">{total}</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Total Assigned</span>
+          <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{total}</span>
         </div>
 
         <ResponsiveContainer width="100%" height="100%">
