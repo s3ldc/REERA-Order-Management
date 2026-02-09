@@ -331,7 +331,7 @@ const AdminDashboard: React.FC = () => {
                           {order.payment_status}
                         </Badge>
                       </td>
-                      <td className="py-6 px-4 text-sm font-medium text-slate-500">
+                      <td className="py-6 px-4 text-sm font-bold text-slate-700">
                         {new Date(order.created).toLocaleDateString(undefined, {
                           month: "short",
                           day: "numeric",
