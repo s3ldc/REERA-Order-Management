@@ -13,14 +13,15 @@ import { useAuth } from "@/context/AuthContext";
 import { Package } from "lucide-react"; // Import for the center icon
 
 const COLORS = {
-  Pending: "#f59e0b",   // Amber-500
+  Pending: "#f59e0b", // Amber-500
   Dispatched: "#4f46e5", // Indigo-600
-  Delivered: "#10b981",  // Emerald-500
+  Delivered: "#10b981", // Emerald-500
 };
 
 // --- Custom Active Shape for High-Fidelity UI ---
 const renderActiveShape = (props: any) => {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+    props;
   return (
     <g>
       <Sector
@@ -46,10 +47,19 @@ const OrdersByStatusChart = () => {
   const total = myOrders.length;
 
   const data = [
-    { name: "Pending", value: myOrders.filter((o) => o.status === "Pending").length },
-    { name: "Dispatched", value: myOrders.filter((o) => o.status === "Dispatched").length },
-    { name: "Delivered", value: myOrders.filter((o) => o.status === "Delivered").length },
-  ].filter(d => d.value > 0);
+    {
+      name: "Pending",
+      value: myOrders.filter((o) => o.status === "Pending").length,
+    },
+    {
+      name: "Dispatched",
+      value: myOrders.filter((o) => o.status === "Dispatched").length,
+    },
+    {
+      name: "Delivered",
+      value: myOrders.filter((o) => o.status === "Delivered").length,
+    },
+  ].filter((d) => d.value > 0);
 
   const onPieEnter = (_: any, index: number) => setActiveIndex(index);
   const onPieLeave = () => setActiveIndex(-1);
@@ -61,18 +71,26 @@ const OrdersByStatusChart = () => {
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             {/* Matches placeholder style in image_755f65.png */}
             <div className="bg-slate-50 p-5 rounded-full mb-4">
-               <Package className="w-8 h-8 text-slate-200" /> 
+              <Package className="w-8 h-8 text-slate-200" />
             </div>
-            <h3 className="text-sm font-bold text-slate-900">No orders found</h3>
-            <p className="text-xs text-slate-400 mt-1">Start by creating a new order above.</p>
+            <h3 className="text-sm font-bold text-slate-900">
+              No orders found
+            </h3>
+            <p className="text-xs text-slate-400 mt-1">
+              Start by creating a new order above.
+            </p>
           </div>
         ) : (
           <>
             {/* Center Content: Icon + Count + Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
               {/* <Package className="w-5 h-5 text-slate-300 mb-1" /> */}
-              <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{total}</span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total Orders</span>
+              <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">
+                {total}
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                Total Orders
+              </span>
             </div>
 
             <ResponsiveContainer width="100%" height="100%">
@@ -100,15 +118,19 @@ const OrdersByStatusChart = () => {
                     />
                   ))}
                 </Pie>
-                <Tooltip 
-                  cursor={false} 
+                <Tooltip
+                  cursor={false}
                   content={({ active, payload }: any) => {
                     if (active && payload && payload.length) {
                       const d = payload[0].payload;
                       return (
                         <div className="bg-white/95 backdrop-blur-md border border-slate-100 px-3 py-2 shadow-xl rounded-xl">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{d.name}</p>
-                          <p className="text-sm font-black text-slate-900">{d.value} Orders</p>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                            {d.name}
+                          </p>
+                          <p className="text-sm font-black text-slate-900">
+                            {d.value} Orders
+                          </p>
                         </div>
                       );
                     }
@@ -124,22 +146,24 @@ const OrdersByStatusChart = () => {
       {/* Legend Grid Matching the Card Style */}
       <div className="mt-4 grid grid-cols-3 gap-3">
         {["Pending", "Dispatched", "Delivered"].map((status) => {
-          const count = myOrders.filter(o => o.status === status).length;
+          const count = myOrders.filter((o) => o.status === status).length;
           const percentage = total > 0 ? ((count / total) * 100).toFixed(0) : 0;
           const isSelected = data[activeIndex]?.name === status;
-          
+
           return (
-            <div 
-              key={status} 
-              className={`flex flex-col items-center p-2.5 rounded-2xl border transition-all duration-300 ${
-                isSelected 
-                  ? 'bg-slate-50 border-slate-200 shadow-sm' 
-                  : 'bg-transparent border-transparent'
+            <div
+              key={status}
+              className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+                isSelected
+                  ? "bg-white border-slate-200 shadow-sm ring-1 ring-slate-100"
+                  : "bg-slate-50/50 border-transparent"
               }`}
             >
-              <div 
-                className="h-1 w-6 rounded-full mb-2" 
-                style={{ backgroundColor: COLORS[status as keyof typeof COLORS] }}
+              <div
+                className="h-1 w-6 rounded-full mb-2"
+                style={{
+                  backgroundColor: COLORS[status as keyof typeof COLORS],
+                }}
               />
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">
                 {status}
