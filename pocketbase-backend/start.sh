@@ -1,2 +1,2 @@
 #!/bin/sh
-./pocketbase serve --http=0.0.0.0:8090
+./pocketbase serve --http=0.0.0.0:$PORT
