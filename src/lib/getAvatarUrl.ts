@@ -1,4 +1,4 @@
-// lib/getAvatarUrl.ts
+
 import pb from "./pocketbase";
 
 interface AvatarUser {
