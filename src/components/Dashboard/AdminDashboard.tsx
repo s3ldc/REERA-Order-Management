@@ -321,15 +321,24 @@ const AdminDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-6 px-4">
-                        <Badge
-                          className={`rounded-full px-3 py-1 font-bold border-none shadow-sm ${
-                            order.payment_status === "Paid"
-                              ? "bg-emerald-500 text-white"
-                              : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          {order.payment_status}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              order.payment_status === "Paid"
+                                ? "bg-emerald-500"
+                                : "bg-slate-300"
+                            }`}
+                          />
+                          <span
+                            className={`text-xs font-bold uppercase ${
+                              order.payment_status === "Paid"
+                                ? "text-emerald-600"
+                                : "text-slate-400"
+                            }`}
+                          >
+                            {order.payment_status}
+                          </span>
+                        </div>
                       </td>
                       <td className="py-6 px-4 text-sm font-bold text-slate-700">
                         {new Date(order.created).toLocaleDateString(undefined, {
@@ -340,7 +349,8 @@ const AdminDashboard: React.FC = () => {
                       </td>
                       <td className="py-6 px-8 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <Button title="View order timeline"
+                          <Button
+                            title="View order timeline"
                             size="sm"
                             variant="ghost"
                             onClick={() => setActiveOrder(order)}
