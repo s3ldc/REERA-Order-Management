@@ -189,7 +189,7 @@ const DistributorDashboard: React.FC = () => {
                     <th className="py-5 px-4">Product Specs</th>
                     {/* NEW COLUMN HEADER */}
                     <th className="py-5 px-4 text-center">QTY</th>
-                    <th className="py-5 px-4">Current Status</th>
+                    <th className="py-5 px-4">Status</th>
                     <th className="py-5 px-4">Payment</th>
                     <th className="py-5 px-4">Date Assigned</th>
                     <th className="py-5 px-8 text-right">Action</th>
@@ -222,19 +222,11 @@ const DistributorDashboard: React.FC = () => {
                       </td>
 
                       <td className="py-6 px-4">
-                        <div className="flex items-center gap-3">
-                          <Badge
-                            variant="outline"
-                            className={`rounded-full px-3 py-1 font-bold border-none ${
-                              order.status === "Pending"
-                                ? "bg-amber-100 text-amber-600"
-                                : order.status === "Dispatched"
-                                  ? "bg-blue-100 text-blue-600"
-                                  : "bg-emerald-100 text-emerald-600"
-                            }`}
-                          >
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(order.status)}
+                          <span className="text-sm font-bold text-slate-700">
                             {order.status}
-                          </Badge>
+                          </span>
                         </div>
                       </td>
 
