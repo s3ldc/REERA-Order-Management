@@ -24,6 +24,7 @@ import {
   Search,
   ArrowRight,
   Clock,
+  RotateCcw,
 } from "lucide-react";
 import UserManagementModal from "../UserManagementModal";
 import { useToast } from "../../hooks/useToast";
@@ -45,6 +46,12 @@ const AdminDashboard: React.FC = () => {
     dateTo: "",
   });
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
+
+  const initialFilters = { status: "all", dateFrom: "", dateTo: "" };
+
+  const handleClearFilters = () => {
+    setFilters(initialFilters);
+  };
 
   const filteredOrders =
     orders?.filter((order) => {
@@ -205,17 +212,31 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Advanced Filters */}
-      <Card className="border-none shadow-sm bg-white rounded-2xl">
-        <CardHeader className="border-b border-slate-50 py-4 px-8">
-          <div className="flex items-center gap-2 text-slate-900 font-bold">
-            <Filter className="w-4 h-4" />
-            <span>Global Filters</span>
+      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden">
+        <CardHeader className="border-b border-slate-50 py-5 px-8 bg-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-slate-900 font-bold">
+              <Filter className="w-4 h-4 text-indigo-500" />
+              <span className="tracking-tight">Global Filters</span>
+            </div>
+
+            {/* CLEAR FILTER BUTTON */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClearFilters}
+              className="h-8 px-3 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all flex items-center gap-2"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Clear All
+            </Button>
           </div>
         </CardHeader>
+
         <CardContent className="p-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-500 uppercase">
+            <div className="space-y-3">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Fulfillment Status
               </Label>
               <select
@@ -224,7 +245,7 @@ const AdminDashboard: React.FC = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, status: e.target.value })
                 }
-                className="w-full h-11 px-4 border border-slate-200 rounded-xl bg-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                className="w-full h-11 px-4 border border-slate-100 rounded-xl bg-slate-50 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all cursor-pointer appearance-none"
               >
                 <option value="all">All Statuses</option>
                 <option value="Pending">Pending</option>
@@ -232,8 +253,9 @@ const AdminDashboard: React.FC = () => {
                 <option value="Delivered">Delivered</option>
               </select>
             </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-500 uppercase">
+
+            <div className="space-y-3">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Start Date
               </Label>
               <Input
@@ -242,11 +264,12 @@ const AdminDashboard: React.FC = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, dateFrom: e.target.value })
                 }
-                className="h-11 rounded-xl border-slate-200 bg-slate-50"
+                className="h-11 rounded-xl border-slate-100 bg-slate-50 font-medium text-slate-600 focus:bg-white transition-all shadow-none"
               />
             </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-500 uppercase">
+
+            <div className="space-y-3">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 End Date
               </Label>
               <Input
@@ -255,7 +278,7 @@ const AdminDashboard: React.FC = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, dateTo: e.target.value })
                 }
-                className="h-11 rounded-xl border-slate-200 bg-slate-50"
+                className="h-11 rounded-xl border-slate-100 bg-slate-50 font-medium text-slate-600 focus:bg-white transition-all shadow-none"
               />
             </div>
           </div>
