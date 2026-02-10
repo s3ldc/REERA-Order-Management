@@ -27,9 +27,9 @@ const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
     if (lowerType === "dispatched" || lowerMsg.includes("dispatched") || lowerMsg.includes("shipped")) {
       return { icon: Truck, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200" };
     }
-    if (lowerType === "status_change" || lowerMsg.includes("processing") || lowerMsg.includes("status changed")) {
-      return { icon: PackageCheck, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-200" };
-    }
+    // if (lowerType === "status_change" || lowerMsg.includes("processing") || lowerMsg.includes("status changed")) {
+    //   return { icon: PackageCheck, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-200" };
+    // }
     if (lowerType === "payment" || lowerMsg.includes("paid") || lowerMsg.includes("unpaid")) {
       return { icon: CreditCard, color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-200" };
     }

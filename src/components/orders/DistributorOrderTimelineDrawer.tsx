@@ -53,7 +53,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => 
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Logistics Audit</h3>
-                <h2 className="text-lg font-bold text-slate-900 leading-tight">Order Activity</h2>
+                <h2 className="text-lg font-bold text-slate-900 leading-tight">Order Timeline</h2>
                 {/* <div className="mt-2">
                    <Badge variant="outline" className="bg-white border-slate-200 text-[10px] font-bold px-2 py-0">
                       ID: {order.id.slice(0, 8)}
