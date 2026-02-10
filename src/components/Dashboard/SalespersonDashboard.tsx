@@ -23,6 +23,8 @@ import {
   User,
   X,
   Calendar,
+  Truck,
+  CheckCircle,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import pb from "../../lib/pocketbase";
@@ -48,6 +50,19 @@ const SalespersonDashboard: React.FC = () => {
   >([]);
 
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "Pending":
+        return <Clock className="w-5 h-5 text-amber-600" />;
+      case "Dispatched":
+        return <Truck className="w-5 h-5 text-blue-600" />;
+      case "Delivered":
+        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
+      default:
+        return <Package className="w-5 h-5 text-slate-500" />;
+    }
+  };
 
   const myOrders =
     orders?.filter((order) => order.salesperson_id === user?.id) || [];
@@ -428,16 +443,12 @@ const SalespersonDashboard: React.FC = () => {
                         {order.quantity}
                       </td>
                       <td className="py-6 px-4">
-                        <Badge
-                          variant="outline"
-                          className={`rounded-full px-3 py-1 font-bold border-none ${
-                            order.status === "Pending"
-                              ? "bg-amber-100 text-amber-600"
-                              : "bg-blue-100 text-blue-600"
-                          }`}
-                        >
-                          {order.status}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(order.status)}
+                          <span className="text-sm font-bold text-slate-700">
+                            {order.status}
+                          </span>
+                        </div>
                       </td>
                       <td className="py-6 px-4">
                         <div className="flex items-center gap-2">
