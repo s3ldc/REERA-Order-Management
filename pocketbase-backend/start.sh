@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "Starting PocketBase..."
+echo "Starting PocketBase.."
 pwd
 ls -la
 
