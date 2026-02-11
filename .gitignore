@@ -73,3 +73,5 @@ coverage/
 
 # TernJS port file
 .tern-port
+
+pocketbase-backend/pb_data/
