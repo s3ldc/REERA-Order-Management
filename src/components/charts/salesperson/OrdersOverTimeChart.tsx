@@ -11,7 +11,7 @@ import {
 import { ChartCard } from "@/components/ui/chart-card";
 import { useOrderContext } from "@/context/OrderContext";
 import { useAuth } from "@/context/AuthContext";
-import { Activity } from "lucide-react"; // Relevant icon for Velocity/Trends
+import { Activity } from "lucide-react";
 import dayjs from "dayjs";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
