@@ -384,13 +384,6 @@ const SalespersonDashboard: React.FC = () => {
                 Tracking your most recent order submissions
               </CardDescription>
             </div>
-            {/* <div className="relative group">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
-              <Input
-                placeholder="Filter orders..."
-                className="pl-10 h-10 w-full md:w-64 rounded-lg bg-slate-50 border-none focus:bg-white transition-all ring-0 focus-visible:ring-1 focus-visible:ring-blue-200"
-              />
-            </div> */}
           </div>
         </CardHeader>
         <CardContent className="p-0">
