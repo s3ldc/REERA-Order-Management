@@ -13,5 +13,6 @@ export default defineSchema({
     avatar: v.optional(v.string()),
     verified: v.boolean(),
     createdAt: v.number(),
-  }).index("by_email", ["email"]),
+  })
+    .index("by_email", ["email"]),
 });
