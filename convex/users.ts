@@ -11,7 +11,11 @@ export const createUser = mutation({
   args: {
     name: v.string(),
     email: v.string(),
-    role: v.string(),
+    role: v.union(
+      v.literal("Admin"),
+      v.literal("Salesperson"),
+      v.literal("Distributor")
+    ),
     avatar: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
