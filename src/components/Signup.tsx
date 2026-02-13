@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-mo
 import { UserPlus, Mail, Lock, Eye, EyeOff, ArrowRight, User, Briefcase, Zap, ShieldCheck } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
-import { useMutation } from "convex/react";
+import { useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 type Role = "Salesperson" | "Distributor";
@@ -38,7 +38,7 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const createUser = useMutation(api.users.createUser);
+  const createUser = useAction(api.users.createUser);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
