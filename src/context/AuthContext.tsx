@@ -74,29 +74,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // }, []);
 
   // --- LOGIN ---
-  const login = async (email: string, _password: string): Promise<boolean> => {
-    try {
-      const users = await convex.query(api.users.getUsers);
+const login = async (email: string, password: string): Promise<boolean> => {
+  try {
+    const result = await convex.action(api.auth.login, {
+      email,
+      password,
+    });
 
-      const foundUser = users.find((u: any) => u.email === email);
+    if (!result) return false;
 
-      if (!foundUser) return false;
+    const mappedUser: User = {
+      id: result._id,
+      email: result.email,
+      name: result.name,
+      role: result.role,
+      avatar: result.avatar,
+    };
 
-      const mappedUser: User = {
-        id: foundUser._id,
-        email: foundUser.email,
-        name: foundUser.name,
-        role: foundUser.role,
-        avatar: foundUser.avatar,
-      };
-
-      setUser(mappedUser);
-      return true;
-    } catch (err) {
-      console.error("Login failed", err);
-      return false;
-    }
-  };
+    setUser(mappedUser);
+    return true;
+  } catch (err) {
+    console.error("Login failed", err);
+    return false;
+  }
+};
 
   // --- LOGOUT ---
 const logout = () => {
@@ -112,7 +113,7 @@ const signUp = async (
   try {
     await convex.mutation(api.users.createUser, {
       email,
-      password, // ✅ add this
+      password,
       name: userData.name,
       role: userData.role,
       avatar: "",
