@@ -11,8 +11,9 @@ import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 import { getAvatarUrl } from "./lib/getAvatarUrl";
-import AppSkeleton from "./components/AppSkeleton";
+// import AppSkeleton from "./components/AppSkeleton";
 import AdminDashboardSkeleton from "./components/skeletons/AdminDashboardSkeleton";
+import SalespersonDashboardSkeleton from "./components/skeletons/SalespersonDashboardSkeleton";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
@@ -30,6 +31,19 @@ const AppContent: React.FC = () => {
 // const { user, logout, loading } = useAuth();
 
 if (loading) {
+  if (user?.role === "Admin") {
+    return <AdminDashboardSkeleton />;
+  }
+
+  if (user?.role === "Salesperson") {
+    return <SalespersonDashboardSkeleton />;
+  }
+
+  // if (user?.role === "Distributor") {
+  //   return <DistributorDashboardSkeleton />;
+  // }
+
+  // fallback
   return <AdminDashboardSkeleton />;
 }
 
