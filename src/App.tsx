@@ -11,15 +11,17 @@ import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 import { getAvatarUrl } from "./lib/getAvatarUrl";
+import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
 // import AppSkeleton from "./components/AppSkeleton";
-import AdminDashboardSkeleton from "./components/skeletons/AdminDashboardSkeleton";
-import SalespersonDashboardSkeleton from "./components/skeletons/SalespersonDashboardSkeleton";
-import DistributorDashboardSkeleton from "./components/skeletons/DistributorDashboardSkeleton";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+if (loading) {
+  return <AppShellSkeleton />;
+}
 
 //   if (loading) {
 //   return (
@@ -31,22 +33,7 @@ const AppContent: React.FC = () => {
 
 // const { user, logout, loading } = useAuth();
 
-if (loading) {
-  if (user?.role === "Admin") {
-    return <AdminDashboardSkeleton />;
-  }
-
-  if (user?.role === "Salesperson") {
-    return <SalespersonDashboardSkeleton />;
-  }
-
-  if (user?.role === "Distributor") {
-    return <DistributorDashboardSkeleton />;
-  }
-
-  // fallback
-  return <AdminDashboardSkeleton />;
-}
+// if (loading) return null; // or global shell skeleton
 
 if (!user) {
   return showSignup ? (
