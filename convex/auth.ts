@@ -1,8 +1,8 @@
-import { query } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import bcrypt from "bcryptjs";
 
-export const login = query({
+export const login = mutation({
   args: {
     email: v.string(),
     password: v.string(),
