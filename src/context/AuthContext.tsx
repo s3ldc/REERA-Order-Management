@@ -28,8 +28,7 @@ interface AuthContextType {
     email: string,
     password: string,
     userData: { name: string; role: "Salesperson" | "Distributor" },
-  ) => Promise<boolean>;
-  refreshUser: () => Promise<void>; // 👈 ADD THIS
+  ) => Promise<boolean>; // 👈 ADD THIS
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -44,35 +43,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     typeof avatar === "string" && avatar.length > 0 ? avatar : undefined;
 
   // Restore session on page refresh
-  useEffect(() => {
-    const restoreSession = async () => {
-      if (pb.authStore.isValid && pb.authStore.model) {
-        const model = pb.authStore.model as any;
+  // useEffect(() => {
+  //   const restoreSession = async () => {
+  //     if (pb.authStore.isValid && pb.authStore.model) {
+  //       const model = pb.authStore.model as any;
 
-        try {
-          const fullUser = await pb.collection("users").getOne(model.id);
+  //       try {
+  //         const fullUser = await pb.collection("users").getOne(model.id);
 
-          const mappedUser: User = {
-            id: fullUser.id,
-            email: fullUser.email,
-            name: fullUser.name || fullUser.email,
-            role: fullUser.role,
-            avatar: normalizeAvatar(fullUser.avatar),
-          };
+  //         const mappedUser: User = {
+  //           id: fullUser.id,
+  //           email: fullUser.email,
+  //           name: fullUser.name || fullUser.email,
+  //           role: fullUser.role,
+  //           avatar: normalizeAvatar(fullUser.avatar),
+  //         };
 
-          setUser(mappedUser);
-        } catch (err) {
-          console.error("Failed to restore session", err);
-          pb.authStore.clear();
-          setUser(null);
-        }
-      }
+  //         setUser(mappedUser);
+  //       } catch (err) {
+  //         console.error("Failed to restore session", err);
+  //         pb.authStore.clear();
+  //         setUser(null);
+  //       }
+  //     }
 
-      setLoading(false);
-    };
+  //     setLoading(false);
+  //   };
 
-    restoreSession();
-  }, []);
+  //   restoreSession();
+  // }, []);
 
   // --- LOGIN ---
   const login = async (email: string, _password: string): Promise<boolean> => {
@@ -100,48 +99,46 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   // --- LOGOUT ---
-  const logout = () => {
-    pb.authStore.clear();
-    setUser(null);
-  };
+const logout = () => {
+  setUser(null);
+};
 
   // --- SIGN UP (Salesperson / Distributor only) ---
-  const signUp = async (
-    email: string,
-    password: string,
-    userData: { name: string; role: "Salesperson" | "Distributor" },
-  ): Promise<boolean> => {
-    try {
-      await pb.collection("users").create({
-        email,
-        password,
-        passwordConfirm: password,
-        name: userData.name,
-        role: userData.role, // NEVER admin from UI
-      });
+const signUp = async (
+  email: string,
+  _password: string,
+  userData: { name: string; role: "Salesperson" | "Distributor" }
+): Promise<boolean> => {
+  try {
+    await convex.mutation(api.users.createUser, {
+      email,
+      name: userData.name,
+      role: userData.role,
+      avatar: "",
+    });
 
-      return true;
-    } catch (err) {
-      console.error("Signup failed", err);
-      return false;
-    }
-  };
+    return true;
+  } catch (err) {
+    console.error("Signup failed", err);
+    return false;
+  }
+};
 
-  const refreshUser = async () => {
-    if (!pb.authStore.isValid || !pb.authStore.model) return;
+  // const refreshUser = async () => {
+  //   if (!pb.authStore.isValid || !pb.authStore.model) return;
 
-    const fullUser = await pb.collection("users").getOne(pb.authStore.model.id);
+  //   const fullUser = await pb.collection("users").getOne(pb.authStore.model.id);
 
-    const mappedUser: User = {
-      id: fullUser.id,
-      email: fullUser.email,
-      name: fullUser.name || fullUser.email,
-      role: fullUser.role,
-      avatar: normalizeAvatar(fullUser.avatar),
-    };
+  //   const mappedUser: User = {
+  //     id: fullUser.id,
+  //     email: fullUser.email,
+  //     name: fullUser.name || fullUser.email,
+  //     role: fullUser.role,
+  //     avatar: normalizeAvatar(fullUser.avatar),
+  //   };
 
-    setUser(mappedUser);
-  };
+  //   setUser(mappedUser);
+  // };
 
   // if (loading) return null;
 
@@ -152,8 +149,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         login,
         logout,
         signUp,
-        loading,
-        refreshUser, // 👈 ADD THIS
+        loading, // 👈 ADD THIS
       }}
     >
       {children}
