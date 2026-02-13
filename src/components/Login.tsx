@@ -43,7 +43,10 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   // const user = useQuery(api.auth.login, email ? { email } : "skip");
-  const loginMutation = useMutation(api.auth.login);
+  const user = await convex.action(api.auth.login, {
+    email,
+    password,
+  });
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,31 +69,30 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
     mouseY.set(0);
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError(null);
-  setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
-  try {
-    const result = await loginMutation({
-      email,
-      password,
-    });
+    try {
+      const result = await loginMutation({
+        email,
+        password,
+      });
 
-    if (!result) {
-      setError("Invalid credentials provided.");
-      setIsLoading(false);
-      return;
+      if (!result) {
+        setError("Invalid credentials provided.");
+        setIsLoading(false);
+        return;
+      }
+
+      await login(email, password); // update AuthContext state
+    } catch (err) {
+      setError("Authentication failed.");
     }
 
-    await login(email, password); // update AuthContext state
-
-  } catch (err) {
-    setError("Authentication failed.");
-  }
-
-  setIsLoading(false);
-};
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">

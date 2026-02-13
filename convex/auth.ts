@@ -1,17 +1,18 @@
-import { query, mutation } from "./_generated/server";
+import { action } from "./_generated/server";
 import { v } from "convex/values";
 import bcrypt from "bcryptjs";
 
-export const login = mutation({
+export const login = action({
   args: {
     email: v.string(),
     password: v.string(),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("email"), args.email))
-      .first();
+    const user = await ctx.runQuery(
+      // call a query inside action
+      require("./users").getUserByEmail,
+      { email: args.email }
+    );
 
     if (!user) return null;
 
