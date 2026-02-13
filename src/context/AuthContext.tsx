@@ -106,12 +106,13 @@ const logout = () => {
   // --- SIGN UP (Salesperson / Distributor only) ---
 const signUp = async (
   email: string,
-  _password: string,
+  password: string,
   userData: { name: string; role: "Salesperson" | "Distributor" }
 ): Promise<boolean> => {
   try {
     await convex.mutation(api.users.createUser, {
       email,
+      password, // ✅ add this
       name: userData.name,
       role: userData.role,
       avatar: "",

@@ -19,7 +19,7 @@ import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { useMutation } from "convex/react";
 // import { useQuery } from "convex/react";
-// import { api } from "../../convex/_generated/api";
+import { api } from "../../convex/_generated/api";
 
 interface LoginProps {
   onShowSignup: () => void;
