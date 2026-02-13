@@ -11,27 +11,34 @@ import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 import { getAvatarUrl } from "./lib/getAvatarUrl";
+import AppSkeleton from "./components/AppSkeleton";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  if (loading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAFBFC]">
-      <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+//   if (loading) {
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-[#FAFBFC]">
+//       <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+//     </div>
+//   );
+// }
+
+// const { user, logout, loading } = useAuth();
+
+if (loading) {
+  return <AppSkeleton />;
 }
 
-  if (!user) {
-    return showSignup ? (
-      <Signup onBackToLogin={() => setShowSignup(false)} />
-    ) : (
-      <Login onShowSignup={() => setShowSignup(true)} />
-    );
-  }
+if (!user) {
+  return showSignup ? (
+    <Signup onBackToLogin={() => setShowSignup(false)} />
+  ) : (
+    <Login onShowSignup={() => setShowSignup(true)} />
+  );
+}
 
   const handleLogout = () => {
     logout();
