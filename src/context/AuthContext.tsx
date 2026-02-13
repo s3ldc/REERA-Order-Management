@@ -42,6 +42,44 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const normalizeAvatar = (avatar: unknown): string | undefined =>
     typeof avatar === "string" && avatar.length > 0 ? avatar : undefined;
 
+  useEffect(() => {
+    const restoreSession = async () => {
+      const storedId = localStorage.getItem("session_user_id");
+
+      if (!storedId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const user = await convex.query(api.users.getUserById, {
+          id: storedId as any,
+        });
+
+        if (!user) {
+          localStorage.removeItem("session_user_id");
+          setUser(null);
+        } else {
+          setUser({
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            avatar: user.avatar,
+          });
+        }
+      } catch (error) {
+        console.error("Session restore failed", error);
+        localStorage.removeItem("session_user_id");
+        setUser(null);
+      }
+
+      setLoading(false);
+    };
+
+    restoreSession();
+  }, []);
+
   // Restore session on page refresh
   // useEffect(() => {
   //   const restoreSession = async () => {
@@ -92,6 +130,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       };
 
       setUser(mappedUser);
+      localStorage.setItem("session_user_id", mappedUser.id);
       return true;
     } catch (err) {
       console.error("Login failed", err);
@@ -101,6 +140,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // --- LOGOUT ---
   const logout = () => {
+    localStorage.removeItem("session_user_id");
     setUser(null);
   };
 

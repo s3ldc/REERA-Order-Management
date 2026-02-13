@@ -9,7 +9,6 @@ export const createUser = action({
     password: v.string(),
     name: v.string(),
     role: v.union(
-      v.literal("Admin"),
       v.literal("Salesperson"),
       v.literal("Distributor"),
     ),
