@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import {
   motion,
   AnimatePresence,
@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+// import { useQuery } from "convex/react";
+// import { api } from "../../convex/_generated/api";
 
 interface LoginProps {
   onShowSignup: () => void;
@@ -39,9 +39,9 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
 }
 
 const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
-  // const { login } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
-  const user = useQuery(api.auth.login, email ? { email } : "skip");
+  // const user = useQuery(api.auth.login, email ? { email } : "skip");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,21 +64,19 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
     mouseY.set(0);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError(null);
+  setIsLoading(true);
 
-    if (!user) {
-      setError("Invalid credentials provided.");
-      setIsLoading(false);
-      return;
-    }
+  const success = await login(email, password);
 
-    console.log("Logged in:", user);
+  if (!success) {
+    setError("Invalid credentials provided.");
+  }
 
-    setIsLoading(false);
-  };
+  setIsLoading(false);
+};
 
   return (
     <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
