@@ -1,9 +1,24 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+// import { useAuth } from "../context/AuthContext";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 interface LoginProps {
   onShowSignup: () => void;
@@ -16,7 +31,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       className={cn(
         "flex h-12 w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-sm text-white transition-all outline-none",
         "placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10",
-        className
+        className,
       )}
       {...props}
     />
@@ -24,8 +39,9 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
 }
 
 const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
-  const { login } = useAuth();
+  // const { login } = useAuth();
   const [email, setEmail] = useState("");
+  const user = useQuery(api.auth.login, email ? { email } : "skip");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,30 +67,33 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    try {
-      setIsLoading(true);
-      const success = await login(email, password);
-      if (!success) setError("Invalid credentials provided.");
-    } catch (err) {
-      setError("System authentication failed.");
-    } finally {
+    setIsLoading(true);
+
+    if (!user) {
+      setError("Invalid credentials provided.");
       setIsLoading(false);
+      return;
     }
+
+    console.log("Logged in:", user);
+
+    setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
-      
       {/* Left Decoration: Brand & Social Proof */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-slate-800/50">
         <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-cyan-500/5" />
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px]" />
-        
+
         <div className="relative z-10 flex items-center gap-3">
           <div className="bg-indigo-600 p-2 rounded-lg shadow-xl shadow-indigo-500/20">
             <Zap className="w-6 h-6 text-white fill-white" />
           </div>
-          <span className="text-xl font-black text-white uppercase tracking-tighter">Core OS</span>
+          <span className="text-xl font-black text-white uppercase tracking-tighter">
+            Core OS
+          </span>
         </div>
 
         <div className="relative z-10">
@@ -85,8 +104,9 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
             </span>
           </h2>
           <p className="mt-6 text-slate-400 text-lg max-w-md leading-relaxed">
-            The next-generation B2B portal for modern distributors and sales teams. 
-            Automated ordering, real-time tracking, and role-based intelligence.
+            The next-generation B2B portal for modern distributors and sales
+            teams. Automated ordering, real-time tracking, and role-based
+            intelligence.
           </p>
         </div>
 
@@ -101,7 +121,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
       <div className="flex-1 flex items-center justify-center p-6 relative">
         {/* Animated Background Mesh */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
-            <div className="absolute bottom-[10%] left-[10%] w-[300px] h-[300px] bg-indigo-500/20 rounded-full blur-[80px]" />
+          <div className="absolute bottom-[10%] left-[10%] w-[300px] h-[300px] bg-indigo-500/20 rounded-full blur-[80px]" />
         </div>
 
         <motion.div
@@ -123,13 +143,19 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
                 <ShieldCheck className="w-3 h-3" />
                 Secure Terminal
               </div>
-              <h3 className="text-3xl font-bold text-white tracking-tight">Identity Access</h3>
-              <p className="text-slate-500 text-sm mt-2 font-medium">Please authenticate to continue.</p>
+              <h3 className="text-3xl font-bold text-white tracking-tight">
+                Identity Access
+              </h3>
+              <p className="text-slate-500 text-sm mt-2 font-medium">
+                Please authenticate to continue.
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label className="text-slate-400 text-xs font-bold uppercase ml-1">Work Email</Label>
+                <Label className="text-slate-400 text-xs font-bold uppercase ml-1">
+                  Work Email
+                </Label>
                 <div className="relative group">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
                   <Input
@@ -144,7 +170,9 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-400 text-xs font-bold uppercase ml-1">Password</Label>
+                <Label className="text-slate-400 text-xs font-bold uppercase ml-1">
+                  Password
+                </Label>
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
                   <Input
@@ -160,13 +188,17 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
               {error && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-bold text-center"
@@ -211,8 +243,12 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
 };
 
 // Helper for consistency
-const Label = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <label className={cn("block", className)}>{children}</label>
-);
+const Label = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => <label className={cn("block", className)}>{children}</label>;
 
 export default Login;
