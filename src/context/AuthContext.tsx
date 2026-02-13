@@ -5,7 +5,11 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import pb from "../lib/pocketbase";
+// import pb from "../lib/pocketbase";
+import { ConvexReactClient } from "convex/react";
+import { api } from "../../convex/_generated/api";
+
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
 interface User {
   id: string;
@@ -37,8 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   const normalizeAvatar = (avatar: unknown): string | undefined =>
-  typeof avatar === "string" && avatar.length > 0 ? avatar : undefined;
-
+    typeof avatar === "string" && avatar.length > 0 ? avatar : undefined;
 
   // Restore session on page refresh
   useEffect(() => {
@@ -72,20 +75,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   // --- LOGIN ---
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, _password: string): Promise<boolean> => {
     try {
-      const authData = await pb
-        .collection("users")
-        .authWithPassword(email, password);
+      const users = await convex.query(api.users.getUsers);
 
-      const record = authData.record as any;
+      const foundUser = users.find((u: any) => u.email === email);
+
+      if (!foundUser) return false;
 
       const mappedUser: User = {
-        id: record.id,
-        email: record.email,
-        name: record.name || record.email,
-        role: record.role,
-        avatar: normalizeAvatar(record.avatar),
+        id: foundUser._id,
+        email: foundUser.email,
+        name: foundUser.name,
+        role: foundUser.role,
+        avatar: foundUser.avatar,
       };
 
       setUser(mappedUser);
