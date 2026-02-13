@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
+import { useMutation } from "convex/react";
 // import { useQuery } from "convex/react";
 // import { api } from "../../convex/_generated/api";
 
@@ -42,6 +43,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   // const user = useQuery(api.auth.login, email ? { email } : "skip");
+  const loginMutation = useMutation(api.auth.login);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,10 +71,22 @@ const handleSubmit = async (e: React.FormEvent) => {
   setError(null);
   setIsLoading(true);
 
-  const success = await login(email, password);
+  try {
+    const result = await loginMutation({
+      email,
+      password,
+    });
 
-  if (!success) {
-    setError("Invalid credentials provided.");
+    if (!result) {
+      setError("Invalid credentials provided.");
+      setIsLoading(false);
+      return;
+    }
+
+    await login(email, password); // update AuthContext state
+
+  } catch (err) {
+    setError("Authentication failed.");
   }
 
   setIsLoading(false);
