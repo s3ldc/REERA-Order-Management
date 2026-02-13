@@ -1,61 +1,74 @@
+import { useAuth } from "@/context/AuthContext";
+
 const SkeletonBlock = ({ className }: { className: string }) => (
-  <div className={`bg-slate-200 rounded animate-pulse ${className}`} />
+  <div
+    className={`relative overflow-hidden rounded bg-slate-200 ${className}`}
+  >
+    <div className="absolute inset-0 animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+  </div>
 );
 
 const AppShellSkeleton = () => {
+  const { user } = useAuth();
+
+  const role = user?.role;
+
+  const statCount =
+    role === "Admin" ? 4 :
+    role === "Distributor" ? 3 :
+    3; // Salesperson
+
   return (
-    <div className="min-h-screen bg-[#FAFBFC]">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-pulse">
+      
       {/* Header */}
-      <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
-          <SkeletonBlock className="h-6 w-40" />
-          <SkeletonBlock className="h-8 w-24 rounded-full" />
+      <div className="flex justify-between items-start">
+        <div className="space-y-3">
+          <SkeletonBlock className="h-8 w-64" />
+          <SkeletonBlock className="h-4 w-48" />
         </div>
-      </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-10 space-y-10">
-        {/* Title Section */}
-        <div className="flex justify-between items-start">
-          <div className="space-y-3">
-            <SkeletonBlock className="h-8 w-72" />
-            <SkeletonBlock className="h-4 w-48" />
+        <SkeletonBlock className="h-10 w-44 rounded-xl" />
+      </div>
+
+      {/* Stat Cards */}
+      <div className={`grid gap-6 mt-10 ${
+        statCount === 4
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+      }`}>
+        {[...Array(statCount)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm"
+          >
+            <SkeletonBlock className="h-3 w-32 mb-4" />
+            <SkeletonBlock className="h-8 w-16" />
           </div>
-          <SkeletonBlock className="h-10 w-44 rounded-xl" />
-        </div>
+        ))}
+      </div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm"
-            >
-              <SkeletonBlock className="h-3 w-32 mb-4" />
-              <SkeletonBlock className="h-8 w-12" />
-            </div>
-          ))}
-        </div>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+        {[...Array(2)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm"
+          >
+            <SkeletonBlock className="h-4 w-40 mb-6" />
+            <SkeletonBlock className="h-[260px] w-full rounded-2xl" />
+          </div>
+        ))}
+      </div>
 
-        {/* Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {[...Array(2)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm"
-            >
-              <SkeletonBlock className="h-4 w-40 mb-6" />
-              <SkeletonBlock className="h-[280px] w-full rounded-2xl" />
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom Section */}
+      {/* Bottom Panel */}
+      <div className="mt-10">
         <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
           <SkeletonBlock className="h-4 w-40 mb-6" />
-          <SkeletonBlock className="h-[250px] w-full rounded-2xl" />
+          <SkeletonBlock className="h-[240px] w-full rounded-2xl" />
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 };
 
