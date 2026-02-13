@@ -14,6 +14,7 @@ import { getAvatarUrl } from "./lib/getAvatarUrl";
 // import AppSkeleton from "./components/AppSkeleton";
 import AdminDashboardSkeleton from "./components/skeletons/AdminDashboardSkeleton";
 import SalespersonDashboardSkeleton from "./components/skeletons/SalespersonDashboardSkeleton";
+import DistributorDashboardSkeleton from "./components/skeletons/DistributorDashboardSkeleton";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
@@ -39,9 +40,9 @@ if (loading) {
     return <SalespersonDashboardSkeleton />;
   }
 
-  // if (user?.role === "Distributor") {
-  //   return <DistributorDashboardSkeleton />;
-  // }
+  if (user?.role === "Distributor") {
+    return <DistributorDashboardSkeleton />;
+  }
 
   // fallback
   return <AdminDashboardSkeleton />;
