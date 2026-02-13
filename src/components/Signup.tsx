@@ -20,8 +20,9 @@ import {
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
-import { useMutation, useAction } from "convex/react";
-import { api } from "../../convex/_generated/api";
+// import { useMutation, useAction } from "convex/react";
+// import { api } from "../../convex/_generated/api";
+import { useAuth } from "../context/AuthContext";
 
 type Role = "Salesperson" | "Distributor";
 
@@ -54,7 +55,7 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const createUser = useMutation(api.users.createUser);
+  const { signUp } = useAuth();
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -72,29 +73,31 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
     mouseY.set(0);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setIsLoading(true);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError(null);
+  setSuccess(null);
+  setIsLoading(true);
 
-    try {
-      await createUser({
-        email: formData.email,
-        password: formData.password,
-        name: formData.name,
-        role: formData.role,
-        avatar: "",
-      });
-
-      setSuccess("Account created successfully. Redirecting...");
-      setTimeout(onBackToLogin, 1500);
-    } catch (err: any) {
-      setError("Credential registration failed");
-    } finally {
-      setIsLoading(false);
+  const success = await signUp(
+    formData.email,
+    formData.password,
+    {
+      name: formData.name,
+      role: formData.role,
     }
-  };
+  );
+
+  if (!success) {
+    setError("Credential registration failed");
+    setIsLoading(false);
+    return;
+  }
+
+  setSuccess("Account created successfully. Redirecting...");
+  setTimeout(onBackToLogin, 1500);
+  setIsLoading(false);
+};
 
   return (
     <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
