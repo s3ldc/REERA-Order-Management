@@ -13,9 +13,17 @@ import ProfileDrawer from "./components/ProfileDrawer";
 import { getAvatarUrl } from "./lib/getAvatarUrl";
 
 const AppContent: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#FAFBFC]">
+      <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
 
   if (!user) {
     return showSignup ? (
