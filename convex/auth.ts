@@ -8,8 +8,14 @@ export const login = action({
     email: v.string(),
     password: v.string(),
   },
-  handler: async (ctx, args) => {
-    // call query properly
+  handler: async (ctx, args): Promise<{
+    _id: string;
+    name: string;
+    email: string;
+    role: "Admin" | "Salesperson" | "Distributor";
+    avatar?: string;
+  } | null> => {
+
     const user = await ctx.runQuery(api.users.getUserByEmail, {
       email: args.email,
     });
