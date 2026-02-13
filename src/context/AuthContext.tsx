@@ -74,57 +74,57 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // }, []);
 
   // --- LOGIN ---
-const login = async (email: string, password: string): Promise<boolean> => {
-  try {
-    const result = await convex.action(api.auth.login, {
-      email,
-      password,
-    });
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const result = await convex.action(api.auth.login, {
+        email,
+        password,
+      });
 
-    if (!result) return false;
+      if (!result) return false;
 
-    const mappedUser: User = {
-      id: result._id,
-      email: result.email,
-      name: result.name,
-      role: result.role,
-      avatar: result.avatar,
-    };
+      const mappedUser: User = {
+        id: result._id,
+        email: result.email,
+        name: result.name,
+        role: result.role,
+        avatar: result.avatar,
+      };
 
-    setUser(mappedUser);
-    return true;
-  } catch (err) {
-    console.error("Login failed", err);
-    return false;
-  }
-};
+      setUser(mappedUser);
+      return true;
+    } catch (err) {
+      console.error("Login failed", err);
+      return false;
+    }
+  };
 
   // --- LOGOUT ---
-const logout = () => {
-  setUser(null);
-};
+  const logout = () => {
+    setUser(null);
+  };
 
   // --- SIGN UP (Salesperson / Distributor only) ---
-const signUp = async (
-  email: string,
-  password: string,
-  userData: { name: string; role: "Salesperson" | "Distributor" }
-): Promise<boolean> => {
-  try {
-    await convex.action(api.auth.createUser, {
-      email,
-      password,
-      name: userData.name,
-      role: userData.role,
-      avatar: "",
-    });
+  const signUp = async (
+    email: string,
+    password: string,
+    userData: { name: string; role: "Salesperson" | "Distributor" },
+  ): Promise<boolean> => {
+    try {
+      await convex.mutation(api.users.createUser, {
+        email,
+        password,
+        name: userData.name,
+        role: userData.role,
+        avatar: "",
+      });
 
-    return true;
-  } catch (err) {
-    console.error("Signup failed", err);
-    return false;
-  }
-};
+      return true;
+    } catch (err) {
+      console.error("Signup failed", err);
+      return false;
+    }
+  };
 
   // const refreshUser = async () => {
   //   if (!pb.authStore.isValid || !pb.authStore.model) return;
