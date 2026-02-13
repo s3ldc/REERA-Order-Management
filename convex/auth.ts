@@ -1,6 +1,7 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import bcrypt from "bcryptjs";
+import { api } from "./_generated/api";
 
 export const login = action({
   args: {
@@ -8,11 +9,10 @@ export const login = action({
     password: v.string(),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.runQuery(
-      // call a query inside action
-      require("./users").getUserByEmail,
-      { email: args.email }
-    );
+    // call query properly
+    const user = await ctx.runQuery(api.users.getUserByEmail, {
+      email: args.email,
+    });
 
     if (!user) return null;
 
