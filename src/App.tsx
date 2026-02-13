@@ -12,6 +12,7 @@ import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 import { getAvatarUrl } from "./lib/getAvatarUrl";
 import AppSkeleton from "./components/AppSkeleton";
+import AdminDashboardSkeleton from "./components/skeletons/AdminDashboardSkeleton";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
@@ -29,7 +30,7 @@ const AppContent: React.FC = () => {
 // const { user, logout, loading } = useAuth();
 
 if (loading) {
-  return <AppSkeleton />;
+  return <AdminDashboardSkeleton />;
 }
 
 if (!user) {
