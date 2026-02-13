@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import pb from "../lib/pocketbase";
+// import pb from "../lib/pocketbase";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { UserPlus, Mail, Lock, Eye, EyeOff, ArrowRight, User, Briefcase, Zap, ShieldCheck } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 type Role = "Salesperson" | "Distributor";
 
@@ -36,6 +38,7 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const createUser = useMutation(api.users.createUser);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -53,29 +56,29 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
     mouseY.set(0);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setIsLoading(true);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError(null);
+  setSuccess(null);
+  setIsLoading(true);
 
-    try {
-      await pb.collection("users").create({
-        email: formData.email,
-        password: formData.password,
-        passwordConfirm: formData.password,
-        name: formData.name,
-        role: formData.role,
-      });
+  try {
+    await createUser({
+      email: formData.email,
+      password: formData.password,
+      name: formData.name,
+      role: formData.role,
+      avatar: "",
+    });
 
-      setSuccess("Protocol Accepted. Redirecting to terminal...");
-      setTimeout(onBackToLogin, 2000);
-    } catch (err: any) {
-      setError(err.message || "Credential registration failed");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    setSuccess("Account created successfully. Redirecting...");
+    setTimeout(onBackToLogin, 1500);
+  } catch (err: any) {
+    setError("Credential registration failed");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
