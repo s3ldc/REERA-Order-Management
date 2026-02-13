@@ -111,7 +111,7 @@ const signUp = async (
   userData: { name: string; role: "Salesperson" | "Distributor" }
 ): Promise<boolean> => {
   try {
-    await convex.mutation(api.users.createUser, {
+    await convex.action(api.auth.createUser, {
       email,
       password,
       name: userData.name,

@@ -38,7 +38,7 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const createUser = useAction(api.users.createUser);
+  const createUser = useAction(api.auth.createUser);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
