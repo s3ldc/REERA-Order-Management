@@ -1,8 +1,7 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import bcrypt from "bcryptjs";
-import { api } from "./_generated/api";
-
+import { api, internal } from "./_generated/api";
 
 export const createUser = action({
   args: {
@@ -12,13 +11,13 @@ export const createUser = action({
     role: v.union(
       v.literal("Admin"),
       v.literal("Salesperson"),
-      v.literal("Distributor")
+      v.literal("Distributor"),
     ),
     avatar: v.optional(v.string()),
   },
 
-  handler: async (ctx, args) => {
-    // ✅ Check if user already exists
+  handler: async (ctx, args): Promise<string> => {
+    // Check if user already exists
     const existing = await ctx.runQuery(api.users.getUserByEmail, {
       email: args.email,
     });
@@ -27,20 +26,19 @@ export const createUser = action({
       throw new Error("User already exists");
     }
 
-    // ✅ Hash password
+    // Hash password
     const passwordHash = await bcrypt.hash(args.password, 10);
 
-    // ✅ Insert using internal mutation
-    return await ctx.runMutation(
-      api.users_internal.insertUser,
-      {
-        email: args.email,
-        passwordHash,
-        name: args.name,
-        role: args.role,
-        avatar: args.avatar,
-      }
-    );
+    // Insert using internal mutation
+    const userId = await ctx.runMutation(internal.users_internal.insertUser, {
+      email: args.email,
+      passwordHash,
+      name: args.name,
+      role: args.role,
+      avatar: args.avatar,
+    });
+
+    return userId;
   },
 });
 
@@ -49,14 +47,16 @@ export const login = action({
     email: v.string(),
     password: v.string(),
   },
-  handler: async (ctx, args): Promise<{
+  handler: async (
+    ctx,
+    args,
+  ): Promise<{
     _id: string;
     name: string;
     email: string;
     role: "Admin" | "Salesperson" | "Distributor";
     avatar?: string;
   } | null> => {
-
     const user = await ctx.runQuery(api.users.getUserByEmail, {
       email: args.email,
     });
