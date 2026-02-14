@@ -109,6 +109,8 @@ const AdminDashboard: React.FC = () => {
       await updateOrderStatus({
         orderId,
         status: nextStatus,
+        actor_id: user?._id as Id<"users">,
+        actor_role: user?.role || "Admin",
       });
       toast({
         title: "Status Synchronized",
@@ -127,6 +129,8 @@ const AdminDashboard: React.FC = () => {
     await updatePaymentStatus({
       orderId,
       payment_status: newStatus,
+      actor_id: user?._id as Id<"users">,
+      actor_role: user?.role || "Admin",
     });
 
     toast({
