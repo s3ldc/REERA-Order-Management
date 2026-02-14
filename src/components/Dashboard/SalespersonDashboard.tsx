@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useOrderContext } from "../../context/OrderContext";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -27,15 +26,22 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
-import pb from "../../lib/pocketbase";
 import OrdersByStatusChart from "@/components/charts/salesperson/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/salesperson/PaymentStatusChart";
 import OrdersOverTimeChart from "@/components/charts/salesperson/OrdersOverTimeChart";
 import SalespersonOrderTimelineDrawer from "../orders/SalespersonOrderTimelineDrawer";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
-  const { orders, createOrder } = useOrderContext();
+  const createOrder = useMutation(api.orders.createOrder);
+
+  const myOrders =
+    useQuery(
+      api.orders.getOrdersBySalesperson,
+      user ? { salesperson_id: user.id as any } : "skip",
+    ) || [];
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -45,9 +51,6 @@ const SalespersonDashboard: React.FC = () => {
     quantity: 0,
     distributor_id: "",
   });
-  const [distributors, setDistributors] = useState<
-    { id: string; name: string; email: string }[]
-  >([]);
 
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
@@ -64,31 +67,31 @@ const SalespersonDashboard: React.FC = () => {
     }
   };
 
-  const myOrders =
-    orders?.filter((order) => order.salesperson_id === user?.id) || [];
+  // const myOrders =
+  //   orders?.filter((order) => order.salesperson_id === user?.id) || [];
 
-  useEffect(() => {
-    const fetchDistributors = async () => {
-      try {
-        const records = await pb.collection("users").getFullList({
-          filter: 'role = "Distributor"',
-          sort: "name",
-        });
+  // useEffect(() => {
+  //   const fetchDistributors = async () => {
+  //     try {
+  //       const records = await pb.collection("users").getFullList({
+  //         filter: 'role = "Distributor"',
+  //         sort: "name",
+  //       });
 
-        const mapped = records.map((r: any) => ({
-          id: r.id,
-          name: r.name || r.email,
-          email: r.email,
-        }));
+  //       const mapped = records.map((r: any) => ({
+  //         id: r.id,
+  //         name: r.name || r.email,
+  //         email: r.email,
+  //       }));
 
-        setDistributors(mapped);
-      } catch (err) {
-        console.error("Failed to fetch distributors", err);
-      }
-    };
+  //       setDistributors(mapped);
+  //     } catch (err) {
+  //       console.error("Failed to fetch distributors", err);
+  //     }
+  //   };
 
-    fetchDistributors();
-  }, []);
+  //   fetchDistributors();
+  // }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,8 +123,8 @@ const SalespersonDashboard: React.FC = () => {
         quantity: qty,
         status: "Pending",
         payment_status: "Unpaid",
-        salesperson_id: user.id,
-        distributor_id: formData.distributor_id,
+        salesperson_id: user.id as any,
+        distributor_id: formData.distributor_id as any,
       });
 
       setFormData({
@@ -415,7 +418,7 @@ const SalespersonDashboard: React.FC = () => {
                 <tbody className="divide-y divide-slate-50">
                   {myOrders.map((order) => (
                     <tr
-                      key={order.id}
+                      key={order._id}
                       className="group hover:bg-slate-50/80 transition-all duration-200"
                     >
                       <td className="py-6 px-8">
@@ -472,7 +475,7 @@ const SalespersonDashboard: React.FC = () => {
 
                           {/* Creation date */}
                           <div className="text-sm font-bold text-slate-700 whitespace-nowrap">
-                            {new Date(order.created).toLocaleDateString(
+                            {new Date(order._creationTime).toLocaleDateString(
                               "en-US",
                               {
                                 month: "short",
