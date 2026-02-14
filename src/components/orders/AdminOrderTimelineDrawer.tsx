@@ -3,19 +3,19 @@ import { X, User, Box, Truck, CheckCircle2, CreditCard, PackageCheck, Loader2 } 
 import { Card, CardHeader, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { useOrderTimeline } from "../../hooks/useOrderTimeline";
-import type { Order } from "../../context/OrderContext";
+import type { Doc } from "../../../convex/_generated/dataModel";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
 interface Props {
-  order: Order;
+  order: Doc<"orders">;
   onClose: () => void;
 }
 
 const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
-  const { events, loading } = useOrderTimeline(order.id);
+  const { events, loading } = useOrderTimeline(order._id);
 
   const getEventConfig = (type: string, message: string) => {
     const lowerType = type.toLowerCase();
@@ -93,7 +93,7 @@ const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
                                {event.type.replace("_", " ")}
                             </span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                               {dayjs(event.created).fromNow()}
+                               {dayjs(event._creationTime).fromNow()}
                             </span>
                           </div>
                           

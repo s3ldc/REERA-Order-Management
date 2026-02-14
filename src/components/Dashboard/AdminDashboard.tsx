@@ -31,15 +31,15 @@ import OrdersByStatusChart from "../charts/admin/OrdersByStatusChart";
 import PaymentStatusChart from "../charts/admin/PaymentStatusChart";
 import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
 // import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
-import type { Order } from "../../context/OrderContext";
 import OrderTimelineDrawer from "../orders/AdminOrderTimelineDrawer";
 import { useMutation, useQuery } from "convex/react";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { api } from "../../../convex/_generated/api";
+import type { Doc } from "../../../convex/_generated/dataModel";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
-  const orders = useQuery(api.orders.getAllOrders) ?? [];
+  const orders = (useQuery(api.orders.getAllOrders) ?? []) as Doc<"orders">[];
   const updateOrderStatus = useMutation(api.orders.updateOrderStatus);
   const updatePaymentStatus = useMutation(api.orders.updatePaymentStatus);
   const { toast } = useToast();
@@ -49,7 +49,7 @@ const AdminDashboard: React.FC = () => {
     dateFrom: "",
     dateTo: "",
   });
-  const [activeOrder, setActiveOrder] = useState<Order | null>(null);
+  const [activeOrder, setActiveOrder] = useState<Doc<"orders"> | null>(null);
   type OrderStatus = "Pending" | "Dispatched" | "Delivered";
   type PaymentStatus = "Paid" | "Unpaid";
 
@@ -76,7 +76,7 @@ const AdminDashboard: React.FC = () => {
       return true;
     }) || [];
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: OrderStatus) => {
     switch (status) {
       case "Pending":
         return <Package className="w-5 h-5 text-amber-600" />;
@@ -400,7 +400,7 @@ const AdminDashboard: React.FC = () => {
                             title="View order timeline"
                             size="sm"
                             variant="ghost"
-                            onClick={() => setActiveOrder(order as any)}
+                            onClick={() => setActiveOrder(order)}
                             className="group flex items-center gap-1"
                           >
                             <Calendar className="w-4 h-4" />

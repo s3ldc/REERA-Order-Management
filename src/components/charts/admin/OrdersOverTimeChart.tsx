@@ -10,10 +10,9 @@ import {
   // Removed Defs and LinearGradient from here
 } from "recharts";
 import { ChartCard } from "../../ui/chart-card";
+import type { Doc } from "../../../../convex/_generated/dataModel";
 
-interface Order {
-  created: string;
-}
+type Order = Doc<"orders">;
 
 interface Props {
   orders: Order[];
@@ -37,7 +36,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function OrdersOverTimeChart({ orders }: Props) {
   const grouped = orders.reduce<Record<string, number>>((acc, order) => {
-    const date = new Date(order.created).toISOString().split("T")[0];
+    const date = new Date(order._creationTime).toISOString().split("T")[0];
     acc[date] = (acc[date] || 0) + 1;
     return acc;
   }, {});
