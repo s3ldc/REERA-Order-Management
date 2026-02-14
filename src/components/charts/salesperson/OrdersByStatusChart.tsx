@@ -8,7 +8,9 @@ import {
   Sector,
 } from "recharts";
 import { ChartCard } from "@/components/ui/chart-card";
-import { useOrderContext } from "@/context/OrderContext";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import type { Doc } from "../../../../convex/_generated/dataModel";
 import { useAuth } from "@/context/AuthContext";
 import { Package } from "lucide-react"; // Import for the center icon
 
@@ -44,16 +46,19 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
         <div className="flex items-center gap-2 mb-1">
-          <div 
-            className="w-2 h-2 rounded-full" 
-            style={{ backgroundColor: COLORS[data.name as keyof typeof COLORS] }}
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{
+              backgroundColor: COLORS[data.name as keyof typeof COLORS],
+            }}
           />
           <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
             {data.name}
           </span>
         </div>
         <p className="text-sm font-bold text-slate-900">
-          {data.value} <span className="text-slate-400 font-medium text-xs">Orders</span>
+          {data.value}{" "}
+          <span className="text-slate-400 font-medium text-xs">Orders</span>
         </p>
       </div>
     );
@@ -62,11 +67,13 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const OrdersByStatusChart = () => {
-  const { orders } = useOrderContext();
+  const orders = useQuery(api.orders.getAllOrders) ?? [];
   const { user } = useAuth();
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const myOrders = orders?.filter((o) => o.salesperson_id === user?.id) || [];
+  const myOrders = user
+    ? orders.filter((o) => o.salesperson_id === user.id)
+    : [];
   const total = myOrders.length;
 
   const data = [
@@ -108,13 +115,12 @@ const OrdersByStatusChart = () => {
             {/* Center Content: Icon + Count + Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
               {/* <Package className="w-5 h-5 text-slate-300 mb-1" /> */}
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                 Total Orders
               </span>
               <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">
                 {total}
               </span>
-             
             </div>
 
             <ResponsiveContainer width="100%" height="100%">
