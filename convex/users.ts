@@ -22,13 +22,22 @@ export const getUserById = query({
   },
 });
 
+export const getDistributors = query({
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("role"), "Distributor"))
+      .collect();
+  },
+});
+
 export const updateAvatar = mutation({
   args: {
-    userId: v.string(),
+    userId: v.id("users"),
     avatar: v.string(),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.userId as any, {
+    await ctx.db.patch(args.userId, {
       avatar: args.avatar,
     });
   },
