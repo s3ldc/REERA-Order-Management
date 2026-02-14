@@ -9,7 +9,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { ChartCard } from "@/components/ui/chart-card";
-import { useOrderContext } from "@/context/OrderContext";
+import { api } from "../../../../convex/_generated/api";
+import { useQuery } from "convex/react";
+import type { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useAuth } from "@/context/AuthContext";
 import dayjs from "dayjs";
 
@@ -21,7 +23,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           {dayjs(label).format("MMM DD, YYYY")}
         </p>
         <p className="text-sm font-bold text-slate-900">
-          {payload[0].value} <span className="text-slate-400 font-medium text-xs">Deliveries</span>
+          {payload[0].value}{" "}
+          <span className="text-slate-400 font-medium text-xs">
+            Deliveries
+          </span>
         </p>
       </div>
     );
@@ -30,31 +35,37 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const DeliveriesOverTimeChart = () => {
-  const { orders } = useOrderContext();
+  const orders: Doc<"orders">[] =
+    useQuery(api.orders.getAllOrders) ?? [];
+
   const { user } = useAuth();
 
-  const deliveredOrders = orders?.filter(
-    (o) => o.distributor_id === user?.id && o.status === "Delivered"
-  ) || [];
+  const deliveredOrders: Doc<"orders">[] =
+    user
+      ? orders.filter(
+          (o: Doc<"orders">) =>
+            o.distributor_id === (user.id as Id<"users">) &&
+            o.status === "Delivered"
+        )
+      : [];
 
   const groupedByDate: Record<string, number> = {};
+
   deliveredOrders.forEach((order) => {
-    const date = dayjs(order.created).format("YYYY-MM-DD");
-    groupedByDate[date] = (groupedByDate[date] || 0) + 1;
+    const dateKey = dayjs(order._creationTime).format("YYYY-MM-DD");
+    groupedByDate[dateKey] =
+      (groupedByDate[dateKey] || 0) + 1;
   });
 
   const data = Object.keys(groupedByDate)
-    .sort()
+    .sort((a, b) => dayjs(a).unix() - dayjs(b).unix())
     .map((date) => ({
       date,
       deliveries: groupedByDate[date],
     }));
 
   return (
-    <ChartCard 
-      title="Performance Trends" 
-      // subtitle="Historical delivery volume and growth"
-    >
+    <ChartCard title="Performance Trends">
       <div className="h-[300px] w-full mt-4 -ml-4">
         {data.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center">
@@ -67,20 +78,44 @@ const DeliveriesOverTimeChart = () => {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>
-                <linearGradient id="colorDeliveries" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.15} />
-                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                <linearGradient
+                  id="colorDeliveries"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="5%"
+                    stopColor="#6366f1"
+                    stopOpacity={0.15}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="#6366f1"
+                    stopOpacity={0}
+                  />
                 </linearGradient>
               </defs>
 
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f1f5f9"
+              />
 
               <XAxis
                 dataKey="date"
                 axisLine={false}
                 tickLine={false}
-                tickFormatter={(str) => dayjs(str).format("MMM DD")}
-                tick={{ fontSize: 10, fontWeight: 600, fill: "#94a3b8" }}
+                tickFormatter={(str) =>
+                  dayjs(str).format("MMM DD")
+                }
+                tick={{
+                  fontSize: 10,
+                  fontWeight: 600,
+                  fill: "#94a3b8",
+                }}
                 dy={10}
               />
 
@@ -88,13 +123,20 @@ const DeliveriesOverTimeChart = () => {
                 allowDecimals={false}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 10, fontWeight: 600, fill: "#94a3b8" }}
+                tick={{
+                  fontSize: 10,
+                  fontWeight: 600,
+                  fill: "#94a3b8",
+                }}
                 dx={-10}
               />
 
-              <Tooltip 
-                content={<CustomTooltip />} 
-                cursor={{ stroke: "#e2e8f0", strokeWidth: 2 }} 
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{
+                  stroke: "#e2e8f0",
+                  strokeWidth: 2,
+                }}
               />
 
               <Area
@@ -105,10 +147,10 @@ const DeliveriesOverTimeChart = () => {
                 fillOpacity={1}
                 fill="url(#colorDeliveries)"
                 animationDuration={1500}
-                activeDot={{ 
-                  r: 6, 
-                  fill: "#6366f1", 
-                  stroke: "#fff", 
+                activeDot={{
+                  r: 6,
+                  fill: "#6366f1",
+                  stroke: "#fff",
                   strokeWidth: 2,
                 }}
               />
