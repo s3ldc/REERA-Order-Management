@@ -8,19 +8,21 @@ import {
   Sector,
 } from "recharts";
 import { ChartCard } from "@/components/ui/chart-card";
-import { useOrderContext } from "@/context/OrderContext";
 import { useAuth } from "@/context/AuthContext";
-import { CreditCard } from "lucide-react"; // The relevant icon for Finance
+import { CreditCard } from "lucide-react";
+import { api } from "../../../../convex/_generated/api";
+import { useQuery } from "convex/react";
+import type { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 const COLORS = {
-  Paid: "#10B981", // Emerald-500
-  Unpaid: "#F43F5E", // Rose-500
+  Paid: "#10B981",
+  Unpaid: "#F43F5E",
 };
 
-// --- Custom Active Shape for High-Fidelity UI ---
 const renderActiveShape = (props: any) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
     props;
+
   return (
     <g>
       <Sector
@@ -31,7 +33,7 @@ const renderActiveShape = (props: any) => {
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
-        cornerRadius={40} // Consistent fully rounded ends
+        cornerRadius={40}
       />
     </g>
   );
@@ -40,6 +42,7 @@ const renderActiveShape = (props: any) => {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
+
     return (
       <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
         <div className="flex items-center gap-2 mb-1">
@@ -64,25 +67,39 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const PaymentStatusChart = () => {
-  const { orders } = useOrderContext();
+  const orders: Doc<"orders">[] =
+    useQuery(api.orders.getAllOrders) ?? [];
+
   const { user } = useAuth();
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const myOrders = orders?.filter((o) => o.salesperson_id === user?.id) || [];
+  const myOrders: Doc<"orders">[] =
+    user
+      ? orders.filter(
+          (o: Doc<"orders">) =>
+            o.salesperson_id === (user.id as Id<"users">)
+        )
+      : [];
+
   const total = myOrders.length;
 
   const data = [
     {
       name: "Paid",
-      value: myOrders.filter((o) => o.payment_status === "Paid").length,
+      value: myOrders.filter(
+        (o: Doc<"orders">) => o.payment_status === "Paid"
+      ).length,
     },
     {
       name: "Unpaid",
-      value: myOrders.filter((o) => o.payment_status === "Unpaid").length,
+      value: myOrders.filter(
+        (o: Doc<"orders">) => o.payment_status === "Unpaid"
+      ).length,
     },
   ].filter((d) => d.value > 0);
 
-  const onPieEnter = (_: any, index: number) => setActiveIndex(index);
+  const onPieEnter = (_: any, index: number) =>
+    setActiveIndex(index);
   const onPieLeave = () => setActiveIndex(-1);
 
   return (
@@ -102,9 +119,7 @@ const PaymentStatusChart = () => {
           </div>
         ) : (
           <>
-            {/* Center Content: Icon + Count + Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-              {/* <CreditCard className="w-5 h-5 text-slate-300 mb-1" /> */}
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                 Total Orders
               </span>
@@ -119,7 +134,7 @@ const PaymentStatusChart = () => {
                   activeIndex={activeIndex}
                   activeShape={renderActiveShape}
                   data={data}
-                  innerRadius={70} // Sleek thin ring geometry
+                  innerRadius={70}
                   outerRadius={95}
                   paddingAngle={10}
                   cornerRadius={12}
@@ -132,7 +147,11 @@ const PaymentStatusChart = () => {
                   {data.map((entry) => (
                     <Cell
                       key={entry.name}
-                      fill={COLORS[entry.name as keyof typeof COLORS]}
+                      fill={
+                        COLORS[
+                          entry.name as keyof typeof COLORS
+                        ]
+                      }
                       className="transition-all duration-300 outline-none cursor-pointer"
                     />
                   ))}
@@ -144,14 +163,18 @@ const PaymentStatusChart = () => {
         )}
       </div>
 
-      {/* Modern SaaS Legend Grid */}
       <div className="mt-4 grid grid-cols-2 gap-3">
         {["Paid", "Unpaid"].map((status) => {
           const count = myOrders.filter(
-            (o) => o.payment_status === status,
+            (o: Doc<"orders">) =>
+              o.payment_status === status
           ).length;
-          const isSelected = data[activeIndex]?.name === status;
-          const color = COLORS[status as keyof typeof COLORS];
+
+          const isSelected =
+            data[activeIndex]?.name === status;
+
+          const color =
+            COLORS[status as keyof typeof COLORS];
 
           return (
             <div
@@ -174,7 +197,11 @@ const PaymentStatusChart = () => {
                   {count}
                 </span>
                 <span className="text-[9px] font-bold text-slate-400">
-                  ({total > 0 ? ((count / total) * 100).toFixed(0) : 0}%)
+                  (
+                  {total > 0
+                    ? ((count / total) * 100).toFixed(0)
+                    : 0}
+                  %)
                 </span>
               </div>
             </div>
