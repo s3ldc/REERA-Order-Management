@@ -130,7 +130,7 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
                           </p>
 
                           {event.actor && (
-                            <div className="flex items-center gap-2 mt-2 px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-100/50">
+                            <div className="flex items-center gap-2 mt-2 px-2.5 py-1.5 bg-slate-50 rounded-lg w-fit border border-slate-100/50">
                               <User className="w-3 h-3 text-slate-400" />
                               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">
                                 {event.actor.name || event.actor.email}
