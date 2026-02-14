@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as avatar from "../avatar.js";
+import type * as orders from "../orders.js";
 import type * as users from "../users.js";
 import type * as users_internal from "../users_internal.js";
 
@@ -22,6 +23,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   avatar: typeof avatar;
+  orders: typeof orders;
   users: typeof users;
   users_internal: typeof users_internal;
 }>;
