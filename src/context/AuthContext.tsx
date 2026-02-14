@@ -8,16 +8,12 @@ import React, {
 // import pb from "../lib/pocketbase";
 import { ConvexReactClient } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import type { Doc } from "../../convex/_generated/dataModel";
+import type { Id } from "../../convex/_generated/dataModel";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
-interface User {
-  id: string;
-  email: string;
-  role: "Salesperson" | "Distributor" | "Admin";
-  name: string;
-  avatar?: string;
-}
+type User = Doc<"users">;
 
 interface AuthContextType {
   user: User | null;
@@ -61,13 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           localStorage.removeItem("session_user_id");
           setUser(null);
         } else {
-          setUser({
-            id: user._id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            avatar: user.avatar,
-          });
+          setUser(user);
         }
       } catch (error) {
         console.error("Session restore failed", error);
@@ -122,16 +112,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (!result) return false;
 
-      const mappedUser: User = {
-        id: result._id,
-        email: result.email,
-        name: result.name,
-        role: result.role,
-        avatar: result.avatar,
-      };
+      // 🔥 Fetch full user document
+      const fullUser = await convex.query(api.users.getUserById, {
+        id: result._id as Id<"users">,
+      });
 
-      setUser(mappedUser);
-      localStorage.setItem("session_user_id", mappedUser.id);
+      if (!fullUser) return false;
+
+      setUser(fullUser);
+      localStorage.setItem("session_user_id", fullUser._id);
+
       return true;
     } catch (err) {
       console.error("Login failed", err);
@@ -167,24 +157,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
- const refreshUser = async () => {
-  const storedId = localStorage.getItem("session_user_id");
-  if (!storedId) return;
+  const refreshUser = async () => {
+    const storedId = localStorage.getItem("session_user_id");
+    if (!storedId) return;
 
-  const userData = await convex.query(api.users.getUserById, {
-    id: storedId as any,
-  });
+    const userData = await convex.query(api.users.getUserById, {
+      id: storedId as any,
+    });
 
-  if (!userData) return;
+    if (!userData) return;
 
-  setUser({
-    id: userData._id,
-    email: userData.email,
-    name: userData.name,
-    role: userData.role,
-    avatar: userData.avatar,
-  });
-};
+    setUser(userData);
+  };
 
   return (
     <AuthContext.Provider

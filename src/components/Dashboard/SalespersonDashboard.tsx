@@ -36,8 +36,7 @@ import { api } from "../../../convex/_generated/api";
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
   const createOrder = useMutation(api.orders.createOrder);
-  const distributors =
-  useQuery(api.users.getDistributors) || [];
+  const distributors = useQuery(api.users.getDistributors) || [];
 
   const myOrders =
     useQuery(
@@ -125,8 +124,10 @@ const SalespersonDashboard: React.FC = () => {
         quantity: qty,
         status: "Pending",
         payment_status: "Unpaid",
-        salesperson_id: user.id as any,
+        salesperson_id: user._id, // ✅ MUST be _id
         distributor_id: formData.distributor_id as any,
+        actor_id: user._id, // ✅ REQUIRED
+        actor_role: user.role, // ✅ REQUIRED
       });
 
       setFormData({
@@ -162,7 +163,9 @@ const SalespersonDashboard: React.FC = () => {
           <p className="text-slate-500 font-medium mt-2 flex items-center gap-2">
             <User className="w-4 h-4 text-blue-500" />
             Welcome back,{" "}
-            <span className="text-slate-900 font-bold">{user?.name || user?.email}</span>
+            <span className="text-slate-900 font-bold">
+              {user?.name || user?.email}
+            </span>
           </p>
         </div>
 
