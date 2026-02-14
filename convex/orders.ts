@@ -21,64 +21,31 @@ export const createOrder = mutation({
     ),
     salesperson_id: v.id("users"),
     distributor_id: v.id("users"),
+    actor_id: v.id("users"), // 🔥 added
+    actor_role: v.string(),  // 🔥 added
   },
 
   handler: async (ctx, args) => {
-    const orderId = await ctx.db.insert("orders", args);
+    const orderId = await ctx.db.insert("orders", {
+      spa_name: args.spa_name,
+      address: args.address,
+      product_name: args.product_name,
+      quantity: args.quantity,
+      status: args.status,
+      payment_status: args.payment_status,
+      salesperson_id: args.salesperson_id,
+      distributor_id: args.distributor_id,
+    });
 
-    // 🔥 Log timeline event
     await ctx.db.insert("order_events", {
       order_id: orderId,
       type: "created",
       message: "Order created",
-      actor_id: args.salesperson_id,
-      actor_role: "Salesperson",
+      actor_id: args.actor_id,
+      actor_role: args.actor_role,
     });
 
     return orderId;
-  },
-});
-
-/* =========================
-   GET ALL ORDERS
-========================= */
-export const getAllOrders = query({
-  handler: async (ctx) => {
-    return await ctx.db.query("orders").collect();
-  },
-});
-
-/* =========================
-   GET ORDERS BY SALESPERSON
-========================= */
-export const getOrdersBySalesperson = query({
-  args: {
-    salesperson_id: v.id("users"),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("orders")
-      .withIndex("by_salesperson", (q) =>
-        q.eq("salesperson_id", args.salesperson_id)
-      )
-      .collect();
-  },
-});
-
-/* =========================
-   GET ORDERS BY DISTRIBUTOR
-========================= */
-export const getOrdersByDistributor = query({
-  args: {
-    distributor_id: v.id("users"),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("orders")
-      .withIndex("by_distributor", (q) =>
-        q.eq("distributor_id", args.distributor_id)
-      )
-      .collect();
   },
 });
 
@@ -93,19 +60,20 @@ export const updateOrderStatus = mutation({
       v.literal("Dispatched"),
       v.literal("Delivered")
     ),
+    actor_id: v.id("users"), // 🔥 added
+    actor_role: v.string(),  // 🔥 added
   },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.orderId, {
       status: args.status,
     });
 
-    // 🔥 Log status change event
     await ctx.db.insert("order_events", {
       order_id: args.orderId,
       type: "status_updated",
       message: `Status changed to ${args.status}`,
-      actor_id: args.orderId, // temporary placeholder
-      actor_role: "System",
+      actor_id: args.actor_id,
+      actor_role: args.actor_role,
     });
   },
 });
@@ -120,19 +88,57 @@ export const updatePaymentStatus = mutation({
       v.literal("Unpaid"),
       v.literal("Paid")
     ),
+    actor_id: v.id("users"), // 🔥 added
+    actor_role: v.string(),  // 🔥 added
   },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.orderId, {
       payment_status: args.payment_status,
     });
 
-    // 🔥 Log payment event
     await ctx.db.insert("order_events", {
       order_id: args.orderId,
       type: "payment_updated",
       message: `Payment marked ${args.payment_status}`,
-      actor_id: args.orderId, // temporary placeholder
-      actor_role: "System",
+      actor_id: args.actor_id,
+      actor_role: args.actor_role,
     });
+  },
+});
+
+/* =========================
+   QUERIES (unchanged)
+========================= */
+export const getAllOrders = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("orders").collect();
+  },
+});
+
+export const getOrdersBySalesperson = query({
+  args: {
+    salesperson_id: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("orders")
+      .withIndex("by_salesperson", (q) =>
+        q.eq("salesperson_id", args.salesperson_id)
+      )
+      .collect();
+  },
+});
+
+export const getOrdersByDistributor = query({
+  args: {
+    distributor_id: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("orders")
+      .withIndex("by_distributor", (q) =>
+        q.eq("distributor_id", args.distributor_id)
+      )
+      .collect();
   },
 });
