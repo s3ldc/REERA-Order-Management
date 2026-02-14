@@ -36,6 +36,8 @@ import { api } from "../../../convex/_generated/api";
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
   const createOrder = useMutation(api.orders.createOrder);
+  const distributors =
+  useQuery(api.users.getDistributors) || [];
 
   const myOrders =
     useQuery(
@@ -354,7 +356,7 @@ const SalespersonDashboard: React.FC = () => {
                     >
                       <option value="">Choose a distributor</option>
                       {distributors.map((d) => (
-                        <option key={d.id} value={d.id}>
+                        <option key={d._id} value={d._id}>
                           {d.name}
                         </option>
                       ))}
