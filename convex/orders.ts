@@ -70,3 +70,19 @@ export const getOrdersByDistributor = query({
       .collect();
   },
 });
+
+export const updateOrderStatus = mutation({
+  args: {
+    orderId: v.id("orders"),
+    status: v.union(
+      v.literal("Pending"),
+      v.literal("Dispatched"),
+      v.literal("Delivered")
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.orderId, {
+      status: args.status,
+    });
+  },
+});
