@@ -41,7 +41,7 @@ const SalespersonDashboard: React.FC = () => {
   const myOrders =
     useQuery(
       api.orders.getOrdersBySalesperson,
-      user ? { salesperson_id: user.id as any } : "skip",
+      user ? { salesperson_id: user._id as any } : "skip",
     ) || [];
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
