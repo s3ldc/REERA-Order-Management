@@ -15,12 +15,13 @@ import { Badge } from "../ui/badge";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useQuery } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
+import type { Doc, Id } from "../../../convex/_generated/dataModel";
 
 dayjs.extend(relativeTime);
 
 interface Props {
-  order: Order;
+  order: Doc<"orders">;
   onClose: () => void;
 }
 
@@ -29,18 +30,19 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
   onClose,
 }) => {
   // Filter for operational events relevant to the distributor
-  const visibleEvents = events.filter(
-    (e) =>
-      e.type === "assigned" ||
-      e.type === "status_updated" ||
-      e.type === "created",
-  );
-
   const events = useQuery(api.orderEvents.getByOrderId, {
     orderId: order._id,
   });
 
   const loading = events === undefined;
+
+  const visibleEvents =
+    events?.filter(
+      (e) =>
+        e.type === "assigned" ||
+        e.type === "status_updated" ||
+        e.type === "created",
+    ) ?? [];
 
   const getEventConfig = (type: string, message: string) => {
     const msg = message.toLowerCase();
@@ -143,7 +145,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                   {visibleEvents.map((event) => {
                     const config = getEventConfig(event.type, event.message);
                     return (
-                      <div key={event.id} className="relative pl-16 group">
+                      <div key={event._id} className="relative pl-16 group">
                         {/* Status Node Node (Squarcle) */}
                         <div
                           className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white shadow-sm z-10 transition-all group-hover:scale-110 ${config.bg} ${config.border}`}
@@ -159,7 +161,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                               {event.type.replace("_", " ")}
                             </span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                              {dayjs(event.created).fromNow()}
+                              {dayjs(event._creationTime).fromNow()}
                             </span>
                           </div>
 
@@ -167,7 +169,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                             {event.message}
                           </p>
 
-                          {event.expand?.actor_id && (
+                          {/* {event.expand?.actor_id && (
                             <div className="flex items-center gap-2 mt-2 px-2.5 py-1.5 bg-slate-50 rounded-lg w-fit border border-slate-100/50">
                               <User className="w-3 h-3 text-slate-400" />
                               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">
@@ -175,7 +177,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                                   event.expand.actor_id.email}
                               </span>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     );

@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as avatar from "../avatar.js";
+import type * as orderEvents from "../orderEvents.js";
 import type * as orders from "../orders.js";
 import type * as seed from "../seed.js";
 import type * as users from "../users.js";
@@ -24,6 +25,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   avatar: typeof avatar;
+  orderEvents: typeof orderEvents;
   orders: typeof orders;
   seed: typeof seed;
   users: typeof users;
