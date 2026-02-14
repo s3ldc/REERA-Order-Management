@@ -13,7 +13,7 @@ cloudinary.config({
 
 export const uploadAvatar = action({
   args: {
-    userId: v.string(),
+    userId: v.id("users"), // ✅ FIXED
     file: v.string(), // base64 image
   },
 
@@ -23,15 +23,15 @@ export const uploadAvatar = action({
       folder: "avatars",
       transformation: [
         { width: 400, height: 400, crop: "fill" },
-        { quality: "auto" }
-      ]
+        { quality: "auto" },
+      ],
     });
 
     const imageUrl = uploadResult.secure_url;
 
     // Update user in Convex
     await ctx.runMutation(api.users.updateAvatar, {
-      userId: args.userId,
+      userId: args.userId, // ✅ no casting needed
       avatar: imageUrl,
     });
 
