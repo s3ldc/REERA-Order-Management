@@ -15,6 +15,7 @@ import { Activity } from "lucide-react";
 import dayjs from "dayjs";
 import { api } from "../../../../convex/_generated/api";
 import { useQuery } from "convex/react";
+import type { Id } from "../../../../convex/_generated/dataModel";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -40,7 +41,11 @@ const OrdersOverTimeChart = () => {
   const { user } = useAuth();
 
 const myOrders: Doc<"orders">[] =
-  user ? orders.filter((o) => o.salesperson_id === user._id) : [];
+  user
+    ? orders.filter(
+        (o) => o.salesperson_id === (user.id as Id<"users">)
+      )
+    : [];
 
 const ordersByDate = myOrders.reduce<Record<string, number>>((acc, order) => {
   const dateKey = dayjs(order._creationTime).format("YYYY-MM-DD");
