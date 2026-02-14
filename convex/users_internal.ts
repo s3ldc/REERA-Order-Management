@@ -21,7 +21,7 @@ export const insertUser = internalMutation({
       role: args.role,
       avatar: args.avatar,
       verified: false,
-      createdAt: Date.now(),
+      // createdAt: Date.now(),
     });
   },
 });

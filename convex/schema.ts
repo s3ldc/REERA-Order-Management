@@ -12,7 +12,7 @@ export default defineSchema({
     ),
     avatar: v.optional(v.string()),
     verified: v.boolean(),
-    createdAt: v.number(),
+    // createdAt: v.number(),
     passwordHash: v.string(), // 👈 ADD THIS
   }).index("by_email", ["email"]),
 });
