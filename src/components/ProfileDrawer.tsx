@@ -13,6 +13,8 @@ import pb from "../lib/pocketbase";
 import { getAvatarUrl } from "../lib/getAvatarUrl";
 import { Button } from "./ui/button"; // Assuming you have a standard SaaS button component
 import { Badge } from "./ui/badge"; // Assuming you have a badge component for roles
+import { useAction } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 interface ProfileDrawerProps {
   open: boolean;
@@ -24,19 +26,27 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const avatarUrl = user?.avatar ? getAvatarUrl(user, 160) : "";
+  const uploadAvatar = useAction(api.avatar.uploadAvatar);
 
   if (!open) return null;
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user) return;
+const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file || !user) return;
+
+  setIsUploading(true);
+
+  const reader = new FileReader();
+
+  reader.onloadend = async () => {
+    const base64 = reader.result as string;
 
     try {
-      setIsUploading(true);
-      const formData = new FormData();
-      formData.append("avatar", file);
+      await uploadAvatar({
+        userId: user.id,
+        file: base64,
+      });
 
-      await pb.collection("users").update(user.id, formData);
       await refreshUser();
     } catch (err) {
       console.error("Avatar upload failed", err);
@@ -44,6 +54,9 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
       setIsUploading(false);
     }
   };
+
+  reader.readAsDataURL(file);
+};
 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end overflow-hidden">

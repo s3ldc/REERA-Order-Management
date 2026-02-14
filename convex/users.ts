@@ -1,4 +1,4 @@
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getUserByEmail = query({
@@ -19,5 +19,17 @@ export const getUserById = query({
   },
   handler: async (ctx, args) => {
     return await ctx.db.get(args.id);
+  },
+});
+
+export const updateAvatar = mutation({
+  args: {
+    userId: v.string(),
+    avatar: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.userId as any, {
+      avatar: args.avatar,
+    });
   },
 });
