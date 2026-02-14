@@ -9,7 +9,7 @@ export const getByOrderId = query({
   handler: async (ctx, args) => {
     const events = await ctx.db
       .query("order_events")
-      .withIndex("by_order_id", (q) =>
+      .withIndex("by_order", (q) =>
         q.eq("order_id", args.orderId)
       )
       .order("desc")
