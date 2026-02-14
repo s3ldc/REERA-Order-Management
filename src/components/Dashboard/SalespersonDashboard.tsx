@@ -162,7 +162,7 @@ const SalespersonDashboard: React.FC = () => {
           <p className="text-slate-500 font-medium mt-2 flex items-center gap-2">
             <User className="w-4 h-4 text-blue-500" />
             Welcome back,{" "}
-            <span className="text-slate-900">{user?.name || user?.email}</span>
+            <span className="text-slate-900 font-bold">{user?.name || user?.email}</span>
           </p>
         </div>
 
