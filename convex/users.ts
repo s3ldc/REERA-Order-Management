@@ -42,3 +42,24 @@ export const updateAvatar = mutation({
     });
   },
 });
+
+export const getAllNonAdminUsers = query({
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("users")
+      .filter((q) =>
+        q.or(
+          q.eq(q.field("role"), "Salesperson"),
+          q.eq(q.field("role"), "Distributor")
+        )
+      )
+      .collect();
+  },
+});
+
+export const deleteUser = mutation({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.userId);
+  },
+});

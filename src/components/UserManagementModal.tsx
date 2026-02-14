@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import pb from "../lib/pocketbase";
+import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,63 +10,31 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Trash2, X, Mail, UserCircle2, Users } from "lucide-react";
 import { useToast } from "../hooks/useToast";
-// import { getAvatarUrl } from "@/lib/getAvatarUrl";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import type { Doc, Id } from "../../convex/_generated/dataModel";
 
 interface UserManagementModalProps {
   onClose: () => void;
-}
-
-interface PBUser {
-  id: string;
-  email: string;
-  name: string;
-  role: "Admin" | "Salesperson" | "Distributor";
-  avatar?: string;
 }
 
 const UserManagementModal: React.FC<UserManagementModalProps> = ({
   onClose,
 }) => {
   const { toast } = useToast();
-  const [users, setUsers] = useState<PBUser[]>([]);
 
-  const fetchUsers = async () => {
+  const users = useQuery(api.users.getAllNonAdminUsers) ?? [];
+  const deleteUser = useMutation(api.users.deleteUser);
+
+  const handleDeleteUser = async (userId: Id<"users">) => {
     try {
-      const records = await pb.collection("users").getFullList({
-        sort: "created",
-        filter: "role = 'Salesperson' || role = 'Distributor'",
-      });
-      const mapped: PBUser[] = records.map((r: any) => ({
-        id: r.id,
-        email: r.email,
-        name: r.name,
-        role: r.role,
-        avatar:
-          typeof r.avatar === "string" && r.avatar.length > 0
-            ? r.avatar
-            : undefined,
-      }));
-      setUsers(mapped);
-    } catch (err) {
-      console.error("Failed to fetch users", err);
+      await deleteUser({ userId });
+
       toast({
-        title: "Error",
-        description: "Failed to load users",
-        variant: "destructive",
+        title: "Success",
+        description: "User removed from system",
       });
-    }
-  };
-
-  useEffect(() => {
-    if (pb.authStore.isValid) fetchUsers();
-  }, []);
-
-  const handleDeleteUser = async (userId: string) => {
-    try {
-      await pb.collection("users").delete(userId);
-      toast({ title: "Success", description: "User removed from system" });
-      await fetchUsers();
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: "Error",
         description: "Failed to delete user",
@@ -82,10 +49,13 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
       Salesperson: "bg-blue-100 text-blue-700 border-blue-200",
       Distributor: "bg-emerald-100 text-emerald-700 border-emerald-200",
     };
+
     return (
       <Badge
         variant="outline"
-        className={`font-bold border shadow-sm ${variants[role as keyof typeof variants]}`}
+        className={`font-bold border shadow-sm ${
+          variants[role as keyof typeof variants]
+        }`}
       >
         {role}
       </Badge>
@@ -141,9 +111,9 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
           {/* Users List */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {users.length > 0 ? (
-              users.map((user) => (
+              users.map((user: Doc<"users">) => (
                 <div
-                  key={user.id}
+                  key={user._id}
                   className="group flex items-center justify-between p-5 bg-white border border-slate-100 rounded-2xl transition-all hover:shadow-lg hover:shadow-slate-200/50 hover:-translate-y-1"
                 >
                   <div className="flex items-center gap-4">
@@ -163,17 +133,19 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
                       <p className="font-bold text-slate-900 leading-none mb-1.5">
                         {user.name}
                       </p>
-                      <p className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5 uppercase tracking-tight">
+                      <p className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5 tracking-tight">
                         <Mail className="w-3 h-3" /> {user.email}
                       </p>
                     </div>
                   </div>
+
                   <div className="flex items-center gap-3">
                     {getRoleBadge(user.role)}
+
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleDeleteUser(user._id)}
                       className="h-9 w-9 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
