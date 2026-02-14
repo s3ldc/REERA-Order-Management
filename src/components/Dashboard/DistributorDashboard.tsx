@@ -30,6 +30,7 @@ const DistributorDashboard: React.FC = () => {
   const { toast } = useToast();
 
   const updateOrderStatus = useMutation(api.orders.updateOrderStatus);
+  type OrderStatus = "Pending" | "Dispatched" | "Delivered";
 
   const assignedOrders =
     useQuery(
@@ -52,7 +53,7 @@ const DistributorDashboard: React.FC = () => {
     }
   };
 
-  const getNextStatus = (currentStatus: string) => {
+  const getNextStatus = (currentStatus: OrderStatus): OrderStatus => {
     switch (currentStatus) {
       case "Pending":
         return "Dispatched";
@@ -65,7 +66,7 @@ const DistributorDashboard: React.FC = () => {
 
   const handleStatusUpdate = async (
     orderId: any,
-    currentStatus: string,
+    currentStatus: OrderStatus,
   ) => {
     const nextStatus = getNextStatus(currentStatus);
 
@@ -91,9 +92,7 @@ const DistributorDashboard: React.FC = () => {
         </h1>
         <p className="text-slate-500 mt-2">
           Welcome back,{" "}
-          <span className="font-bold">
-            {user?.name || user?.email}
-          </span>
+          <span className="font-bold">{user?.name || user?.email}</span>
         </p>
       </div>
 
@@ -106,10 +105,7 @@ const DistributorDashboard: React.FC = () => {
                 {status} Orders
               </h3>
               <p className="text-3xl font-bold text-slate-900 mt-1">
-                {
-                  assignedOrders.filter((o) => o.status === status)
-                    .length
-                }
+                {assignedOrders.filter((o) => o.status === status).length}
               </p>
             </CardContent>
           </Card>
@@ -128,9 +124,7 @@ const DistributorDashboard: React.FC = () => {
       <Card className="bg-white rounded-2xl shadow-sm">
         <CardHeader>
           <CardTitle>Delivery Pipeline</CardTitle>
-          <CardDescription>
-            Manage assigned deliveries
-          </CardDescription>
+          <CardDescription>Manage assigned deliveries</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -159,9 +153,7 @@ const DistributorDashboard: React.FC = () => {
                       <td>{order.quantity}</td>
                       <td>{order.status}</td>
                       <td>
-                        {new Date(
-                          order._creationTime,
-                        ).toLocaleDateString()}
+                        {new Date(order._creationTime).toLocaleDateString()}
                       </td>
                       <td className="text-right">
                         {order.status !== "Delivered" && (
@@ -170,7 +162,7 @@ const DistributorDashboard: React.FC = () => {
                             onClick={() =>
                               handleStatusUpdate(
                                 order._id,
-                                order.status,
+                                order.status as OrderStatus,
                               )
                             }
                           >
