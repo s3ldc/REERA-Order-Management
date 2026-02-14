@@ -34,6 +34,7 @@ import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
 import type { Order } from "../../context/OrderContext";
 import OrderTimelineDrawer from "../orders/AdminOrderTimelineDrawer";
 import { useMutation, useQuery } from "convex/react";
+import type { Id } from "../../../convex/_generated/dataModel";
 import { api } from "../../../convex/_generated/api";
 
 const AdminDashboard: React.FC = () => {
@@ -67,7 +68,10 @@ const AdminDashboard: React.FC = () => {
         new Date(order._creationTime) < new Date(filters.dateFrom)
       )
         return false;
-      if (filters.dateTo && new Date(order._creationTime) > new Date(filters.dateTo))
+      if (
+        filters.dateTo &&
+        new Date(order._creationTime) > new Date(filters.dateTo)
+      )
         return false;
       return true;
     }) || [];
@@ -96,10 +100,16 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleStatusUpdate = async (orderId: string, currentStatus: OrderStatus) => {
+  const handleStatusUpdate = async (
+    orderId: Id<"orders">,
+    currentStatus: OrderStatus,
+  ) => {
     const nextStatus = getNextStatus(currentStatus);
     if (nextStatus !== currentStatus) {
-      await updateOrderStatus(orderId, nextStatus as any);
+      await updateOrderStatus({
+        orderId,
+        status: nextStatus,
+      });
       toast({
         title: "Status Synchronized",
         description: `Order successfully updated to ${nextStatus}`,
@@ -108,11 +118,17 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handlePaymentToggle = async (
-    orderId: string,
+    orderId: Id<"orders">,
     currentStatus: PaymentStatus,
   ) => {
-    const newStatus = currentStatus === "Paid" ? "Unpaid" : "Paid";
-    await updatePaymentStatus(orderId, newStatus as any);
+    const newStatus: PaymentStatus =
+      currentStatus === "Paid" ? "Unpaid" : "Paid";
+
+    await updatePaymentStatus({
+      orderId,
+      payment_status: newStatus,
+    });
+
     toast({
       title: "Finance Record Updated",
       description: `Payment status toggled to ${newStatus}`,

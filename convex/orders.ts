@@ -86,3 +86,18 @@ export const updateOrderStatus = mutation({
     });
   },
 });
+
+export const updatePaymentStatus = mutation({
+  args: {
+    orderId: v.id("orders"),
+    payment_status: v.union(
+      v.literal("Unpaid"),
+      v.literal("Paid")
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.orderId, {
+      payment_status: args.payment_status,
+    });
+  },
+});
