@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useOrderContext } from "../../context/OrderContext";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -34,10 +33,14 @@ import OrdersOverTimeChart from "../charts/admin/OrdersOverTimeChart";
 // import OrdersByRoleChart from "../charts/admin/OrdersByRoleChart";
 import type { Order } from "../../context/OrderContext";
 import OrderTimelineDrawer from "../orders/AdminOrderTimelineDrawer";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
-  const { orders, updateOrderStatus, updatePaymentStatus } = useOrderContext();
+  const orders = useQuery(api.orders.getAllOrders) ?? [];
+  const updateOrderStatus = useMutation(api.orders.updateOrderStatus);
+  const updatePaymentStatus = useMutation(api.orders.updatePaymentStatus);
   const { toast } = useToast();
   const [showUserModal, setShowUserModal] = useState(false);
   const [filters, setFilters] = useState({
@@ -46,6 +49,8 @@ const AdminDashboard: React.FC = () => {
     dateTo: "",
   });
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
+  type OrderStatus = "Pending" | "Dispatched" | "Delivered";
+  type PaymentStatus = "Paid" | "Unpaid";
 
   const initialFilters = { status: "all", dateFrom: "", dateTo: "" };
 
@@ -59,10 +64,10 @@ const AdminDashboard: React.FC = () => {
         return false;
       if (
         filters.dateFrom &&
-        new Date(order.created) < new Date(filters.dateFrom)
+        new Date(order._creationTime) < new Date(filters.dateFrom)
       )
         return false;
-      if (filters.dateTo && new Date(order.created) > new Date(filters.dateTo))
+      if (filters.dateTo && new Date(order._creationTime) > new Date(filters.dateTo))
         return false;
       return true;
     }) || [];
@@ -80,7 +85,7 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const getNextStatus = (currentStatus: string) => {
+  const getNextStatus = (currentStatus: OrderStatus): OrderStatus => {
     switch (currentStatus) {
       case "Pending":
         return "Dispatched";
@@ -91,7 +96,7 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
+  const handleStatusUpdate = async (orderId: string, currentStatus: OrderStatus) => {
     const nextStatus = getNextStatus(currentStatus);
     if (nextStatus !== currentStatus) {
       await updateOrderStatus(orderId, nextStatus as any);
@@ -104,7 +109,7 @@ const AdminDashboard: React.FC = () => {
 
   const handlePaymentToggle = async (
     orderId: string,
-    currentStatus: string,
+    currentStatus: PaymentStatus,
   ) => {
     const newStatus = currentStatus === "Paid" ? "Unpaid" : "Paid";
     await updatePaymentStatus(orderId, newStatus as any);
@@ -321,7 +326,7 @@ const AdminDashboard: React.FC = () => {
                 <tbody className="divide-y divide-slate-50">
                   {filteredOrders.map((order) => (
                     <tr
-                      key={order.id}
+                      key={order._id}
                       className="group hover:bg-slate-50/80 transition-all duration-200"
                     >
                       <td className="py-6 px-8">
@@ -364,11 +369,14 @@ const AdminDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-6 px-4 text-sm font-bold text-slate-700">
-                        {new Date(order.created).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+                        {new Date(order._creationTime).toLocaleDateString(
+                          undefined,
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          },
+                        )}
                       </td>
                       <td className="py-6 px-8 text-right">
                         <div className="flex items-center justify-end gap-2">
@@ -376,7 +384,7 @@ const AdminDashboard: React.FC = () => {
                             title="View order timeline"
                             size="sm"
                             variant="ghost"
-                            onClick={() => setActiveOrder(order)}
+                            onClick={() => setActiveOrder(order as any)}
                             className="group flex items-center gap-1"
                           >
                             <Calendar className="w-4 h-4" />
@@ -388,7 +396,7 @@ const AdminDashboard: React.FC = () => {
                             <Button
                               size="sm"
                               onClick={() =>
-                                handleStatusUpdate(order.id, order.status)
+                                handleStatusUpdate(order._id, order.status)
                               }
                               className="h-9 px-4 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all font-bold border-none"
                             >
@@ -400,7 +408,7 @@ const AdminDashboard: React.FC = () => {
                             variant="outline"
                             onClick={() =>
                               handlePaymentToggle(
-                                order.id,
+                                order._id,
                                 order.payment_status,
                               )
                             }
