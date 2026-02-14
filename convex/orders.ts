@@ -24,7 +24,18 @@ export const createOrder = mutation({
   },
 
   handler: async (ctx, args) => {
-    return await ctx.db.insert("orders", args);
+    const orderId = await ctx.db.insert("orders", args);
+
+    // 🔥 Log timeline event
+    await ctx.db.insert("order_events", {
+      order_id: orderId,
+      type: "created",
+      message: "Order created",
+      actor_id: args.salesperson_id,
+      actor_role: "Salesperson",
+    });
+
+    return orderId;
   },
 });
 
@@ -71,6 +82,9 @@ export const getOrdersByDistributor = query({
   },
 });
 
+/* =========================
+   UPDATE ORDER STATUS
+========================= */
 export const updateOrderStatus = mutation({
   args: {
     orderId: v.id("orders"),
@@ -84,9 +98,21 @@ export const updateOrderStatus = mutation({
     await ctx.db.patch(args.orderId, {
       status: args.status,
     });
+
+    // 🔥 Log status change event
+    await ctx.db.insert("order_events", {
+      order_id: args.orderId,
+      type: "status_updated",
+      message: `Status changed to ${args.status}`,
+      actor_id: args.orderId, // temporary placeholder
+      actor_role: "System",
+    });
   },
 });
 
+/* =========================
+   UPDATE PAYMENT STATUS
+========================= */
 export const updatePaymentStatus = mutation({
   args: {
     orderId: v.id("orders"),
@@ -98,6 +124,15 @@ export const updatePaymentStatus = mutation({
   handler: async (ctx, args) => {
     await ctx.db.patch(args.orderId, {
       payment_status: args.payment_status,
+    });
+
+    // 🔥 Log payment event
+    await ctx.db.insert("order_events", {
+      order_id: args.orderId,
+      type: "payment_updated",
+      message: `Payment marked ${args.payment_status}`,
+      actor_id: args.orderId, // temporary placeholder
+      actor_role: "System",
     });
   },
 });

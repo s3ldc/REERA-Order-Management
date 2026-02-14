@@ -1,6 +1,19 @@
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
+
+export const createEvent = mutation({
+  args: {
+    order_id: v.id("orders"),
+    type: v.string(),
+    message: v.string(),
+    actor_id: v.id("users"),
+    actor_role: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("order_events", args);
+  },
+});
 
 export const getByOrderId = query({
   args: {
