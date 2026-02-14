@@ -25,7 +25,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
   const { user, refreshUser, logout } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
 
-  const avatarUrl = user?.avatar ? getAvatarUrl(user, 160) : "";
+  const avatarUrl = user?.avatar || "";
   const uploadAvatar = useAction(api.avatar.uploadAvatar);
 
   if (!open) return null;
