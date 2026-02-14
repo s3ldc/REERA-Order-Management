@@ -9,7 +9,7 @@ import {
 } from "recharts";
 import { ChartCard } from "@/components/ui/chart-card";
 import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import type { Doc } from "../../../../convex/_generated/dataModel";
 import { useAuth } from "@/context/AuthContext";
 import { Package } from "lucide-react"; // Import for the center icon
