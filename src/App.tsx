@@ -10,6 +10,7 @@ import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
 import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
+// import { getAvatarUrl } from "./lib/getAvatarUrl";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
 // import AppSkeleton from "./components/AppSkeleton";
 

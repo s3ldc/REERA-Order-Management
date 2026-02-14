@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 // import pb from "../lib/pocketbase";
-import { getAvatarUrl } from "../lib/getAvatarUrl";
 import { Button } from "./ui/button"; // Assuming you have a standard SaaS button component
 import { Badge } from "./ui/badge"; // Assuming you have a badge component for roles
 import { useAction } from "convex/react";

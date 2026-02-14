@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Trash2, X, Mail, UserCircle2, Users } from "lucide-react";
 import { useToast } from "../hooks/useToast";
-import { getAvatarUrl } from "@/lib/getAvatarUrl";
+// import { getAvatarUrl } from "@/lib/getAvatarUrl";
 
 interface UserManagementModalProps {
   onClose: () => void;
@@ -150,7 +150,7 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
                     <div className="h-12 w-12 rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 flex items-center justify-center">
                       {user.avatar ? (
                         <img
-                          src={getAvatarUrl(user, 96)}
+                          src={user.avatar}
                           alt={user.name}
                           className="h-full w-full object-cover"
                         />
