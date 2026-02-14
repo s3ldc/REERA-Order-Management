@@ -43,7 +43,7 @@ const OrdersOverTimeChart = () => {
 const myOrders: Doc<"orders">[] =
   user
     ? orders.filter(
-        (o) => o.salesperson_id === (user.id as Id<"users">)
+        (o) => o.salesperson_id === (user._id as Id<"users">)
       )
     : [];
 

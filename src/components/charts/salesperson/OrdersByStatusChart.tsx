@@ -72,7 +72,7 @@ const OrdersByStatusChart = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const myOrders = user
-    ? orders.filter((o) => o.salesperson_id === user.id)
+    ? orders.filter((o) => o.salesperson_id === user._id)
     : [];
   const total = myOrders.length;
 

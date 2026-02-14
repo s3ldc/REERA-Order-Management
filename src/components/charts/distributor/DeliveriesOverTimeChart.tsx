@@ -44,7 +44,7 @@ const DeliveriesOverTimeChart = () => {
     user
       ? orders.filter(
           (o: Doc<"orders">) =>
-            o.distributor_id === (user.id as Id<"users">) &&
+            o.distributor_id === (user._id as Id<"users">) &&
             o.status === "Delivered"
         )
       : [];

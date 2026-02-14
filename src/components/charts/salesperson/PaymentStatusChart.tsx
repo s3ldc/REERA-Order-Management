@@ -77,7 +77,7 @@ const PaymentStatusChart = () => {
     user
       ? orders.filter(
           (o: Doc<"orders">) =>
-            o.salesperson_id === (user.id as Id<"users">)
+            o.salesperson_id === (user._id as Id<"users">)
         )
       : [];
 

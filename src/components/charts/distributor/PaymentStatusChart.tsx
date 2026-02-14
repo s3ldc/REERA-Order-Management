@@ -83,7 +83,7 @@ export default function PaymentStatusChart() {
   const assignedOrders: Doc<"orders">[] =
     orders.filter(
       (o: Doc<"orders">) =>
-        o.distributor_id === (user.id as Id<"users">)
+        o.distributor_id === (user._id as Id<"users">)
     );
 
   const total = assignedOrders.length;
