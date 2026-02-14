@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { OrderProvider } from "./context/OrderContext";
 import { ToastProvider } from "./hooks/useToast";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -154,11 +153,9 @@ const Badge = ({
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <OrderProvider>
         <ToastProvider>
           <AppContent />
         </ToastProvider>
-      </OrderProvider>
     </AuthProvider>
   );
 };
