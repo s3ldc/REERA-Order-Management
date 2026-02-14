@@ -29,6 +29,7 @@ interface AuthContextType {
     password: string,
     userData: { name: string; role: "Salesperson" | "Distributor" },
   ) => Promise<boolean>; // 👈 ADD THIS
+  refreshUser: () => Promise<void>; // Optional, only if you implement it
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -166,23 +167,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // const refreshUser = async () => {
-  //   if (!pb.authStore.isValid || !pb.authStore.model) return;
+ const refreshUser = async () => {
+  const storedId = localStorage.getItem("session_user_id");
+  if (!storedId) return;
 
-  //   const fullUser = await pb.collection("users").getOne(pb.authStore.model.id);
+  const userData = await convex.query(api.users.getUserById, {
+    id: storedId as any,
+  });
 
-  //   const mappedUser: User = {
-  //     id: fullUser.id,
-  //     email: fullUser.email,
-  //     name: fullUser.name || fullUser.email,
-  //     role: fullUser.role,
-  //     avatar: normalizeAvatar(fullUser.avatar),
-  //   };
+  if (!userData) return;
 
-  //   setUser(mappedUser);
-  // };
-
-  // if (loading) return null;
+  setUser({
+    id: userData._id,
+    email: userData.email,
+    name: userData.name,
+    role: userData.role,
+    avatar: userData.avatar,
+  });
+};
 
   return (
     <AuthContext.Provider
@@ -192,6 +194,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         logout,
         signUp,
         loading, // 👈 ADD THIS
+        refreshUser, // 👈 ADD THIS
       }}
     >
       {children}
