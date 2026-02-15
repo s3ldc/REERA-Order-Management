@@ -7,7 +7,7 @@ import SalespersonDashboard from "./components/Dashboard/SalespersonDashboard";
 import DistributorDashboard from "./components/Dashboard/DistributorDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
-import { LogOut, LayoutDashboard, UserCircle } from "lucide-react";
+import { LogOut, LayoutDashboard, UserCircle, Zap } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 // import { getAvatarUrl } from "./lib/getAvatarUrl";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
@@ -54,7 +54,7 @@ const AppContent: React.FC = () => {
           {/* Left: Branding */}
           <div className="flex items-center gap-4">
             <div className="bg-indigo-600 p-2 rounded-xl">
-              <LayoutDashboard className="w-5 h-5 text-white" />
+              <Zap className="w-5 h-5 text-white fill-white" />
             </div>
             <div className="flex flex-col">
               <h1 className="text-sm font-black text-slate-900 uppercase tracking-tighter leading-none">
