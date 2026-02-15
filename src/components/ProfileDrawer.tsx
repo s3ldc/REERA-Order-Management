@@ -42,7 +42,7 @@ const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     try {
       await uploadAvatar({
-        userId: user.id,
+        userId: user._id,
         file: base64,
       });
 
@@ -195,7 +195,7 @@ const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
           <div className="text-center text-[10px] text-slate-400 mt-4 font-medium uppercase tracking-tight">
             <p className="text-center text-[10px] text-slate-400 font-medium uppercase tracking-wide">
               🔒 Enterprise ID:{" "}
-              <span className="font-mono">{user?.id.slice(0, 8)}</span> ·
+              <span className="font-mono">{user?._id.slice(0, 8)}</span> ·
               Managed Identity
             </p>
           </div>
