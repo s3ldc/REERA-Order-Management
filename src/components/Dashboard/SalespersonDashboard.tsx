@@ -153,7 +153,7 @@ const SalespersonDashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-10 bg-[#FAFBFC] min-h-screen">
+    <div className="max-w-7xl mx-auto p-6 space-y-10 bg-transparent min-h-screen text-white">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-gray-100">
         <div>
