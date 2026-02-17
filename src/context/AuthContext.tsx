@@ -177,8 +177,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         login,
         logout,
         signUp,
-        loading, // 👈 ADD THIS
-        refreshUser, // 👈 ADD THIS
+        loading, 
+        refreshUser, 
       }}
     >
       {children}

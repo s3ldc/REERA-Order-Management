@@ -9,7 +9,7 @@ import AdminDashboard from "./Dashboard/AdminDashboard";
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
 
-  // 🔴 CRITICAL: Wait until session restore finishes
+  // CRITICAL: Wait until session restore finishes
   if (loading) {
     return null; // or a spinner later
   }

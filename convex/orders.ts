@@ -21,8 +21,8 @@ export const createOrder = mutation({
     ),
     salesperson_id: v.id("users"),
     distributor_id: v.id("users"),
-    actor_id: v.id("users"), // 🔥 added
-    actor_role: v.string(),  // 🔥 added
+    actor_id: v.id("users"),
+    actor_role: v.string(),
   },
 
   handler: async (ctx, args) => {

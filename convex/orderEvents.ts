@@ -28,7 +28,7 @@ export const getByOrderId = query({
       .order("desc")
       .collect();
 
-    // 🔥 Manual join with users table
+    // Manual join with users table
     const enriched = await Promise.all(
       events.map(async (event) => {
         const actor = await ctx.db.get(event.actor_id);

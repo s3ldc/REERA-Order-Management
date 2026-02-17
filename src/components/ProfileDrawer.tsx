@@ -29,33 +29,33 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
 
   if (!open) return null;
 
-const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file || !user) return;
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
 
-  setIsUploading(true);
+    setIsUploading(true);
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onloadend = async () => {
-    const base64 = reader.result as string;
+    reader.onloadend = async () => {
+      const base64 = reader.result as string;
 
-    try {
-      await uploadAvatar({
-        userId: user._id,
-        file: base64,
-      });
+      try {
+        await uploadAvatar({
+          userId: user._id,
+          file: base64,
+        });
 
-      await refreshUser();
-    } catch (err) {
-      console.error("Avatar upload failed", err);
-    } finally {
-      setIsUploading(false);
-    }
+        await refreshUser();
+      } catch (err) {
+        console.error("Avatar upload failed", err);
+      } finally {
+        setIsUploading(false);
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
-
-  reader.readAsDataURL(file);
-};
 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end overflow-hidden">
