@@ -49,18 +49,19 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#020617] text-white">
       {/* Premium Sticky Header */}
-      <header className="sticky top-0 z-40 w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-sm">
+      <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
           {/* Left: Branding */}
           <div className="flex items-center gap-4">
-            <div className="bg-indigo-600 p-2 rounded-xl">
-              <Zap className="w-5 h-5 text-white fill-white" />
+            <div className="bg-primary p-2 rounded-xl">
+              <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
+
             <div className="flex flex-col">
-              <h1 className="text-sm font-black text-slate-900 uppercase tracking-tighter leading-none">
+              <h1 className="text-sm font-black text-foreground uppercase tracking-tighter leading-none">
                 B2B Order Hub
               </h1>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 Enterprise v2.0
               </span>
             </div>
@@ -68,18 +69,19 @@ const AppContent: React.FC = () => {
 
           {/* Right: User Profile & Logout */}
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 pr-6 border-r border-slate-100 hidden sm:flex">
+            <div className="flex items-center gap-3 pr-6 border-r border-border hidden sm:flex">
               <div className="text-right">
-                <p className="text-sm font-bold text-slate-900 leading-none">
+                <p className="text-sm font-bold text-foreground leading-none">
                   {user.name || user.email?.split("@")[0]}
                 </p>
-                <Badge className="mt-1 h-4 text-[9px] bg-slate-100 text-slate-500 border-none font-bold uppercase tracking-tight">
+                <Badge className="mt-1 h-4 text-[9px] bg-muted text-muted-foreground border-none font-bold uppercase tracking-tight">
                   {user.role}
                 </Badge>
               </div>
+
               <button
                 onClick={() => setProfileOpen(true)}
-                className="relative h-10 w-10 rounded-full overflow-hidden border border-slate-100 hover:ring-2 hover:ring-indigo-500 transition bg-slate-100 flex items-center justify-center"
+                className="relative h-10 w-10 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
               >
                 {user.avatar ? (
                   <img
@@ -88,7 +90,7 @@ const AppContent: React.FC = () => {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <UserCircle className="w-6 h-6 text-indigo-500" />
+                  <UserCircle className="w-6 h-6 text-primary" />
                 )}
               </button>
             </div>
@@ -97,7 +99,7 @@ const AppContent: React.FC = () => {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="group text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold text-xs flex items-center gap-2"
+              className="group text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all font-bold text-xs flex items-center gap-2"
             >
               <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Logout
@@ -153,9 +155,9 @@ const Badge = ({
 const App: React.FC = () => {
   return (
     <AuthProvider>
-        <ToastProvider>
-          <AppContent />
-        </ToastProvider>
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </AuthProvider>
   );
 };
