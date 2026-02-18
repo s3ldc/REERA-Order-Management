@@ -180,20 +180,20 @@ const SalespersonDashboard: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden relative group">
+        <Card className="rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                   Total Orders
                 </p>
-                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                <h3 className="text-3xl font-bold text-foreground mt-1">
                   {myOrders.length}
                 </h3>
               </div>
-              <div className="p-3 bg-blue-50 rounded-xl group-hover:bg-blue-100 transition-colors">
-                <ShoppingBag className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
+                <ShoppingBag className="w-6 h-6 text-primary" />
               </div>
             </div>
           </CardContent>
