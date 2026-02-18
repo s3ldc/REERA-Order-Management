@@ -100,13 +100,13 @@ const OrdersByStatusChart = () => {
         {total === 0 ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             {/* Matches placeholder style in image_755f65.png */}
-            <div className="bg-slate-50 p-5 rounded-full mb-4">
-              <Package className="w-8 h-8 text-slate-200" />
+            <div className="bg-muted p-5 rounded-full mb-4">
+              <Package className="w-8 h-8 text-muted-foreground/40" />
             </div>
-            <h3 className="text-sm font-bold text-slate-900">
+            <h3 className="text-sm font-bold text-foreground">
               No orders found
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Start by creating a new order above.
             </p>
           </div>
@@ -115,10 +115,10 @@ const OrdersByStatusChart = () => {
             {/* Center Content: Icon + Count + Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
               {/* <Package className="w-5 h-5 text-slate-300 mb-1" /> */}
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 Total Orders
               </span>
-              <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">
+              <span className="text-3xl font-black text-foreground tracking-tighter leading-none">
                 {total}
               </span>
             </div>
@@ -167,8 +167,8 @@ const OrdersByStatusChart = () => {
               key={status}
               className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
                 isSelected
-                  ? "bg-white border-slate-200 shadow-sm ring-1 ring-slate-100"
-                  : "bg-slate-50/50 border-transparent"
+                  ? "bg-card border-border shadow-sm ring-1 ring-border"
+                  : "bg-muted/40 border-transparent"
               }`}
             >
               <div
@@ -177,10 +177,10 @@ const OrdersByStatusChart = () => {
                   backgroundColor: COLORS[status as keyof typeof COLORS],
                 }}
               />
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">
                 {status}
               </span>
-              <span className="text-xs font-black text-slate-800">
+              <span className="text-xs font-black text-foreground">
                 {percentage}%
               </span>
             </div>
