@@ -12,11 +12,33 @@ import ProfileDrawer from "./components/ProfileDrawer";
 // import { getAvatarUrl } from "./lib/getAvatarUrl";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
 // import AppSkeleton from "./components/AppSkeleton";
+import { Sun, Moon } from "lucide-react";
+import { useEffect } from "react";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    } else {
+      document.documentElement.classList.add("dark"); // default dark
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+  };
 
   if (loading) {
     return <AppShellSkeleton />;
@@ -94,6 +116,19 @@ const AppContent: React.FC = () => {
                 )}
               </button>
             </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleTheme}
+              className="rounded-xl text-muted-foreground hover:bg-muted transition-all"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
+            </Button>
 
             <Button
               variant="ghost"
