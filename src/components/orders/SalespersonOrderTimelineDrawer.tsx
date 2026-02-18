@@ -42,8 +42,8 @@ const loading = events === undefined;
       return {
         icon: Box,
         color: "text-blue-600 dark:text-blue-400",
-        bg: "bg-blue-100 dark:bg-blue-500/20",
-        border: "border-blue-200 dark:border-blue-500/40",
+        bg: "bg-blue-100 dark:bg-blue-900",
+        border: "border-blue-200 dark:border-blue-700",
       };
     }
 
@@ -51,8 +51,8 @@ const loading = events === undefined;
       return {
         icon: User,
         color: "text-indigo-600 dark:text-indigo-400",
-        bg: "bg-indigo-100 dark:bg-indigo-500/10",
-        border: "border-indigo-200 dark:border-indigo-500/30",
+        bg: "bg-indigo-100 dark:bg-indigo-900",
+        border: "border-indigo-200 dark:border-indigo-700",
       };
     }
 
@@ -60,8 +60,8 @@ const loading = events === undefined;
       return {
         icon: Truck,
         color: "text-amber-600 dark:text-amber-400",
-        bg: "bg-amber-100 dark:bg-amber-500/10",
-        border: "border-amber-200 dark:border-amber-500/30",
+        bg: "bg-amber-100 dark:bg-amber-900",
+        border: "border-amber-200 dark:border-amber-700",
       };
     }
 
@@ -69,8 +69,8 @@ const loading = events === undefined;
       return {
         icon: CheckCircle2,
         color: "text-emerald-600 dark:text-emerald-400",
-        bg: "bg-emerald-100 dark:bg-emerald-500/10",
-        border: "border-emerald-200 dark:border-emerald-500/30",
+        bg: "bg-emerald-100 dark:bg-emerald-900",
+        border: "border-emerald-200 dark:border-emerald-700",
       };
     }
 
@@ -78,8 +78,8 @@ const loading = events === undefined;
       return {
         icon: CreditCard,
         color: "text-violet-600 dark:text-violet-400",
-        bg: "bg-violet-100 dark:bg-violet-500/10",
-        border: "border-violet-200 dark:border-violet-500/30",
+        bg: "bg-violet-100 dark:bg-violet-900",
+        border: "border-violet-200 dark:border-violet-700",
       };
     }
 
@@ -133,7 +133,7 @@ const loading = events === undefined;
               </div>
             ) : (
               <div className="relative">
-                <div className="absolute left-[20px] top-6 bottom-6 w-[2px] bg-border" />
+                <div className="absolute left-[20px] top-2 bottom-2 w-[2px] bg-border dark:bg-border/80" />
 
                 <div className="space-y-12">
                   {events.map((event) => {
@@ -142,7 +142,7 @@ const loading = events === undefined;
                     return (
                       <div key={event._id} className="relative pl-16 group">
                         <div
-                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-card shadow-sm z-10 ${config.bg} ${config.border}`}
+                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white shadow-sm z-10 transition-all group-hover:scale-110 ${config.bg} ${config.border}`}
                         >
                           <config.icon className={`w-4 h-4 ${config.color}`} />
                         </div>

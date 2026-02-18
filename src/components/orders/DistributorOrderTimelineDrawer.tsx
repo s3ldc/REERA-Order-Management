@@ -139,7 +139,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
             ) : (
               <div className="relative">
                 {/* Visual Connector Line: Centered exactly at 20px (half of w-10 node) */}
-                <div className="absolute left-[19.5px] top-2 bottom-2 w-[1.5px] bg-slate-100" />
+                <div className="absolute left-[19.5px] top-2 bottom-2 w-[1.5px] bg-slate-500" />
 
                 <div className="space-y-12">
                   {visibleEvents.map((event) => {
