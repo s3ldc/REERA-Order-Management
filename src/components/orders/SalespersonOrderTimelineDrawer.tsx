@@ -42,45 +42,45 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
     if (t === "created" || m.includes("created")) {
       return {
         icon: Box,
-        color: "text-blue-500",
-        bg: "bg-blue-500/10",
-        border: "border-blue-500/30",
+        color: "text-blue-600 dark:text-blue-400",
+        bg: "bg-blue-100 dark:bg-blue-500/10",
+        border: "border-blue-200 dark:border-blue-500/30",
       };
     }
 
     if (t === "assigned" || m.includes("assigned")) {
       return {
         icon: User,
-        color: "text-indigo-500",
-        bg: "bg-indigo-500/10",
-        border: "border-indigo-500/30",
+        color: "text-indigo-600 dark:text-indigo-400",
+        bg: "bg-indigo-100 dark:bg-indigo-500/10",
+        border: "border-indigo-200 dark:border-indigo-500/30",
       };
     }
 
     if (m.includes("dispatched") || m.includes("shipped")) {
       return {
         icon: Truck,
-        color: "text-amber-500",
-        bg: "bg-amber-500/10",
-        border: "border-amber-500/30",
+        color: "text-amber-600 dark:text-amber-400",
+        bg: "bg-amber-100 dark:bg-amber-500/10",
+        border: "border-amber-200 dark:border-amber-500/30",
       };
     }
 
     if (m.includes("delivered")) {
       return {
         icon: CheckCircle2,
-        color: "text-emerald-500",
-        bg: "bg-emerald-500/10",
-        border: "border-emerald-500/30",
+        color: "text-emerald-600 dark:text-emerald-400",
+        bg: "bg-emerald-100 dark:bg-emerald-500/10",
+        border: "border-emerald-200 dark:border-emerald-500/30",
       };
     }
 
     if (t === "payment_updated" || m.includes("paid")) {
       return {
         icon: CreditCard,
-        color: "text-violet-500",
-        bg: "bg-violet-500/10",
-        border: "border-violet-500/30",
+        color: "text-violet-600 dark:text-violet-400",
+        bg: "bg-violet-100 dark:bg-violet-500/10",
+        border: "border-violet-200 dark:border-violet-500/30",
       };
     }
 
@@ -134,7 +134,7 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
               </div>
             ) : (
               <div className="relative">
-                <div className="absolute left-[19.5px] top-2 bottom-2 w-[1.5px] bg-border" />
+                <div className="absolute left-5 top-2 bottom-2 w-[1.5px] bg-border/70 dark:bg-border" />
 
                 <div className="space-y-12">
                   {events.map((event) => {
