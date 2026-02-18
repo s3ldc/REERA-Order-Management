@@ -44,7 +44,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-card/95 backdrop-blur-sm border border-border p-3 shadow-xl rounded-xl">
+      <div className="bg-card/90 backdrop-blur-xl border border-border/60 p-3 shadow-2xl rounded-2xl ring-1 ring-primary/10">
         <div className="flex items-center gap-2 mb-1">
           <div
             className="w-2 h-2 rounded-full"
@@ -58,7 +58,9 @@ const CustomTooltip = ({ active, payload }: any) => {
         </div>
         <p className="text-sm font-bold text-foreground">
           {data.value}{" "}
-          <span className="text-muted-foreground font-medium text-xs">Orders</span>
+          <span className="text-muted-foreground font-medium text-xs">
+            Orders
+          </span>
         </p>
       </div>
     );
@@ -167,8 +169,8 @@ const OrdersByStatusChart = () => {
               key={status}
               className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
                 isSelected
-  ? "bg-card border-border shadow-sm ring-1 ring-primary/20"
-  : "bg-muted/30 border border-border/40 hover:bg-muted/50"
+                  ? "bg-card border-border shadow-sm ring-1 ring-primary/20"
+                  : "bg-muted/30 border border-border/40 hover:bg-muted/50"
               }`}
             >
               <div
