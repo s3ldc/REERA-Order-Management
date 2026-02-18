@@ -171,7 +171,11 @@ const SalespersonDashboard: React.FC = () => {
 
         <Button
           onClick={() => setShowForm(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-200/50 transition-all hover:scale-[1.02] active:scale-[0.98] h-11 px-6 rounded-xl flex items-center gap-2"
+          className="bg-primary text-primary-foreground 
+           hover:opacity-90 
+           shadow-lg shadow-[0_0_20px_hsl(var(--primary)/0.4)] 
+           transition-all hover:scale-[1.02] active:scale-[0.98] 
+           h-11 px-6 rounded-xl flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Create New Order
