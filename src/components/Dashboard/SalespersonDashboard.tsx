@@ -199,39 +199,39 @@ const SalespersonDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden relative group">
+        <Card className="rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-amber-400" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                   Pending Fulfillment
                 </p>
-                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                <h3 className="text-3xl font-bold text-foreground mt-1">
                   {myOrders.filter((o) => o.status === "Pending").length}
                 </h3>
               </div>
-              <div className="p-3 bg-amber-50 rounded-xl group-hover:bg-amber-100 transition-colors">
-                <Clock className="w-6 h-6 text-amber-600" />
+              <div className="p-3 bg-amber-500/10 rounded-xl group-hover:bg-amber-500/20 transition-colors">
+                <Clock className="w-6 h-6 text-amber-500" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden relative group">
+        <Card className="rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                   Payments Received
                 </p>
-                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                <h3 className="text-3xl font-bold text-foreground mt-1">
                   {myOrders.filter((o) => o.payment_status === "Paid").length}
                 </h3>
               </div>
-              <div className="p-3 bg-emerald-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
-                <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+              <div className="p-3 bg-emerald-500/10 rounded-xl group-hover:bg-emerald-500/20 transition-colors">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500" />
               </div>
             </div>
           </CardContent>
