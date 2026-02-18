@@ -44,7 +44,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
+      <div className="bg-card/95 backdrop-blur-sm border border-border p-3 shadow-xl rounded-xl">
         <div className="flex items-center gap-2 mb-1">
           <div
             className="w-2 h-2 rounded-full"
@@ -52,11 +52,11 @@ const CustomTooltip = ({ active, payload }: any) => {
               backgroundColor: COLORS[data.name as keyof typeof COLORS],
             }}
           />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
             {data.name}
           </span>
         </div>
-        <p className="text-sm font-bold text-slate-900">
+        <p className="text-sm font-bold text-foreground">
           {data.value}{" "}
           <span className="text-slate-400 font-medium text-xs">Orders</span>
         </p>
