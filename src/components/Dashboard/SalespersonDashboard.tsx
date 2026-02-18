@@ -157,13 +157,13 @@ const SalespersonDashboard: React.FC = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-gray-100">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
             Analytics Overview
           </h1>
-          <p className="text-slate-500 font-medium mt-2 flex items-center gap-2">
+          <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
             <User className="w-4 h-4 text-blue-500" />
             Welcome back,{" "}
-            <span className="text-slate-900 font-bold">
+            <span className="text-foreground font-bold">
               {user?.name || user?.email}
             </span>
           </p>
