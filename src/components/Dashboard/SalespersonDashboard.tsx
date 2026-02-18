@@ -180,8 +180,9 @@ const SalespersonDashboard: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="rounded-2xl overflow-hidden relative group">
-          <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
+
+        <Card className="bg-card border border-border rounded-2xl overflow-hidden relative group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -199,8 +200,8 @@ const SalespersonDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl overflow-hidden relative group">
-          <div className="absolute top-0 left-0 w-1 h-full bg-amber-400" />
+        <Card className="bg-card border border-border rounded-2xl overflow-hidden relative group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-amber-500" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -218,7 +219,7 @@ const SalespersonDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl overflow-hidden relative group">
+        <Card className="bg-card border border-border rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
