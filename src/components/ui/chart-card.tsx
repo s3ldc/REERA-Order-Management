@@ -15,12 +15,12 @@ export function ChartCard({
   className,
 }: ChartCardProps) {
   return (
-   <Card
-  className={cn(
-    "rounded-[24px] border border-border bg-card shadow-sm dark:shadow-none dark:ring-1 dark:ring-white/5 overflow-hidden transition-colors",
-    className
-  )}
->
+    <Card
+      className={cn(
+        "rounded-[24px] border border-border bg-card shadow-sm dark:shadow-none dark:ring-1 dark:ring-white/5 overflow-hidden transition-colors",
+        className,
+      )}
+    >
       <CardHeader className="px-6 pt-6 pb-0 flex flex-col gap-1">
         <CardTitle className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-foreground">
           {title}
