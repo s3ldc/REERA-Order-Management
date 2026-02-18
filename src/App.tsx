@@ -44,17 +44,6 @@ const AppContent: React.FC = () => {
     return <AppShellSkeleton />;
   }
 
-  //   if (loading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center bg-[#FAFBFC]">
-  //       <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-  //     </div>
-  //   );
-  // }
-
-  // const { user, logout, loading } = useAuth();
-
-  // if (loading) return null; // or global shell skeleton
 
   if (!user) {
     return showSignup ? (
