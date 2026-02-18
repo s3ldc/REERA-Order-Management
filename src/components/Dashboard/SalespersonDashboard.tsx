@@ -255,7 +255,7 @@ const SalespersonDashboard: React.FC = () => {
       {/* Modern Form Overlay */}
       {showForm && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-2xl shadow-2xl border-none rounded-3xl animate-in zoom-in-95 duration-200">
+          <Card className="w-full max-w-2xl bg-card text-card-foreground border border-border shadow-2xl rounded-3xl ...">
             <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-6 px-8">
               <div>
                 <CardTitle className="text-2xl font-bold text-foreground">
