@@ -116,7 +116,7 @@ const loading = events === undefined;
             </div>
           </CardHeader>
 
-          <CardContent className="flex-1 px-10 py-10 overflow-y-auto relative">
+          <CardContent className="flex-1 px-10 py-10 overflow-y-auto relative bg-card">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-40 gap-4">
                 <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
@@ -133,7 +133,7 @@ const loading = events === undefined;
               </div>
             ) : (
               <div className="relative">
-                <div className="absolute left-[20px] top-6 bottom-6 w-[2px] bg-muted-foreground/20 dark:bg-muted-foreground/30" />
+                <div className="absolute left-[20px] top-6 bottom-6 w-[2px] bg-border" />
 
                 <div className="space-y-12">
                   {events.map((event) => {
