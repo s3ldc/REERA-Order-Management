@@ -42,8 +42,8 @@ const loading = events === undefined;
       return {
         icon: Box,
         color: "text-blue-600 dark:text-blue-400",
-        bg: "bg-blue-100 dark:bg-blue-500/10",
-        border: "border-blue-200 dark:border-blue-500/30",
+        bg: "bg-blue-100 dark:bg-blue-500/20",
+        border: "border-blue-200 dark:border-blue-500/40",
       };
     }
 
@@ -98,7 +98,7 @@ const loading = events === undefined;
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-[450px] bg-background text-foreground h-full shadow-2xl flex flex-col border-l border-border">
+      <div className="relative w-full max-w-[450px] bg-card text-foreground h-full shadow-2xl flex flex-col border-l border-border">
         <Card className="h-full rounded-none border-none flex flex-col shadow-none overflow-hidden">
           <CardHeader className="px-6 py-5 border-b border-border bg-card">
             <div className="flex items-center justify-between">
@@ -133,7 +133,7 @@ const loading = events === undefined;
               </div>
             ) : (
               <div className="relative">
-                <div className="absolute left-[20px] top-6 bottom-6 w-[2px] bg-border/60" />
+                <div className="absolute left-[20px] top-6 bottom-6 w-[2px] bg-muted-foreground/20 dark:bg-muted-foreground/30" />
 
                 <div className="space-y-12">
                   {events.map((event) => {
