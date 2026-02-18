@@ -66,14 +66,21 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
       />
 
       {/* Drawer Container */}
-      <div className="relative w-full sm:w-[400px] bg-white shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)] flex flex-col transform transition-transform duration-300 ease-out animate-in slide-in-from-right">
+      <div
+        className="relative w-full sm:w-[400px] bg-card text-card-foreground 
+border-l border-border 
+shadow-[0_0_60px_-10px_rgba(0,0,0,0.4)] 
+flex flex-col"
+      >
         {/* Modern Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+        <div className="flex items-center justify-between px-6 py-5 border-b bg-muted/40 border-border">
           <div>
-            <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
+            <h2 className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">
               Account Settings
             </h2>
-            <p className="text-sm font-bold text-slate-900">Personal Profile</p>
+            <p className="text-sm font-bold text-foreground">
+              Personal Profile
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -89,7 +96,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
           <div className="flex flex-col items-center">
             <div className="relative group">
               <div
-                className={`h-28 w-28 rounded-3xl bg-slate-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-xl transition-all ${isUploading ? "opacity-50" : "group-hover:ring-4 group-hover:ring-blue-50"}`}
+                className={`h-28 w-28 rounded-3xl bg-muted flex items-center justify-center overflow-hidden border-4 border-background shadow-xl transition-all ${isUploading ? "opacity-50" : "group-hover:ring-4 group-hover:ring-blue-50"}`}
               >
                 {avatarUrl ? (
                   <img
@@ -102,7 +109,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
                 )}
 
                 {isUploading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-white/60">
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/70">
                     <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
                   </div>
                 )}
@@ -121,29 +128,29 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
               )}
             </div>
             <div className="mt-4 text-center">
-              <h3 className="font-black text-slate-900 text-lg">
+              <h3 className="font-black text-foreground text-lg">
                 {user?.name}
               </h3>
               <p className="text-xs font-medium text-slate-500 mt-0.5">
                 {user?.role} · Active
               </p>
 
-              {/* <p className="text-xs font-medium text-slate-400 mt-0.5">{user?.email}</p> */}
+              {/* <p className="text-xs font-medium text-muted-foreground mt-0.5">{user?.email}</p> */}
             </div>
           </div>
 
           {/* Core Info - Data Grid Layout */}
           <div className="grid gap-6">
-            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-2">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-50 pb-2">
               Information
             </h4>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="p-2.5 bg-blue-50 rounded-xl">
-                  <Mail className="w-4 h-4 text-blue-600" />
+                <div className="p-2.5 bg-primary/10 rounded-xl">
+                  <Mail className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase">
                     Registered Email
                   </p>
                   <p className="text-sm font-bold text-slate-700">
@@ -152,11 +159,11 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="p-2.5 bg-emerald-50 rounded-xl">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <div className="p-2.5 bg-emerald-500/10 rounded-xl">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase">
                     Access Role
                   </p>
                   <Badge
@@ -184,7 +191,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
         </div>
 
         {/* Action Footer */}
-        <div className="p-6 border-t border-slate-100 bg-slate-50/50">
+        <div className="p-6 border-t bg-muted/40 border-border">
           {/* <Button 
             onClick={logout}
             className="w-full h-12 rounded-2xl bg-white border border-red-100 hover:bg-red-50 text-red-600 font-bold transition-all gap-2 group shadow-sm"
@@ -192,8 +199,8 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
             <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Sign Out
           </Button> */}
-          <div className="text-center text-[10px] text-slate-400 mt-4 font-medium uppercase tracking-tight">
-            <p className="text-center text-[10px] text-slate-400 font-medium uppercase tracking-wide">
+          <div className="text-center text-[10px] text-muted-foreground mt-4 font-medium uppercase tracking-tight">
+            <p className="text-center text-[10px] text-muted-foreground font-medium uppercase tracking-wide">
               🔒 Enterprise ID:{" "}
               <span className="font-mono">{user?._id.slice(0, 8)}</span> ·
               Managed Identity
