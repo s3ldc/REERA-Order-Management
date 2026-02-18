@@ -42,41 +42,45 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
     if (t === "created" || m.includes("created")) {
       return {
         icon: Box,
-        color: "text-blue-600",
-        bg: "bg-blue-50",
-        border: "border-blue-200",
+        color: "text-blue-500",
+        bg: "bg-blue-500/10",
+        border: "border-blue-500/30",
       };
     }
+
     if (t === "assigned" || m.includes("assigned")) {
       return {
         icon: User,
-        color: "text-indigo-600",
-        bg: "bg-indigo-50",
-        border: "border-indigo-200",
+        color: "text-indigo-500",
+        bg: "bg-indigo-500/10",
+        border: "border-indigo-500/30",
       };
     }
+
     if (m.includes("dispatched") || m.includes("shipped")) {
       return {
         icon: Truck,
-        color: "text-amber-600",
-        bg: "bg-amber-50",
-        border: "border-amber-200",
+        color: "text-amber-500",
+        bg: "bg-amber-500/10",
+        border: "border-amber-500/30",
       };
     }
+
     if (m.includes("delivered")) {
       return {
         icon: CheckCircle2,
-        color: "text-emerald-600",
-        bg: "bg-emerald-50",
-        border: "border-emerald-200",
+        color: "text-emerald-500",
+        bg: "bg-emerald-500/10",
+        border: "border-emerald-500/30",
       };
     }
+
     if (t === "payment_updated" || m.includes("paid")) {
       return {
         icon: CreditCard,
-        color: "text-violet-600",
-        bg: "bg-violet-50",
-        border: "border-violet-200",
+        color: "text-violet-500",
+        bg: "bg-violet-500/10",
+        border: "border-violet-500/30",
       };
     }
 
@@ -139,7 +143,7 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
                     return (
                       <div key={event._id} className="relative pl-16 group">
                         <div
-                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white shadow-sm z-10 ${config.bg} ${config.border}`}
+                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-card shadow-sm z-10 ${config.bg} ${config.border}`}
                         >
                           <config.icon className={`w-4 h-4 ${config.color}`} />
                         </div>
@@ -156,7 +160,7 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
                             </span>
                           </div>
 
-                          <p className="text-sm font-bold text-slate-800 leading-snug">
+                          <p className="text-sm font-bold text-foreground leading-snug">
                             {event.message}
                           </p>
 
