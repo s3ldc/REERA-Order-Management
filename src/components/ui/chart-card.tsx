@@ -18,7 +18,7 @@ export function ChartCard({
     <Card
       className={cn(
         "rounded-[24px] border border-border bg-card shadow-sm overflow-hidden transition-colors",
-        className
+        className,
       )}
     >
       <CardHeader className="px-6 pt-6 pb-0 flex flex-col gap-1">
@@ -33,9 +33,7 @@ export function ChartCard({
         )}
       </CardHeader>
 
-      <CardContent className="px-6 pb-6 pt-2">
-        {children}
-      </CardContent>
+      <CardContent className="px-6 pb-6 pt-2">{children}</CardContent>
     </Card>
   );
 }
