@@ -373,8 +373,9 @@ const SalespersonDashboard: React.FC = () => {
                 <div className="flex gap-3 pt-4">
                   <Button
                     type="submit"
-                    className="flex-1 bg-primary text-primary-foreground h-12 rounded-xl text-lg font-bold 
-shadow-lg shadow-[0_0_25px_hsl(var(--primary)/0.35)] 
+                    className="flex-1 bg-primary text-primary-foreground 
+h-12 rounded-xl text-lg font-bold
+shadow-lg shadow-[0_0_25px_hsl(var(--primary)/0.4)]
 hover:opacity-90 transition-all"
                   >
                     Confirm Order
