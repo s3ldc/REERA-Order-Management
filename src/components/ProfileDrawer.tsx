@@ -153,7 +153,7 @@ flex flex-col"
                   <p className="text-[10px] font-bold text-muted-foreground uppercase">
                     Registered Email
                   </p>
-                  <p className="text-sm font-bold text-slate-700">
+                  <p className="text-sm font-bold text-foreground">
                     {user?.email}
                   </p>
                 </div>
@@ -191,7 +191,7 @@ flex flex-col"
         </div>
 
         {/* Action Footer */}
-        <div className="p-6 border-t bg-muted/40 border-border">
+        <div className="p-5 border-t bg-muted/40 border-border">
           {/* <Button 
             onClick={logout}
             className="w-full h-12 rounded-2xl bg-white border border-red-100 hover:bg-red-50 text-red-600 font-bold transition-all gap-2 group shadow-sm"
