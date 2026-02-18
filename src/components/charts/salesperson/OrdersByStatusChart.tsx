@@ -58,7 +58,7 @@ const CustomTooltip = ({ active, payload }: any) => {
         </div>
         <p className="text-sm font-bold text-foreground">
           {data.value}{" "}
-          <span className="text-slate-400 font-medium text-xs">Orders</span>
+          <span className="text-muted-foreground font-medium text-xs">Orders</span>
         </p>
       </div>
     );
