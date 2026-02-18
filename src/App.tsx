@@ -7,7 +7,7 @@ import SalespersonDashboard from "./components/Dashboard/SalespersonDashboard";
 import DistributorDashboard from "./components/Dashboard/DistributorDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { Button } from "./components/ui/button";
-import { LogOut, LayoutDashboard, UserCircle, Zap } from "lucide-react";
+import { LogOut, UserCircle, Zap } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 // import { getAvatarUrl } from "./lib/getAvatarUrl";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
@@ -152,14 +152,14 @@ const AppContent: React.FC = () => {
         {/* Fallback */}
         {!["Salesperson", "Distributor", "Admin"].includes(user.role) && (
           <div className="flex items-center justify-center min-h-[50vh]">
-            <div className="text-center p-10 bg-white rounded-3xl shadow-xl border border-red-50">
-              <p className="text-red-500 font-black uppercase text-xs tracking-widest mb-2">
+            <div className="text-center p-10 bg-card text-card-foreground rounded-3xl shadow-xl border border-border">
+              <p className="text-destructive font-black uppercase text-xs tracking-widest mb-2">
                 Access Denied
               </p>
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-2xl font-bold">
                 Unknown Role: {String(user.role)}
               </h2>
-              <p className="text-slate-500 mt-2">
+              <p className="text-muted-foreground mt-2">
                 Please contact system administrator.
               </p>
             </div>

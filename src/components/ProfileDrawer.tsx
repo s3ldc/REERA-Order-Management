@@ -5,12 +5,10 @@ import {
   Camera,
   Mail,
   ShieldCheck,
-  LogOut,
   Loader2,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 // import pb from "../lib/pocketbase";
-import { Button } from "./ui/button"; // Assuming you have a standard SaaS button component
 import { Badge } from "./ui/badge"; // Assuming you have a badge component for roles
 import { useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -21,7 +19,7 @@ interface ProfileDrawerProps {
 }
 
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
-  const { user, refreshUser, logout } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
 
   const avatarUrl = user?.avatar || "";

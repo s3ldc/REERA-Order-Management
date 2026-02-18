@@ -28,12 +28,11 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
   order,
   onClose,
 }) => {
-  const events =
-    useQuery(api.orderEvents.getByOrderId, {
-      orderId: order._id,
-    }) ?? [];
+  const events = useQuery(api.orderEvents.getByOrderId, {
+  orderId: order._id,
+});
 
-  const loading = events === undefined;
+const loading = events === undefined;
 
   const getEventConfig = (type: string, message: string) => {
     const t = type.toLowerCase();
@@ -99,9 +98,9 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-[450px] bg-card text-card-foreground h-full shadow-2xl flex flex-col border-l border-border">
+      <div className="relative w-full max-w-[450px] bg-background text-foreground h-full shadow-2xl flex flex-col border-l border-border">
         <Card className="h-full rounded-none border-none flex flex-col shadow-none overflow-hidden">
-          <CardHeader className="px-6 py-5 border-b border-border bg-muted/40">
+          <CardHeader className="px-6 py-5 border-b border-border bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">
@@ -134,7 +133,7 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
               </div>
             ) : (
               <div className="relative">
-                <div className="absolute left-5 top-2 bottom-2 w-[1.5px] bg-border/70 dark:bg-border" />
+                <div className="absolute left-[20px] top-6 bottom-6 w-[2px] bg-border/60" />
 
                 <div className="space-y-12">
                   {events.map((event) => {
@@ -181,7 +180,7 @@ const SalespersonOrderTimelineDrawer: React.FC<Props> = ({
             )}
           </CardContent>
 
-          <div className="px-8 py-6 border-t border-border bg-muted/30 text-center">
+          <div className="px-8 py-6 border-t border-border bg-card text-center">
             <p className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
               End of Operational Log
             </p>
