@@ -256,7 +256,7 @@ const SalespersonDashboard: React.FC = () => {
       {showForm && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <Card className="w-full max-w-2xl shadow-2xl border-none rounded-3xl animate-in zoom-in-95 duration-200">
-            <CardHeader className="flex flex-row items-center justify-between border-b border-slate-100 pb-6 px-8">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-6 px-8">
               <div>
                 <CardTitle className="text-2xl font-bold text-foreground">
                   New Order Entry
@@ -278,7 +278,7 @@ const SalespersonDashboard: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">
+                    <Label className="text-foreground font-semibold">
                       Spa/Salon Name
                     </Label>
                     <Input
@@ -288,12 +288,12 @@ const SalespersonDashboard: React.FC = () => {
                         setFormData({ ...formData, spa_name: e.target.value })
                       }
                       placeholder="e.g. Zen Retreat"
-                      className="rounded-xl border-slate-200 h-11 focus:ring-blue-500 focus:border-blue-500"
+                      className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">
+                    <Label className="text-foreground font-semibold">
                       Address
                     </Label>
                     <Input
@@ -303,12 +303,12 @@ const SalespersonDashboard: React.FC = () => {
                         setFormData({ ...formData, address: e.target.value })
                       }
                       placeholder="Street, City, Zip"
-                      className="rounded-xl border-slate-200 h-11"
+                      className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">
+                    <Label className="text-foreground font-semibold">
                       Product
                     </Label>
                     <Input
@@ -321,12 +321,12 @@ const SalespersonDashboard: React.FC = () => {
                         })
                       }
                       placeholder="Search products..."
-                      className="rounded-xl border-slate-200 h-11"
+                      className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">
+                    <Label className="text-foreground font-semibold">
                       Quantity
                     </Label>
                     <Input
@@ -340,13 +340,13 @@ const SalespersonDashboard: React.FC = () => {
                           quantity: Number(e.target.value),
                         })
                       }
-                      className="rounded-xl border-slate-200 h-11"
+                      className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                       required
                     />
                   </div>
 
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-slate-700 font-semibold">
+                    <Label className="text-foreground font-semibold">
                       Assign Distributor
                     </Label>
                     <select
@@ -358,7 +358,7 @@ const SalespersonDashboard: React.FC = () => {
                           distributor_id: e.target.value,
                         })
                       }
-                      className="w-full border border-slate-200 rounded-xl px-4 h-11 bg-white text-sm focus:ring-2 focus:ring-blue-500 outline-none appearance-none"
+                      className="w-full border border-border rounded-xl px-4 h-11 bg-background text-sm focus:ring-2 focus:ring-ring outline-none"
                       required
                     >
                       <option value="">Choose a distributor</option>
@@ -373,7 +373,9 @@ const SalespersonDashboard: React.FC = () => {
                 <div className="flex gap-3 pt-4">
                   <Button
                     type="submit"
-                    className="flex-1 bg-blue-600 h-12 rounded-xl text-lg font-bold shadow-lg shadow-blue-200"
+                    className="flex-1 bg-primary text-primary-foreground h-12 rounded-xl text-lg font-bold 
+shadow-lg shadow-[0_0_25px_hsl(var(--primary)/0.35)] 
+hover:opacity-90 transition-all"
                   >
                     Confirm Order
                   </Button>
