@@ -141,7 +141,7 @@ flex flex-col"
 
           {/* Core Info - Data Grid Layout */}
           <div className="grid gap-6">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-50 pb-2">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest border-b border-border pb-2">
               Information
             </h4>
             <div className="space-y-4">
