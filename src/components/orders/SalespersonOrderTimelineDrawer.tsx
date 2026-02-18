@@ -142,7 +142,7 @@ const loading = events === undefined;
                     return (
                       <div key={event._id} className="relative pl-16 group">
                         <div
-                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white shadow-sm z-10 transition-all group-hover:scale-110 ${config.bg} ${config.border}`}
+                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 ${config.border} shadow-sm z-10 transition-all group-hover:scale-110 ${config.bg} ${config.border}`}
                         >
                           <config.icon className={`w-4 h-4 ${config.color}`} />
                         </div>
