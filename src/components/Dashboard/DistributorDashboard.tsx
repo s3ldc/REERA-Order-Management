@@ -84,7 +84,7 @@ const DistributorDashboard: React.FC = () => {
       case "Delivered":
         return <CheckCircle className="w-5 h-5 text-emerald-600" />;
       default:
-        return <Package className="w-5 h-5 text-slate-500" />;
+        return <Package className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -125,17 +125,17 @@ const DistributorDashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-10 bg-[#FAFBFC] min-h-screen">
+    <div className="max-w-7xl mx-auto p-6 space-y-10 bg-background text-foreground min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-gray-100">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
             Logistics Overview
           </h1>
-          <p className="text-slate-500 font-medium mt-2 flex items-center gap-2">
+          <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
             <Truck className="w-4 h-4 text-blue-500" />
             Welcome back,{" "}
-            <span className="text-slate-900 font-bold">
+            <span className="text-foreground font-bold">
               {user?.name || user?.email}
             </span>
           </p>
@@ -151,7 +151,7 @@ const DistributorDashboard: React.FC = () => {
           return (
             <Card
               key={i}
-              className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden relative group"
+              className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-card rounded-2xl overflow-hidden relative group"
             >
               <div
                 className={`absolute top-0 left-0 w-1 h-full ${stat.color}`}
@@ -160,11 +160,11 @@ const DistributorDashboard: React.FC = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                       {stat.label}
                     </p>
 
-                    <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                    <h3 className="text-3xl font-bold text-foreground mt-1">
                       {
                         assignedOrders.filter((o) => o.status === stat.count)
                           .length
@@ -195,11 +195,11 @@ const DistributorDashboard: React.FC = () => {
       </div>
 
       {/* Orders Table */}
-      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-2xl overflow-hidden">
-        <CardHeader className="bg-white border-b border-slate-100 p-8">
+      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-card rounded-2xl overflow-hidden">
+        <CardHeader className="bg-card border-b border-slate-100 p-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-xl font-bold text-slate-900">
+              <CardTitle className="text-xl font-bold text-foreground">
                 Delivery Pipeline
               </CardTitle>
               <CardDescription className="text-slate-400 font-medium">
@@ -212,7 +212,7 @@ const DistributorDashboard: React.FC = () => {
           {assignedOrders.length === 0 ? (
             <div className="text-center py-24">
               <Package className="w-10 h-10 text-slate-200" />
-              <p className="text-slate-900 font-bold text-lg">
+              <p className="text-foreground font-bold text-lg">
                 No assignments found
               </p>
             </div>
@@ -220,7 +220,7 @@ const DistributorDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-slate-50/50 text-slate-500 uppercase text-[11px] font-bold tracking-widest">
+                  <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
                     <th className="py-5 px-8">Destination (Spa)</th>
                     <th className="py-5 px-4">Product Specs</th>
 
@@ -232,14 +232,14 @@ const DistributorDashboard: React.FC = () => {
                     <th className="py-5 px-8 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody className="divide-y divide-border">
                   {assignedOrders.map((order) => (
                     <tr
                       key={order._id}
                       className="group hover:bg-slate-50/80 transition-all duration-200"
                     >
                       <td className="py-6 px-8">
-                        <div className="font-bold text-slate-900">
+                        <div className="font-bold text-foreground">
                           {order.spa_name}
                         </div>
                         <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium italic">
@@ -247,14 +247,14 @@ const DistributorDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-6 px-4">
-                        <div className="text-sm font-semibold text-slate-700 bg-slate-100 rounded-md px-2.5 py-1 inline-flex items-center gap-2">
+                        <div className="text-sm font-semibold text-slate-700 bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
                           <Package className="w-3.5 h-3.5" />{" "}
                           {order.product_name}
                         </div>
                       </td>
 
                       {/* NEW SEPARATE QUANTITY COLUMN */}
-                      <td className="py-6 px-4 text-center font-bold text-slate-900">
+                      <td className="py-6 px-4 text-center font-bold text-foreground">
                         {order.quantity}
                       </td>
                       <td className="py-6 px-4">
