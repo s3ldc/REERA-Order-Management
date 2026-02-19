@@ -309,21 +309,24 @@ const DistributorDashboard: React.FC = () => {
                             </span>
                           </Button>
                           {order.status !== "Delivered" ? (
-                            <Button
-                              size="sm"
-                              onClick={() =>
-                                handleStatusUpdate(order._id, order.status)
-                              }
-                              className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-100 rounded-lg h-9 px-4 font-bold"
-                            >
-                              Mark {getNextStatus(order.status)}
-                              <ArrowRightCircle className="w-4 h-4 ml-2" />
-                            </Button>
-                          ) : (
-                            <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
-                              <CheckCircle className="w-4 h-4" /> Delivered
-                            </div>
-                          )}
+  <Button
+    size="sm"
+    onClick={() =>
+      handleStatusUpdate(order._id, order.status)
+    }
+    className="bg-primary text-primary-foreground 
+               hover:opacity-90
+               shadow-lg shadow-primary/30
+               rounded-lg h-9 px-4 font-bold transition-all"
+  >
+    Mark {getNextStatus(order.status)}
+    <ArrowRightCircle className="w-4 h-4 ml-2" />
+  </Button>
+) : (
+  <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
+    <CheckCircle className="w-4 h-4" /> Delivered
+  </div>
+)}
                         </div>
                       </td>
                     </tr>
