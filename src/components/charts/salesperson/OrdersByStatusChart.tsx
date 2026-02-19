@@ -101,7 +101,6 @@ const OrdersByStatusChart = () => {
       <div className="relative h-[260px] w-full mt-2">
         {total === 0 ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            {/* Matches placeholder style in image_755f65.png */}
             <div className="bg-muted p-5 rounded-full mb-4">
               <Package className="w-8 h-8 text-muted-foreground/40" />
             </div>
