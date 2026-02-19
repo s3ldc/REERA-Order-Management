@@ -87,16 +87,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
+/* Dark mode (white icon) */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.1);
 }
 
-/* Hide native icon visually but keep functionality */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
+/* Light mode (dark icon) */
+:root input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) saturate(100%);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
