@@ -18,13 +18,13 @@ import dayjs from "dayjs";
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
-        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+      <div className="bg-card/95 backdrop-blur-sm border border-border p-3 shadow-xl rounded-xl">
+        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">
           {dayjs(label).format("MMM DD, YYYY")}
         </p>
-        <p className="text-sm font-bold text-slate-900">
+        <p className="text-sm font-bold text-foreground">
           {payload[0].value}{" "}
-          <span className="text-slate-400 font-medium text-xs">
+          <span className="text-muted-foreground font-medium text-xs">
             Deliveries
           </span>
         </p>
@@ -35,26 +35,23 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const DeliveriesOverTimeChart = () => {
-  const orders: Doc<"orders">[] =
-    useQuery(api.orders.getAllOrders) ?? [];
+  const orders: Doc<"orders">[] = useQuery(api.orders.getAllOrders) ?? [];
 
   const { user } = useAuth();
 
-  const deliveredOrders: Doc<"orders">[] =
-    user
-      ? orders.filter(
-          (o: Doc<"orders">) =>
-            o.distributor_id === (user._id as Id<"users">) &&
-            o.status === "Delivered"
-        )
-      : [];
+  const deliveredOrders: Doc<"orders">[] = user
+    ? orders.filter(
+        (o: Doc<"orders">) =>
+          o.distributor_id === (user._id as Id<"users">) &&
+          o.status === "Delivered",
+      )
+    : [];
 
   const groupedByDate: Record<string, number> = {};
 
   deliveredOrders.forEach((order) => {
     const dateKey = dayjs(order._creationTime).format("YYYY-MM-DD");
-    groupedByDate[dateKey] =
-      (groupedByDate[dateKey] || 0) + 1;
+    groupedByDate[dateKey] = (groupedByDate[dateKey] || 0) + 1;
   });
 
   const data = Object.keys(groupedByDate)
@@ -70,7 +67,7 @@ const DeliveriesOverTimeChart = () => {
         {data.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center">
             <span className="text-2xl mb-2">📈</span>
-            <p className="text-xs text-slate-400 font-medium tracking-tight">
+            <p className="text-xs text-muted-foreground font-medium tracking-tight">
               No delivery history available
             </p>
           </div>
@@ -87,12 +84,12 @@ const DeliveriesOverTimeChart = () => {
                 >
                   <stop
                     offset="5%"
-                    stopColor="#6366f1"
+                    stopColor="hsl(var(--primary))"
                     stopOpacity={0.15}
                   />
                   <stop
                     offset="95%"
-                    stopColor="#6366f1"
+                    stopColor="hsl(var(--primary))"
                     stopOpacity={0}
                   />
                 </linearGradient>
@@ -101,20 +98,18 @@ const DeliveriesOverTimeChart = () => {
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#f1f5f9"
+                stroke="hsl(var(--border))"
               />
 
               <XAxis
                 dataKey="date"
                 axisLine={false}
                 tickLine={false}
-                tickFormatter={(str) =>
-                  dayjs(str).format("MMM DD")
-                }
+                tickFormatter={(str) => dayjs(str).format("MMM DD")}
                 tick={{
                   fontSize: 10,
                   fontWeight: 600,
-                  fill: "#94a3b8",
+                  fill: "hsl(var(--muted-foreground))",
                 }}
                 dy={10}
               />
@@ -126,7 +121,7 @@ const DeliveriesOverTimeChart = () => {
                 tick={{
                   fontSize: 10,
                   fontWeight: 600,
-                  fill: "#94a3b8",
+                  fill: "hsl(var(--muted-foreground))",
                 }}
                 dx={-10}
               />
@@ -134,7 +129,7 @@ const DeliveriesOverTimeChart = () => {
               <Tooltip
                 content={<CustomTooltip />}
                 cursor={{
-                  stroke: "#e2e8f0",
+                  stroke: "hsl(var(--border))",
                   strokeWidth: 2,
                 }}
               />
@@ -142,15 +137,15 @@ const DeliveriesOverTimeChart = () => {
               <Area
                 type="monotone"
                 dataKey="deliveries"
-                stroke="#6366f1"
+                stroke="hsl(var(--primary))"
                 strokeWidth={3}
                 fillOpacity={1}
                 fill="url(#colorDeliveries)"
                 animationDuration={1500}
                 activeDot={{
                   r: 6,
-                  fill: "#6366f1",
-                  stroke: "#fff",
+                  fill: "hsl(var(--primary))",
+                  stroke: "hsl(var(--background))",
                   strokeWidth: 2,
                 }}
               />
