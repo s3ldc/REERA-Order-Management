@@ -46,7 +46,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
+      <div className="bg-card/95 backdrop-blur-sm border border-border p-3 shadow-xl rounded-xl">
         <div className="flex items-center gap-2 mb-1">
           <div
             className="w-2 h-2 rounded-full"
@@ -55,13 +55,13 @@ const CustomTooltip = ({ active, payload }: any) => {
                 COLORS[data.name as OrderStatus],
             }}
           />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
             {data.name}
           </span>
         </div>
-        <p className="text-sm font-bold text-slate-900">
+        <p className="text-sm font-bold text-foreground">
           {data.value}{" "}
-          <span className="text-slate-400 font-medium text-xs">
+          <span className="text-muted-foreground font-medium text-xs">
             Orders
           </span>
         </p>
@@ -124,13 +124,13 @@ export default function OrdersByStatusChart() {
     return (
       <ChartCard title="Logistics Distribution">
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="bg-slate-50 p-6 rounded-full mb-4">
+          <div className="bg-muted p-6 rounded-full mb-4">
             <span className="text-2xl">📦</span>
           </div>
-          <h3 className="text-sm font-bold text-slate-900">
+          <h3 className="text-sm font-bold text-foreground">
             No Orders Found
           </h3>
-          <p className="text-xs text-slate-400 max-w-[200px] mt-1">
+          <p className="text-xs text-muted-foreground max-w-[200px] mt-1">
             Assignments will appear here once processed by the system.
           </p>
         </div>
@@ -142,10 +142,10 @@ export default function OrdersByStatusChart() {
     <ChartCard title="Logistics Distribution">
       <div className="relative h-[280px] w-full mt-4">
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
+          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">
             Total Assigned
           </span>
-          <span className="text-3xl font-black text-slate-900 tracking-tighter leading-none">
+          <span className="text-3xl font-black text-foreground tracking-tighter leading-none">
             {total}
           </span>
         </div>
@@ -192,8 +192,8 @@ export default function OrdersByStatusChart() {
                 key={status}
                 className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
                   isSelected
-                    ? "bg-white border-slate-200 shadow-sm ring-1 ring-slate-100"
-                    : "bg-slate-50/50 border-transparent"
+  ? "bg-card border-border shadow-sm ring-1 ring-border/50"
+  : "bg-muted/50 border-transparent"
                 }`}
               >
                 <div
@@ -202,10 +202,10 @@ export default function OrdersByStatusChart() {
                     backgroundColor: COLORS[status],
                   }}
                 />
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
                   {status}
                 </span>
-                <span className="text-sm font-black text-slate-800">
+                <span className="text-sm font-black text-foreground">
                   {(
                     (count / total) *
                     100
