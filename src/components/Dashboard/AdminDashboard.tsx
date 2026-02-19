@@ -400,10 +400,10 @@ const AdminDashboard: React.FC = () => {
                             size="sm"
                             variant="ghost"
                             onClick={() => setActiveOrder(order)}
-                            className="group flex items-center gap-1"
+                            className="group flex items-center gap-1 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
                           >
                             <Calendar className="w-4 h-4" />
-                            <span className="hidden group-hover:inline text-xs">
+                            <span className="hidden group-hover:inline text-xs font-medium">
                               Timeline
                             </span>
                           </Button>
@@ -419,22 +419,24 @@ const AdminDashboard: React.FC = () => {
                             </Button>
                           )}
                           <Button
-  size="sm"
-  variant="outline"
-  onClick={() =>
-    handlePaymentToggle(
-      order._id,
-      order.payment_status,
-    )
-  }
-  className={`h-9 px-4 rounded-lg font-bold transition-all border ${
-    order.payment_status === "Paid"
-      ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
-      : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
-  }`}
->
-  {order.payment_status === "Paid" ? "Mark Unpaid" : "Mark Paid"}
-</Button>
+                            size="sm"
+                            variant="outline"
+                            onClick={() =>
+                              handlePaymentToggle(
+                                order._id,
+                                order.payment_status,
+                              )
+                            }
+                            className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+                              order.payment_status === "Paid"
+                                ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                                : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                            }`}
+                          >
+                            {order.payment_status === "Paid"
+                              ? "Mark Unpaid"
+                              : "Mark Paid"}
+                          </Button>
                         </div>
                       </td>
                     </tr>
