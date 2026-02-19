@@ -79,3 +79,14 @@ input[type="number"] {
     transform: translateX(100%);
   }
 }
+
+/* Improve visibility of date picker icon in dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.8);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
