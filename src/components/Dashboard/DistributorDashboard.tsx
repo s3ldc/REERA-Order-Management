@@ -236,18 +236,18 @@ const DistributorDashboard: React.FC = () => {
                   {assignedOrders.map((order) => (
                     <tr
                       key={order._id}
-                      className="group hover:bg-slate-50/80 transition-all duration-200"
+                      className="group hover:bg-muted/40 transition-all duration-200"
                     >
                       <td className="py-6 px-8">
                         <div className="font-bold text-foreground">
                           {order.spa_name}
                         </div>
-                        <div className="text-xs text-slate-400 mt-1 flex items-center gap-1 font-medium italic">
+                        <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1 font-medium italic">
                           <MapPin className="w-3 h-3" /> {order.address}
                         </div>
                       </td>
                       <td className="py-6 px-4">
-                        <div className="text-sm font-semibold text-slate-700 bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
+                        <div className="text-sm font-semibold text-foreground bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
                           <Package className="w-3.5 h-3.5" />{" "}
                           {order.product_name}
                         </div>
@@ -260,7 +260,7 @@ const DistributorDashboard: React.FC = () => {
                       <td className="py-6 px-4">
                         <div className="flex items-center gap-2">
                           {getStatusIcon(order.status)}
-                          <span className="text-sm font-bold text-slate-700">
+                          <span className="text-sm font-bold text-foreground">
                             {order.status}
                           </span>
                         </div>
@@ -271,21 +271,21 @@ const DistributorDashboard: React.FC = () => {
                             className={`w-2 h-2 rounded-full ${
                               order.payment_status === "Paid"
                                 ? "bg-emerald-500"
-                                : "bg-slate-300"
+                                : "bg-muted-foreground/30"
                             }`}
                           />
                           <span
                             className={`text-xs font-bold uppercase ${
                               order.payment_status === "Paid"
                                 ? "text-emerald-600"
-                                : "text-slate-400"
+                                : "text-muted-foreground"
                             }`}
                           >
                             {order.payment_status}
                           </span>
                         </div>
                       </td>
-                      <td className="py-6 px-4 text-sm font-bold text-slate-700">
+                      <td className="py-6 px-4 text-sm font-bold text-foreground">
                         {new Date(order._creationTime).toLocaleDateString(
                           "en-US",
                           {
