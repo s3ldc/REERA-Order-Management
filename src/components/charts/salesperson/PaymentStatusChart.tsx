@@ -176,7 +176,7 @@ const PaymentStatusChart = () => {
               }`}
             >
               <div
-                className="h-1 w-full rounded-full mb-2 opacity-80"
+                className="h-1 w-6 rounded-full mb-2 opacity-80"
                 style={{ backgroundColor: color }}
               />
               <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">

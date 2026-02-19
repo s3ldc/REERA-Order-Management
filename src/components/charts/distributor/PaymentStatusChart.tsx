@@ -12,6 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
+import { CreditCard } from "lucide-react";
 
 const COLORS = {
   Paid: "#10B981",
@@ -30,12 +31,12 @@ const renderActiveShape = (props: any) => {
       <Sector
         cx={cx}
         cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius + 6}
+        innerRadius={innerRadius - 2}
+        outerRadius={outerRadius + 4}
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
-        cornerRadius={12}
+        cornerRadius={40} // fully rounded arc ends
       />
     </g>
   );
@@ -46,23 +47,22 @@ const CustomTooltip = ({ active, payload }: any) => {
     const data = payload[0].payload;
 
     return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
+      <div className="bg-card/90 backdrop-blur-xl border border-border/60 p-3 shadow-2xl rounded-2xl ring-1 ring-primary/10">
         <div className="flex items-center gap-2 mb-1">
           <div
             className="w-2 h-2 rounded-full"
             style={{
-              backgroundColor:
-                COLORS[data.name as PaymentStatus],
+              backgroundColor: COLORS[data.name as PaymentStatus],
             }}
           />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
             {data.name}
           </span>
         </div>
-        <p className="text-sm font-bold text-slate-900">
+        <p className="text-sm font-bold text-foreground">
           {data.value}{" "}
-          <span className="text-slate-400 font-medium text-xs">
-            Orders
+          <span className="text-muted-foreground font-medium text-xs">
+            Invoices
           </span>
         </p>
       </div>
@@ -73,24 +73,19 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 export default function PaymentStatusChart() {
   const { user } = useAuth();
-  const orders: Doc<"orders">[] =
-    useQuery(api.orders.getAllOrders) ?? [];
+  const orders: Doc<"orders">[] = useQuery(api.orders.getAllOrders) ?? [];
 
   const [activeIndex, setActiveIndex] = useState(-1);
 
   if (!user) return null;
 
-  const assignedOrders: Doc<"orders">[] =
-    orders.filter(
-      (o: Doc<"orders">) =>
-        o.distributor_id === (user._id as Id<"users">)
-    );
+  const assignedOrders: Doc<"orders">[] = orders.filter(
+    (o: Doc<"orders">) => o.distributor_id === (user._id as Id<"users">),
+  );
 
   const total = assignedOrders.length;
 
-  const paymentCount = assignedOrders.reduce<
-    Record<PaymentStatus, number>
-  >(
+  const paymentCount = assignedOrders.reduce<Record<PaymentStatus, number>>(
     (acc, order) => {
       acc[order.payment_status as PaymentStatus] =
         (acc[order.payment_status as PaymentStatus] || 0) + 1;
@@ -99,23 +94,17 @@ export default function PaymentStatusChart() {
     {
       Paid: 0,
       Unpaid: 0,
-    }
+    },
   );
 
-  const data = (
-    Object.entries(paymentCount) as [
-      PaymentStatus,
-      number
-    ][]
-  )
+  const data = (Object.entries(paymentCount) as [PaymentStatus, number][])
     .map(([status, count]) => ({
       name: status,
       value: count,
     }))
     .filter((d) => d.value > 0);
 
-  const onPieEnter = (_: any, index: number) =>
-    setActiveIndex(index);
+  const onPieEnter = (_: any, index: number) => setActiveIndex(index);
 
   const onPieLeave = () => setActiveIndex(-1);
 
@@ -123,19 +112,24 @@ export default function PaymentStatusChart() {
     <ChartCard title="Revenue Health">
       <div className="relative h-[280px] w-full mt-4">
         {total === 0 ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-2xl mb-2">💳</span>
-            <p className="text-xs text-slate-400 font-medium">
-              No payment data available
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+            <div className="bg-muted p-5 rounded-full mb-4 border border-border">
+              <CreditCard className="w-10 h-10 text-muted-foreground/40 stroke-[1.5]" />
+            </div>
+            <h3 className="text-sm font-bold text-foreground tracking-tight">
+              No Financial Data
+            </h3>
+            <p className="text-[11px] text-muted-foreground mt-1 max-w-[180px] leading-relaxed">
+              Revenue insights will populate once invoices are generated.
             </p>
           </div>
         ) : (
           <>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 Total Orders
               </span>
-              <span className="text-3xl font-black text-slate-900 leading-none tracking-tighter">
+              <span className="text-3xl font-black text-foreground tracking-tighter leading-none">
                 {total}
               </span>
             </div>
@@ -148,8 +142,8 @@ export default function PaymentStatusChart() {
                   data={data}
                   innerRadius={70}
                   outerRadius={95}
-                  paddingAngle={10}
-                  cornerRadius={12}
+                  paddingAngle={8}
+                  cornerRadius={40}
                   dataKey="value"
                   stroke="none"
                   onMouseEnter={onPieEnter}
@@ -171,47 +165,41 @@ export default function PaymentStatusChart() {
         )}
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        {(Object.keys(COLORS) as PaymentStatus[]).map(
-          (status) => {
-            const count = paymentCount[status];
-            const isSelected =
-              data[activeIndex]?.name === status;
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        {(Object.keys(COLORS) as PaymentStatus[]).map((status) => {
+          const count = paymentCount[status];
+          const percentage = total > 0 ? ((count / total) * 100).toFixed(0) : 0;
+          const isSelected = data[activeIndex]?.name === status;
 
-            return (
+          return (
+            <div
+              key={status}
+              className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+                isSelected
+                  ? "bg-card border-border shadow-sm ring-1 ring-primary/20"
+                  : "bg-muted/30 border border-border/40 hover:bg-muted/50"
+              }`}
+            >
               <div
-                key={status}
-                className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
-                  isSelected
-                    ? "bg-white border-slate-200 shadow-sm ring-1 ring-slate-100"
-                    : "bg-slate-50/50 border-slate-100"
-                }`}
-              >
-                <div
-                  className="h-1.5 w-full rounded-full mb-2 opacity-80"
-                  style={{
-                    backgroundColor: COLORS[status],
-                  }}
-                />
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                  {status}
+                className="h-1 w-6 rounded-full mb-2 opacity-80"
+                style={{
+                  backgroundColor: COLORS[status],
+                }}
+              />
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">
+                {status}
+              </span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xs font-black text-foreground">
+                  {count}
                 </span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-black text-slate-800">
-                    {count}
-                  </span>
-                  <span className="text-[9px] font-bold text-slate-400">
-                    ({(
-                      (count / total) *
-                      100
-                    ).toFixed(0)}
-                    %)
-                  </span>
-                </div>
+                <span className="text-[9px] font-bold text-muted-foreground">
+                  ({percentage}%)
+                </span>
               </div>
-            );
-          }
-        )}
+            </div>
+          );
+        })}
       </div>
     </ChartCard>
   );
