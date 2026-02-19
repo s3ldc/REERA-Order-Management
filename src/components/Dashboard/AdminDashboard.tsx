@@ -147,7 +147,7 @@ const AdminDashboard: React.FC = () => {
           <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
             System Control
           </h1>
-          <p className="text-slate-500 font-medium mt-2 flex items-center gap-2">
+          <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
             <Users className="w-4 h-4 text-indigo-500" />
             Administrator:{" "}
             <span className="text-foreground font-bold">
@@ -232,7 +232,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Advanced Filters */}
-      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-card rounded-2xl overflow-hidden">
+      <Card className="border-none shadow-sm bg-card rounded-2xl overflow-hidden">
         <CardHeader className="border-b border-border py-5 px-8 bg-card">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-foreground font-bold">
@@ -284,7 +284,7 @@ const AdminDashboard: React.FC = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, dateFrom: e.target.value })
                 }
-                className="h-11 rounded-xl border-border bg-muted font-medium text-slate-600 focus:bg-background transition-all shadow-none"
+                className="h-11 rounded-xl border-border bg-muted font-medium text-foreground focus:bg-background transition-all shadow-none"
               />
             </div>
 
@@ -298,7 +298,7 @@ const AdminDashboard: React.FC = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, dateTo: e.target.value })
                 }
-                className="h-11 rounded-xl border-border bg-muted font-medium text-slate-600 focus:bg-background transition-all shadow-none"
+                className="h-11 rounded-xl border-border bg-muted font-medium text-foreground focus:bg-background transition-all shadow-none"
               />
             </div>
           </div>
@@ -369,7 +369,7 @@ const AdminDashboard: React.FC = () => {
                             className={`w-2 h-2 rounded-full ${
                               order.payment_status === "Paid"
                                 ? "bg-emerald-500"
-                                : "bg-slate-300"
+                                : "bg-muted-foreground/40"
                             }`}
                           />
                           <span
@@ -413,7 +413,7 @@ const AdminDashboard: React.FC = () => {
                               onClick={() =>
                                 handleStatusUpdate(order._id, order.status)
                               }
-                              className="h-9 px-4 rounded-lg bg-primary/10 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all font-bold border-none"
+                              className="h-9 px-4 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all font-bold border-none"
                             >
                               Move to {getNextStatus(order.status)}
                             </Button>
