@@ -71,13 +71,11 @@ const stats = [
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "Pending":
-        return <Clock className="w-5 h-5 text-amber-600" />;
-      case "Dispatched":
-        return <Truck className="w-5 h-5 text-blue-600" />;
-      case "Delivered":
-        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
-      default:
-        return <Package className="w-5 h-5 text-muted-foreground" />;
+  return <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
+case "Dispatched":
+  return <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
+case "Delivered":
+  return <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />;
     }
   };
 
