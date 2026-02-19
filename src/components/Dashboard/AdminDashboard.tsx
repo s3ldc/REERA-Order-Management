@@ -232,7 +232,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Advanced Filters */}
-      <Card className="border-none shadow-sm bg-card rounded-2xl overflow-hidden">
+      <Card className="border-borderw-sm bg-card rounded-2xl overflow-hidden">
         <CardHeader className="border-b border-border py-5 px-8 bg-card">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-foreground font-bold">
@@ -292,14 +292,17 @@ const AdminDashboard: React.FC = () => {
               <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 End Date
               </Label>
-              <Input
-                type="date"
-                value={filters.dateTo}
-                onChange={(e) =>
-                  setFilters({ ...filters, dateTo: e.target.value })
-                }
-                className="h-11 rounded-xl border-border bg-muted font-medium text-foreground focus:bg-background transition-all shadow-none"
-              />
+              <div className="relative">
+                <Input
+                  type="date"
+                  value={filters.dateTo}
+                  onChange={(e) =>
+                    setFilters({ ...filters, dateTo: e.target.value })
+                  }
+                  className="h-11 rounded-xl border-border bg-muted font-medium text-foreground pr-10"
+                />
+                <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              </div>
             </div>
           </div>
         </CardContent>
