@@ -292,7 +292,6 @@ const AdminDashboard: React.FC = () => {
               <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 End Date
               </Label>
-              <div className="relative">
                 <Input
                   type="date"
                   value={filters.dateTo}
@@ -301,8 +300,6 @@ const AdminDashboard: React.FC = () => {
                   }
                   className="h-11 rounded-xl border-border bg-muted font-medium text-foreground pr-10"
                 />
-                <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-              </div>
             </div>
           </div>
         </CardContent>
