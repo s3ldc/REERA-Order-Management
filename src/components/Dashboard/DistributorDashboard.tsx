@@ -195,14 +195,14 @@ const DistributorDashboard: React.FC = () => {
       </div>
 
       {/* Orders Table */}
-      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-card rounded-2xl overflow-hidden">
-        <CardHeader className="bg-card border-b border-slate-100 p-8">
+      <Card className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+        <CardHeader className="bg-card border-b border-border p-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <CardTitle className="text-xl font-bold text-foreground">
                 Delivery Pipeline
               </CardTitle>
-              <CardDescription className="text-slate-400 font-medium">
+              <CardDescription className="text-muted-foreground font-medium">
                 Manage and track your assigned deliveries
               </CardDescription>
             </div>
@@ -211,7 +211,7 @@ const DistributorDashboard: React.FC = () => {
         <CardContent className="p-0">
           {assignedOrders.length === 0 ? (
             <div className="text-center py-24">
-              <Package className="w-10 h-10 text-slate-200" />
+              <Package className="w-10 h-10 text-muted-foreground/40" />
               <p className="text-foreground font-bold text-lg">
                 No assignments found
               </p>
@@ -309,24 +309,24 @@ const DistributorDashboard: React.FC = () => {
                             </span>
                           </Button>
                           {order.status !== "Delivered" ? (
-  <Button
-    size="sm"
-    onClick={() =>
-      handleStatusUpdate(order._id, order.status)
-    }
-    className="bg-primary text-primary-foreground 
+                            <Button
+                              size="sm"
+                              onClick={() =>
+                                handleStatusUpdate(order._id, order.status)
+                              }
+                              className="bg-primary text-primary-foreground 
                hover:opacity-90
                shadow-lg shadow-primary/30
                rounded-lg h-9 px-4 font-bold transition-all"
-  >
-    Mark {getNextStatus(order.status)}
-    <ArrowRightCircle className="w-4 h-4 ml-2" />
-  </Button>
-) : (
-  <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
-    <CheckCircle className="w-4 h-4" /> Delivered
-  </div>
-)}
+                            >
+                              Mark {getNextStatus(order.status)}
+                              <ArrowRightCircle className="w-4 h-4 ml-2" />
+                            </Button>
+                          ) : (
+                            <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
+                              <CheckCircle className="w-4 h-4" /> Delivered
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
