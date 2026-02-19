@@ -1,13 +1,13 @@
 # B2B Order Management System
 
-A role-based **B2B Order Management System** built with **React, PocketBase, and Tailwind CSS**, designed to streamline order creation, assignment, tracking, and delivery across Salespersons, Distributors, and Admins.
+A role-based **B2B Order Management System** built with **React, Convex, and Tailwind CSS**, designed to streamline order creation, assignment, tracking, and delivery across Salespersons, Distributors, and Admins.
 
 ---
 
 ## 🚀 Features
 
 ### 🔐 Authentication & Roles
-- Secure authentication using **PocketBase**
+- Secure authentication using **Convex**
 - Role-based access control:
   - **Salesperson**
   - **Distributor**
@@ -65,8 +65,8 @@ A role-based **B2B Order Management System** built with **React, PocketBase, and
 |-------------|------------|
 | Frontend     | React (Vite) |
 | Styling      | Tailwind CSS, shadcn/ui |
-| Backend      | PocketBase |
-| Auth         | PocketBase Auth |
+| Backend      | Convex |
+| Auth         | Convex Auth |
 | Icons        | Lucide React |
 | State Mgmt   | React Context API |
 
@@ -78,23 +78,31 @@ A role-based **B2B Order Management System** built with **React, PocketBase, and
 src/
 │
 ├── components/
-│ ├── Dashboard/
-│ │ ├── SalespersonDashboard.tsx
-│ │ ├── DistributorDashboard.tsx
-│ │ └── AdminDashboard.tsx
-│ ├── ui/ # Reusable UI components
-│ ├── Login.tsx
-│ └── Signup.tsx
+│   ├── dashboard/
+│   │   ├── SalespersonDashboard.tsx
+│   │   ├── DistributorDashboard.tsx
+│   │   └── AdminDashboard.tsx
+│   │
+│   ├── charts/
+│   │   ├── OrdersByStatusChart.tsx
+│   │   ├── PaymentStatusChart.tsx
+│   │   └── DeliveriesOverTimeChart.tsx
+│   │
+│   ├── orders/
+│   │   └── OrderTimelineDrawer.tsx
+│   │
+│   └── ui/ (Reusable UI components)
 │
 ├── context/
-│ ├── AuthContext.tsx
-│ └── OrderContext.tsx
+│   └── AuthContext.tsx
 │
 ├── hooks/
-│ └── useToast.tsx
+│   └── useToast.ts
 │
-├── lib/
-│ └── pocketbase.ts
+├── convex/
+│   ├── orders.ts
+│   ├── orderEvents.ts
+│   └── users.ts
 │
 └── App.tsx
 
@@ -126,12 +134,13 @@ npm run dev
 
 ---
 
-### 🗄️ PocketBase Setup
+### 🗄️ Convex Setup
 
-1.  Download and run **PocketBase**
+1.  Download and run **Convex**
 2.  Create collections:
     - `users`
     - `orders`
+    - `order_events`
 3. Required fields for `orders`:
    - `spa_name`
    - `address`
@@ -145,6 +154,13 @@ npm run dev
    - `Admin`
    - `Salesperson`
    - `Distributor`
+5. Required fields for `order_events`:
+   - `order_id`
+   - `type`
+   - `message`
+   - `actor_id`
+   - `actor_role`
+   - `_creationTime`
      
 ---
 
@@ -160,11 +176,11 @@ npm run dev
 
 ### 🧪 Known Improvements (Planned)
 
-- Global loading skeletons (remove first-load empty state)
 - Pagination for large order lists
 - Advanced search & filtering
 - Sidebar navigation layout
 - Audit logs for Admin actions
+- Export to CSV
 
 ---
 
