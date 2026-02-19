@@ -35,39 +35,32 @@ const DistributorDashboard: React.FC = () => {
   const updateOrderStatus = useMutation(api.orders.updateOrderStatus);
   type OrderStatus = "Pending" | "Dispatched" | "Delivered";
 
-  const stats: {
-    label: string;
-    count: OrderStatus;
-    color: string;
-    iconBg: string;
-    icon: React.ElementType;
-    textColor: string;
-  }[] = [
-    {
-      label: "Pending Orders",
-      count: "Pending",
-      color: "bg-amber-400",
-      iconBg: "bg-amber-50",
-      icon: Clock,
-      textColor: "text-amber-600",
-    },
-    {
-      label: "Active Dispatched",
-      count: "Dispatched",
-      color: "bg-blue-500",
-      iconBg: "bg-blue-50",
-      icon: Truck,
-      textColor: "text-blue-600",
-    },
-    {
-      label: "Total Delivered",
-      count: "Delivered",
-      color: "bg-emerald-500",
-      iconBg: "bg-emerald-50",
-      icon: CheckCircle,
-      textColor: "text-emerald-600",
-    },
-  ];
+const stats = [
+  {
+    label: "Pending Orders",
+    count: "Pending",
+    color: "bg-amber-500",
+    iconBg: "bg-amber-100 dark:bg-amber-900/40",
+    icon: Clock,
+    textColor: "text-amber-600 dark:text-amber-400",
+  },
+  {
+    label: "Active Dispatched",
+    count: "Dispatched",
+    color: "bg-blue-500",
+    iconBg: "bg-blue-100 dark:bg-blue-900/40",
+    icon: Truck,
+    textColor: "text-blue-600 dark:text-blue-400",
+  },
+  {
+    label: "Total Delivered",
+    count: "Delivered",
+    color: "bg-emerald-500",
+    iconBg: "bg-emerald-100 dark:bg-emerald-900/40",
+    icon: CheckCircle,
+    textColor: "text-emerald-600 dark:text-emerald-400",
+  },
+];
 
   const assignedOrders =
     useQuery(
@@ -127,13 +120,13 @@ const DistributorDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-10 bg-background text-foreground min-h-screen">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-gray-100">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border">
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
             Logistics Overview
           </h1>
           <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
-            <Truck className="w-4 h-4 text-blue-500" />
+            <Truck className="w-4 h-4 text-primary" />
             Welcome back,{" "}
             <span className="text-foreground font-bold">
               {user?.name || user?.email}
@@ -151,7 +144,7 @@ const DistributorDashboard: React.FC = () => {
           return (
             <Card
               key={i}
-              className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-card rounded-2xl overflow-hidden relative group"
+              className="bg-card border border-border rounded-2xl overflow-hidden relative group"
             >
               <div
                 className={`absolute top-0 left-0 w-1 h-full ${stat.color}`}
