@@ -260,7 +260,11 @@ const AdminDashboard: React.FC = () => {
               variant="ghost"
               size="sm"
               onClick={handleClearFilters}
-              className="h-8 px-3 text-[11px] font-black uppercase tracking-widest text-muted-foreground hover:text-rose-500 hover:bg-muted rounded-lg transition-all flex items-center gap-2"
+              className="h-8 px-3 text-[11px] font-black uppercase tracking-widest 
+             text-muted-foreground 
+             hover:text-destructive hover:bg-destructive/10
+             focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none
+             rounded-lg transition-all flex items-center gap-2"
             >
               <RotateCcw className="w-3 h-3" />
               Clear All
