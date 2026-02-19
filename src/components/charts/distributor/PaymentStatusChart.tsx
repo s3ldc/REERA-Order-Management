@@ -110,7 +110,7 @@ export default function PaymentStatusChart() {
 
   return (
     <ChartCard title="Revenue Health">
-      <div className="relative h-[280px] w-full mt-4">
+      <div className="relative h-[260px] w-full mt-4">
         {total === 0 ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
             <div className="bg-muted p-5 rounded-full mb-4 border border-border">

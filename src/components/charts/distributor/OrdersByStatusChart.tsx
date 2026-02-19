@@ -12,6 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
+import { Package } from "lucide-react";
 
 const COLORS = {
   Pending: "#f59e0b", // Amber-500
@@ -108,62 +109,63 @@ export default function OrdersByStatusChart() {
 
   const onPieLeave = () => setActiveIndex(-1);
 
-  if (total === 0) {
-    return (
-      <ChartCard title="Logistics Distribution">
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="bg-muted p-6 rounded-full mb-4">
-            <span className="text-2xl">📦</span>
-          </div>
-          <h3 className="text-sm font-bold text-foreground">No Orders Found</h3>
-          <p className="text-xs text-muted-foreground max-w-[200px] mt-1">
-            Assignments will appear here once processed by the system.
-          </p>
-        </div>
-      </ChartCard>
-    );
-  }
-
   return (
     <ChartCard title="Logistics Distribution">
-      <div className="relative h-[280px] w-full mt-4">
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-            Total Assigned
-          </span>
-          <span className="text-3xl font-black text-foreground tracking-tighter leading-none">
-            {total}
-          </span>
-        </div>
+      <div className="relative h-[270px] w-full mt-2">
+        {total === 0 ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <div className="bg-muted p-5 rounded-full mb-4">
+              <Package className="w-8 h-8 text-muted-foreground/40" />
+            </div>
+            <h3 className="text-sm font-bold text-foreground">
+              No orders found
+            </h3>
+            <p className="text-xs text-muted-foreground mt-1">
+              Assignments will appear here once processed by the system.
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Center Content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                Total Assigned
+              </span>
+              <span className="text-3xl font-black text-foreground tracking-tighter leading-none">
+                {total}
+              </span>
+            </div>
 
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              activeIndex={activeIndex}
-              activeShape={renderActiveShape}
-              data={data}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={70}
-              outerRadius={95}
-              paddingAngle={6}
-              cornerRadius={40}
-              stroke="none"
-              onMouseEnter={onPieEnter}
-              onMouseLeave={onPieLeave}
-              animationDuration={1000}
-            >
-              {data.map((entry) => (
-                <Cell
-                  key={entry.name}
-                  fill={COLORS[entry.name]}
-                  className="transition-all duration-300 outline-none"
-                />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} cursor={false} />
-          </PieChart>
-        </ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  activeIndex={activeIndex}
+                  activeShape={renderActiveShape}
+                  data={data}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={70}
+                  outerRadius={95}
+                  paddingAngle={8}
+                  cornerRadius={12}
+                  stroke="none"
+                  onMouseEnter={onPieEnter}
+                  onMouseLeave={onPieLeave}
+                  animationDuration={1000}
+                >
+                  {data.map((entry) => (
+                    <Cell
+                      key={entry.name}
+                      fill={COLORS[entry.name]}
+                      className="transition-all duration-300 outline-none cursor-pointer hover:opacity-90"
+                    />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} cursor={false} />
+              </PieChart>
+            </ResponsiveContainer>
+          </>
+        )}
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-3">
