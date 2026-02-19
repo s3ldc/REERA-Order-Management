@@ -14,9 +14,9 @@ import { api } from "../../../../convex/_generated/api";
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 const COLORS = {
-  Pending: "#F59E0B",
-  Dispatched: "#3B82F6",
-  Delivered: "#10B981",
+  Pending: "#f59e0b", // Amber-500
+  Dispatched: "#4f46e5", // Indigo-600
+  Delivered: "#10b981", // Emerald-500
 } as const;
 
 type OrderStatus = keyof typeof COLORS;
@@ -31,12 +31,12 @@ const renderActiveShape = (props: any) => {
       <Sector
         cx={cx}
         cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius + 6}
+        innerRadius={innerRadius - 2}
+        outerRadius={outerRadius + 4}
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
-        cornerRadius={12}
+        cornerRadius={40} // fully rounded ends
       />
     </g>
   );
@@ -51,8 +51,7 @@ const CustomTooltip = ({ active, payload }: any) => {
           <div
             className="w-2 h-2 rounded-full"
             style={{
-              backgroundColor:
-                COLORS[data.name as OrderStatus],
+              backgroundColor: COLORS[data.name as OrderStatus],
             }}
           />
           <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
@@ -73,24 +72,19 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 export default function OrdersByStatusChart() {
   const { user } = useAuth();
-  const orders: Doc<"orders">[] =
-    useQuery(api.orders.getAllOrders) ?? [];
+  const orders: Doc<"orders">[] = useQuery(api.orders.getAllOrders) ?? [];
 
   const [activeIndex, setActiveIndex] = useState(-1);
 
   if (!user) return null;
 
-  const myOrders: Doc<"orders">[] =
-    orders.filter(
-      (o: Doc<"orders">) =>
-        o.distributor_id === (user._id as Id<"users">)
-    );
+  const myOrders: Doc<"orders">[] = orders.filter(
+    (o: Doc<"orders">) => o.distributor_id === (user._id as Id<"users">),
+  );
 
   const total = myOrders.length;
 
-  const statusCount = myOrders.reduce<
-    Record<OrderStatus, number>
-  >(
+  const statusCount = myOrders.reduce<Record<OrderStatus, number>>(
     (acc, order) => {
       acc[order.status as OrderStatus] =
         (acc[order.status as OrderStatus] || 0) + 1;
@@ -100,23 +94,17 @@ export default function OrdersByStatusChart() {
       Pending: 0,
       Dispatched: 0,
       Delivered: 0,
-    }
+    },
   );
 
-  const data = (
-    Object.entries(statusCount) as [
-      OrderStatus,
-      number
-    ][]
-  )
+  const data = (Object.entries(statusCount) as [OrderStatus, number][])
     .map(([status, count]) => ({
       name: status,
       value: count,
     }))
     .filter((d) => d.value > 0);
 
-  const onPieEnter = (_: any, index: number) =>
-    setActiveIndex(index);
+  const onPieEnter = (_: any, index: number) => setActiveIndex(index);
 
   const onPieLeave = () => setActiveIndex(-1);
 
@@ -127,9 +115,7 @@ export default function OrdersByStatusChart() {
           <div className="bg-muted p-6 rounded-full mb-4">
             <span className="text-2xl">📦</span>
           </div>
-          <h3 className="text-sm font-bold text-foreground">
-            No Orders Found
-          </h3>
+          <h3 className="text-sm font-bold text-foreground">No Orders Found</h3>
           <p className="text-xs text-muted-foreground max-w-[200px] mt-1">
             Assignments will appear here once processed by the system.
           </p>
@@ -142,7 +128,7 @@ export default function OrdersByStatusChart() {
     <ChartCard title="Logistics Distribution">
       <div className="relative h-[280px] w-full mt-4">
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
             Total Assigned
           </span>
           <span className="text-3xl font-black text-foreground tracking-tighter leading-none">
@@ -160,8 +146,8 @@ export default function OrdersByStatusChart() {
               nameKey="name"
               innerRadius={70}
               outerRadius={95}
-              paddingAngle={8}
-              cornerRadius={12}
+              paddingAngle={6}
+              cornerRadius={40}
               stroke="none"
               onMouseEnter={onPieEnter}
               onMouseLeave={onPieLeave}
@@ -180,42 +166,36 @@ export default function OrdersByStatusChart() {
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-2">
-        {(Object.keys(COLORS) as OrderStatus[]).map(
-          (status) => {
-            const count = statusCount[status];
-            const isSelected =
-              data[activeIndex]?.name === status;
+      <div className="mt-4 grid grid-cols-3 gap-3">
+        {(Object.keys(COLORS) as OrderStatus[]).map((status) => {
+          const count = statusCount[status];
+          const percentage = total > 0 ? ((count / total) * 100).toFixed(0) : 0;
+          const isSelected = data[activeIndex]?.name === status;
 
-            return (
+          return (
+            <div
+              key={status}
+              className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+                isSelected
+                  ? "bg-card border-border shadow-sm ring-1 ring-primary/20"
+                  : "bg-muted/30 border border-border/40 hover:bg-muted/50"
+              }`}
+            >
               <div
-                key={status}
-                className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
-                  isSelected
-  ? "bg-card border-border shadow-sm ring-1 ring-border/50"
-  : "bg-muted/50 border-transparent"
-                }`}
-              >
-                <div
-                  className="h-1.5 w-8 rounded-full mb-2"
-                  style={{
-                    backgroundColor: COLORS[status],
-                  }}
-                />
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
-                  {status}
-                </span>
-                <span className="text-sm font-black text-foreground">
-                  {(
-                    (count / total) *
-                    100
-                  ).toFixed(0)}
-                  %
-                </span>
-              </div>
-            );
-          }
-        )}
+                className="h-1 w-6 rounded-full mb-2"
+                style={{
+                  backgroundColor: COLORS[status],
+                }}
+              />
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">
+                {status}
+              </span>
+              <span className="text-xs font-black text-foreground">
+                {percentage}%
+              </span>
+            </div>
+          );
+        })}
       </div>
     </ChartCard>
   );
