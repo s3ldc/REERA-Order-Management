@@ -306,8 +306,8 @@ const AdminDashboard: React.FC = () => {
       </Card>
 
       {/* Order Management Table */}
-      <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-card rounded-2xl overflow-hidden">
-        <CardHeader className="border-b border-border p-8">
+      <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden">
+        <CardHeader className="bg-card border-b border-border p-8">
           <CardTitle className="text-xl font-bold text-foreground">
             Master Order Registry
           </CardTitle>
@@ -419,18 +419,22 @@ const AdminDashboard: React.FC = () => {
                             </Button>
                           )}
                           <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              handlePaymentToggle(
-                                order._id,
-                                order.payment_status,
-                              )
-                            }
-                            className="h-9 px-4 rounded-lg border-border text-foreground font-bold hover:bg-muted transition-all"
-                          >
-                            Toggle Payment
-                          </Button>
+  size="sm"
+  variant="outline"
+  onClick={() =>
+    handlePaymentToggle(
+      order._id,
+      order.payment_status,
+    )
+  }
+  className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+    order.payment_status === "Paid"
+      ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+      : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+  }`}
+>
+  {order.payment_status === "Paid" ? "Mark Unpaid" : "Mark Paid"}
+</Button>
                         </div>
                       </td>
                     </tr>
