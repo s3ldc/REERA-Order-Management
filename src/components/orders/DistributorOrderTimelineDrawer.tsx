@@ -91,16 +91,16 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-[450px] bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-500 ease-out">
+      <div className="relative w-full max-w-[450px] bg-card text-foreground h-full shadow-2xl flex flex-col border-l border-border">
         <Card className="h-full rounded-none border-none flex flex-col shadow-none overflow-hidden">
           {/* Header */}
-          <CardHeader className="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+          <CardHeader className="px-6 py-5 border-b border-border bg-card">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">
+                <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">
                   Logistics Audit
                 </h3>
-                <h2 className="text-lg font-bold text-slate-900 leading-tight">
+                <h2 className="text-lg font-bold text-foreground leading-tight">
                   Order Timeline
                 </h2>
                 {/* <div className="mt-2">
@@ -109,13 +109,8 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                    </Badge>
                 </div> */}
               </div>
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={onClose}
-                className="rounded-xl hover:bg-white border border-transparent hover:border-slate-200 shadow-sm transition-all"
-              >
-                <X className="w-5 h-5 text-slate-500" />
+              <Button size="icon" variant="ghost" onClick={onClose}>
+                <X className="w-5 h-5 text-muted-foreground" />
               </Button>
             </div>
           </CardHeader>
@@ -125,14 +120,14 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
             {loading ? (
               <div className="flex flex-col items-center justify-center h-40 gap-4">
                 <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest text-center">
                   Syncing Pipeline...
                 </p>
               </div>
             ) : visibleEvents.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <AlertCircle className="w-10 h-10 text-slate-200 mb-4" />
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
                   No activity logged yet
                 </p>
               </div>
@@ -148,7 +143,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                       <div key={event._id} className="relative pl-16 group">
                         {/* Status Node Node (Squarcle) */}
                         <div
-                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white shadow-sm z-10 transition-all group-hover:scale-110 ${config.bg} ${config.border}`}
+                          className={`absolute left-0 top-0 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-card shadow-sm z-10 transition-all group-hover:scale-110 ${config.bg} ${config.border}`}
                         >
                           <config.icon className={`w-4 h-4 ${config.color}`} />
                         </div>
@@ -160,7 +155,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
                             >
                               {event.type.replace("_", " ")}
                             </span>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
                               {dayjs(event._creationTime).fromNow()}
                             </span>
                           </div>
@@ -171,7 +166,7 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
 
                           {event.actor && (
                             <div className="flex items-center gap-2 mt-2 px-2.5 py-1.5 bg-slate-50 rounded-lg w-fit border border-slate-100/50">
-                              <User className="w-3 h-3 text-slate-400" />
+                              <User className="w-3 h-3 text-muted-foreground" />
                               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">
                                 {event.actor.name || event.actor.email}
                               </span>
