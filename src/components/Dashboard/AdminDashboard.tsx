@@ -158,7 +158,22 @@ const AdminDashboard: React.FC = () => {
 
         <Button
           onClick={() => setShowUserModal(true)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 transition-all hover:scale-[1.02] active:scale-[0.98] h-11 px-6 rounded-xl flex items-center gap-2"
+          className="
+    bg-primary 
+    text-primary-foreground 
+    hover:bg-primary/90
+    shadow-lg
+    shadow-primary/25
+    transition-all 
+    hover:scale-[1.02] 
+    active:scale-[0.98] 
+    h-11 
+    px-6 
+    rounded-xl 
+    flex 
+    items-center 
+    gap-2
+  "
         >
           <Users className="w-5 h-5" />
           Manage User Access
@@ -292,14 +307,14 @@ const AdminDashboard: React.FC = () => {
               <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 End Date
               </Label>
-                <Input
-                  type="date"
-                  value={filters.dateTo}
-                  onChange={(e) =>
-                    setFilters({ ...filters, dateTo: e.target.value })
-                  }
-                  className="h-11 rounded-xl border-border bg-muted font-medium text-foreground pr-10"
-                />
+              <Input
+                type="date"
+                value={filters.dateTo}
+                onChange={(e) =>
+                  setFilters({ ...filters, dateTo: e.target.value })
+                }
+                className="h-11 rounded-xl border-border bg-muted font-medium text-foreground pr-10"
+              />
             </div>
           </div>
         </CardContent>
