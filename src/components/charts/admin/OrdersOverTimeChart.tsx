@@ -21,12 +21,19 @@ interface Props {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
-        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
-          {new Date(label).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+      <div className="bg-card/95 backdrop-blur-sm border border-border p-3 shadow-xl rounded-xl">
+        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">
+          {new Date(label).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
         </p>
-        <p className="text-sm font-bold text-slate-900">
-          {payload[0].value} <span className="text-slate-400 font-medium text-xs">Total Orders</span>
+        <p className="text-sm font-bold text-foreground">
+          {payload[0].value}{" "}
+          <span className="text-muted-foreground font-medium text-xs">
+            Total Orders
+          </span>
         </p>
       </div>
     );
@@ -46,8 +53,8 @@ export default function OrdersOverTimeChart({ orders }: Props) {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   return (
-    <ChartCard 
-      title="Demand Velocity" 
+    <ChartCard
+      title="Demand Velocity"
       // subtitle="Order volume trends over current period"
     >
       <div className="h-[300px] w-full mt-4 -ml-4">
@@ -56,50 +63,72 @@ export default function OrdersOverTimeChart({ orders }: Props) {
             {/* Standard SVG tags used directly without Recharts import */}
             <defs>
               <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#6366f1" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                <stop
+                  offset="5%"
+                  stopColor="hsl(var(--primary))"
+                  stopOpacity={0.25}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="hsl(var(--primary))"
+                  stopOpacity={0}
+                />
               </linearGradient>
             </defs>
-            
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-            
+
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="hsl(var(--border))"
+            />
+
             <XAxis
               dataKey="date"
               axisLine={false}
               tickLine={false}
               tickFormatter={(str) => {
                 const date = new Date(str);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
               }}
-              tick={{ fontSize: 10, fontWeight: 600, fill: '#94a3b8' }}
+              tick={{
+                fontSize: 10,
+                fontWeight: 600,
+                fill: "hsl(var(--muted-foreground))",
+              }}
               dy={10}
             />
-            
+
             <YAxis
               allowDecimals={false}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fontWeight: 600, fill: '#94a3b8' }}
+              tick={{ fontSize: 10, fontWeight: 600, fill: "#94a3b8" }}
               dx={-10}
             />
-            
-            <Tooltip 
-              content={<CustomTooltip />} 
-              cursor={{ stroke: '#e2e8f0', strokeWidth: 2 }} 
+
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{
+                stroke: "hsl(var(--border))",
+                strokeWidth: 2,
+              }}
             />
-            
+
             <Area
               type="monotone"
               dataKey="count"
-              stroke="#6366f1"
+              stroke="hsl(var(--primary))"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorCount)"
               animationDuration={1500}
-              activeDot={{ 
-                r: 6, 
-                fill: "#6366f1", 
-                stroke: "#fff", 
+              activeDot={{
+                r: 6,
+                fill: "hsl(var(--primary))",
+                stroke: "hsl(var(--background))",
                 strokeWidth: 2,
               }}
             />
