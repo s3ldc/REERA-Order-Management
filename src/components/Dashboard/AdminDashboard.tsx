@@ -17,7 +17,6 @@ import {
   CheckCircle,
   DollarSign,
   Users,
-  Calendar,
   Filter,
   BarChart3,
   Search,
@@ -43,6 +42,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
