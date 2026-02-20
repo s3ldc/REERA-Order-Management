@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { ChartCard } from "../../ui/chart-card";
 import type { Doc } from "../../../../convex/_generated/dataModel";
+import { Activity } from "lucide-react";
 
 type Order = Doc<"orders">;
 
@@ -53,88 +54,104 @@ export default function OrdersOverTimeChart({ orders }: Props) {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   return (
-    <ChartCard
-      title="Demand Velocity"
-      // subtitle="Order volume trends over current period"
-    >
-      <div className="h-[300px] w-full mt-4 -ml-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data}>
-            {/* Standard SVG tags used directly without Recharts import */}
-            <defs>
-              <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="hsl(var(--primary))"
-                  stopOpacity={0.25}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="hsl(var(--primary))"
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
+   <ChartCard title="Demand Velocity">
+  <div className="h-[300px] w-full mt-4 -ml-4">
+    {data.length === 0 ? (
+      <div className="h-full flex flex-col items-center justify-center text-center p-6 -ml-4">
+        <div className="bg-muted p-5 rounded-full mb-4 border border-border">
+          <Activity className="w-10 h-10 text-muted-foreground/40 stroke-[1.5]" />
+        </div>
 
-            <CartesianGrid
-              strokeDasharray="3 3"
-              vertical={false}
-              stroke="hsl(var(--border))"
-            />
+        <h3 className="text-sm font-bold text-foreground tracking-tight">
+          No order volume recorded
+        </h3>
 
-            <XAxis
-              dataKey="date"
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(str) => {
-                const date = new Date(str);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
-              tick={{
-                fontSize: 10,
-                fontWeight: 600,
-                fill: "hsl(var(--muted-foreground))",
-              }}
-              dy={10}
-            />
-
-            <YAxis
-              allowDecimals={false}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 10, fontWeight: 600, fill: "#94a3b8" }}
-              dx={-10}
-            />
-
-            <Tooltip
-              content={<CustomTooltip />}
-              cursor={{
-                stroke: "hsl(var(--border))",
-                strokeWidth: 2,
-              }}
-            />
-
-            <Area
-              type="monotone"
-              dataKey="count"
-              stroke="hsl(var(--primary))"
-              strokeWidth={3}
-              fillOpacity={1}
-              fill="url(#colorCount)"
-              animationDuration={1500}
-              activeDot={{
-                r: 6,
-                fill: "hsl(var(--primary))",
-                stroke: "hsl(var(--background))",
-                strokeWidth: 2,
-              }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        <p className="text-[11px] text-muted-foreground mt-1 max-w-[220px] leading-relaxed">
+          Platform-wide demand analytics will appear once transactions are created and processed.
+        </p>
       </div>
-    </ChartCard>
+    ) : (
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <defs>
+            <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor="hsl(var(--primary))"
+                stopOpacity={0.25}
+              />
+              <stop
+                offset="95%"
+                stopColor="hsl(var(--primary))"
+                stopOpacity={0}
+              />
+            </linearGradient>
+          </defs>
+
+          <CartesianGrid
+            strokeDasharray="3 3"
+            vertical={false}
+            stroke="hsl(var(--border))"
+          />
+
+          <XAxis
+            dataKey="date"
+            axisLine={false}
+            tickLine={false}
+            tickFormatter={(str) => {
+              const date = new Date(str);
+              return date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+            }}
+            tick={{
+              fontSize: 10,
+              fontWeight: 600,
+              fill: "hsl(var(--muted-foreground))",
+            }}
+            dy={10}
+          />
+
+          <YAxis
+            allowDecimals={false}
+            axisLine={false}
+            tickLine={false}
+            tick={{
+              fontSize: 10,
+              fontWeight: 600,
+              fill: "hsl(var(--muted-foreground))",
+            }}
+            dx={-10}
+          />
+
+          <Tooltip
+            content={<CustomTooltip />}
+            cursor={{
+              stroke: "hsl(var(--border))",
+              strokeWidth: 2,
+            }}
+          />
+
+          <Area
+            type="monotone"
+            dataKey="count"
+            stroke="hsl(var(--primary))"
+            strokeWidth={3}
+            fillOpacity={1}
+            fill="url(#colorCount)"
+            animationDuration={1500}
+            activeDot={{
+              r: 6,
+              fill: "hsl(var(--primary))",
+              stroke: "hsl(var(--background))",
+              strokeWidth: 2,
+            }}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    )}
+  </div>
+</ChartCard>
   );
 }
