@@ -18,13 +18,14 @@ interface Props {
 }
 
 const COLORS = {
-  Paid: "#10b981",   // emerald-500
+  Paid: "#10b981", // emerald-500
   Unpaid: "#f43f5e", // rose-500
 };
 
 // --- Custom Active Shape for premium interaction ---
 const renderActiveShape = (props: any) => {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+    props;
   return (
     <g>
       <Sector
@@ -45,18 +46,23 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-3 shadow-xl rounded-xl">
+      <div className="bg-card/95 backdrop-blur-sm border border-border p-3 shadow-xl rounded-xl">
         <div className="flex items-center gap-2 mb-1">
-          <div 
-            className="w-2 h-2 rounded-full" 
-            style={{ backgroundColor: COLORS[data.name as keyof typeof COLORS] }}
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{
+              backgroundColor: COLORS[data.name as keyof typeof COLORS],
+            }}
           />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
             {data.name}
           </span>
         </div>
-        <p className="text-sm font-bold text-slate-900">
-          {data.value} <span className="text-slate-400 font-medium text-xs">Invoices</span>
+        <p className="text-sm font-bold text-foreground">
+          {data.value}{" "}
+          <span className="text-muted-foreground font-medium text-xs">
+            Invoices
+          </span>
         </p>
       </div>
     );
@@ -69,9 +75,15 @@ export default function PaymentStatusChart({ orders }: Props) {
   const total = orders.length;
 
   const data = [
-    { name: "Paid", value: orders.filter((o) => o.payment_status === "Paid").length },
-    { name: "Unpaid", value: orders.filter((o) => o.payment_status === "Unpaid").length },
-  ].filter(d => d.value > 0);
+    {
+      name: "Paid",
+      value: orders.filter((o) => o.payment_status === "Paid").length,
+    },
+    {
+      name: "Unpaid",
+      value: orders.filter((o) => o.payment_status === "Unpaid").length,
+    },
+  ].filter((d) => d.value > 0);
 
   const onPieEnter = (_: any, index: number) => setActiveIndex(index);
   const onPieLeave = () => setActiveIndex(-1);
@@ -81,8 +93,12 @@ export default function PaymentStatusChart({ orders }: Props) {
       <div className="relative h-[280px] w-full mt-4">
         {/* Metric Centerpiece */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total Orders</span>
-          <span className="text-3xl font-black text-slate-900 leading-none tracking-tighter">{total}</span>
+          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">
+            Total Orders
+          </span>
+          <span className="text-3xl font-black text-foreground leading-none tracking-tighter">
+            {total}
+          </span>
         </div>
 
         <ResponsiveContainer width="100%" height="100%">
@@ -118,24 +134,26 @@ export default function PaymentStatusChart({ orders }: Props) {
       {/* Legend Grid */}
       <div className="mt-6 grid grid-cols-2 gap-4">
         {data.map((d, index) => (
-          <div 
-            key={d.name} 
+          <div
+            key={d.name}
             className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
-              activeIndex === index 
-                ? 'bg-white border-slate-200 shadow-sm ring-1 ring-slate-100' 
-                : 'bg-slate-50/50 border-slate-100'
+              activeIndex === index
+                ? "bg-card border-border shadow-sm ring-1 ring-primary/20"
+                : "bg-muted/40 border border-border/40"
             }`}
           >
-            <div 
-              className="h-1.5 w-full rounded-full mb-2 opacity-80" 
+            <div
+              className="h-1.5 w-6 rounded-full mb-2 opacity-80"
               style={{ backgroundColor: COLORS[d.name as keyof typeof COLORS] }}
             />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
               {d.name}
             </span>
             <div className="flex items-baseline gap-1">
-              <span className="text-sm font-black text-slate-800">{d.value}</span>
-              <span className="text-[9px] font-bold text-slate-400">
+              <span className="text-sm font-black text-foreground">
+                {d.value}
+              </span>
+              <span className="text-[9px] font-bold text-muted-foreground">
                 ({total > 0 ? ((d.value / total) * 100).toFixed(0) : 0}%)
               </span>
             </div>

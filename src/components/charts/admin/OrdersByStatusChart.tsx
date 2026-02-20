@@ -150,7 +150,7 @@ export default function OrdersByStatusChart({ orders }: Props) {
               }`}
             >
               <div
-                className="h-1.5 w-8 rounded-full mb-2"
+                className="h-1.5 w-6 rounded-full mb-2"
                 style={{ backgroundColor: COLORS[status] }}
               />
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
