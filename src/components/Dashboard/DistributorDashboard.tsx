@@ -35,32 +35,32 @@ const DistributorDashboard: React.FC = () => {
   const updateOrderStatus = useMutation(api.orders.updateOrderStatus);
   type OrderStatus = "Pending" | "Dispatched" | "Delivered";
 
-const stats = [
-  {
-    label: "Pending Orders",
-    count: "Pending",
-    color: "bg-amber-500",
-    iconBg: "bg-amber-100 dark:bg-amber-900/40",
-    icon: Clock,
-    textColor: "text-amber-600 dark:text-amber-400",
-  },
-  {
-    label: "Active Dispatched",
-    count: "Dispatched",
-    color: "bg-blue-500",
-    iconBg: "bg-blue-100 dark:bg-blue-900/40",
-    icon: Truck,
-    textColor: "text-blue-600 dark:text-blue-400",
-  },
-  {
-    label: "Total Delivered",
-    count: "Delivered",
-    color: "bg-emerald-500",
-    iconBg: "bg-emerald-100 dark:bg-emerald-900/40",
-    icon: CheckCircle,
-    textColor: "text-emerald-600 dark:text-emerald-400",
-  },
-];
+  const stats = [
+    {
+      label: "Pending Orders",
+      count: "Pending",
+      color: "bg-amber-500",
+      iconBg: "bg-amber-100 dark:bg-amber-900/40",
+      icon: Clock,
+      textColor: "text-amber-600 dark:text-amber-400",
+    },
+    {
+      label: "Active Dispatched",
+      count: "Dispatched",
+      color: "bg-blue-500",
+      iconBg: "bg-blue-100 dark:bg-blue-900/40",
+      icon: Truck,
+      textColor: "text-blue-600 dark:text-blue-400",
+    },
+    {
+      label: "Total Delivered",
+      count: "Delivered",
+      color: "bg-emerald-500",
+      iconBg: "bg-emerald-100 dark:bg-emerald-900/40",
+      icon: CheckCircle,
+      textColor: "text-emerald-600 dark:text-emerald-400",
+    },
+  ];
 
   const assignedOrders =
     useQuery(
@@ -71,11 +71,13 @@ const stats = [
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "Pending":
-  return <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
-case "Dispatched":
-  return <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
-case "Delivered":
-  return <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />;
+        return <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
+      case "Dispatched":
+        return <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
+      case "Delivered":
+        return (
+          <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+        );
     }
   };
 
@@ -201,12 +203,19 @@ case "Delivered":
         </CardHeader>
         <CardContent className="p-0">
           {assignedOrders.length === 0 ? (
-            <div className="text-center py-24">
-              <Package className="w-10 h-10 text-muted-foreground/40" />
-              <p className="text-foreground font-bold text-lg">
-                No assignments found
-              </p>
-            </div>
+           <div className="text-center py-24">
+  <div className="bg-muted w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+    <Truck className="w-10 h-10 text-muted-foreground/40" />
+  </div>
+
+  <p className="text-foreground font-bold text-lg">
+    No Assigned Orders
+  </p>
+
+  <p className="text-muted-foreground">
+    Orders assigned to you will appear here once a salesperson dispatches them.
+  </p>
+</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
