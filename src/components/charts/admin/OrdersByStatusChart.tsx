@@ -8,6 +8,7 @@ import {
   Sector,
 } from "recharts";
 import { ChartCard } from "../../ui/chart-card";
+import { BarChart3, Package } from "lucide-react";
 
 interface Order {
   status: "Pending" | "Dispatched" | "Delivered";
@@ -91,45 +92,63 @@ export default function OrdersByStatusChart({ orders }: Props) {
   return (
     <ChartCard title="Logistics Distribution">
       <div className="relative h-[280px] w-full mt-4">
-        {/* Central Asset Label */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
-          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-            Total Assets
-          </span>
-          <span className="text-3xl font-black text-foreground leading-none tracking-tighter">
-            {total}
-          </span>
-        </div>
-
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              activeIndex={activeIndex}
-              activeShape={renderActiveShape}
-              data={chartData}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={70} // Thinner ring as per your reference image
-              outerRadius={95}
-              paddingAngle={8}
-              cornerRadius={12}
-              stroke="none"
-              onMouseEnter={onPieEnter}
-              onMouseLeave={onPieLeave}
-              animationDuration={1000}
-            >
-              {chartData.map((entry) => (
-                <Cell
-                  key={entry.name}
-                  fill={COLORS[entry.name as keyof typeof COLORS]}
-                  className="transition-all duration-300 outline-none cursor-pointer"
-                />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} cursor={false} />
-          </PieChart>
-        </ResponsiveContainer>
+  {total === 0 ? (
+    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+      <div className="bg-muted p-5 rounded-full mb-4">
+        <Package className="w-8 h-8 text-muted-foreground/40" />
       </div>
+
+      <h3 className="text-sm font-bold text-foreground">
+        No order distribution available
+      </h3>
+
+      <p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
+        Status segmentation will appear once orders are created across the platform.
+      </p>
+    </div>
+  ) : (
+    <>
+      {/* Center Metric */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-1">
+        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+          Total Orders
+        </span>
+        <span className="text-3xl font-black text-foreground leading-none tracking-tighter">
+          {total}
+        </span>
+      </div>
+
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            activeIndex={activeIndex}
+            activeShape={renderActiveShape}
+            data={chartData}
+            dataKey="value"
+            nameKey="name"
+            innerRadius={70}
+            outerRadius={95}
+            paddingAngle={8}
+            cornerRadius={12}
+            stroke="none"
+            onMouseEnter={onPieEnter}
+            onMouseLeave={onPieLeave}
+            animationDuration={1000}
+          >
+            {chartData.map((entry) => (
+              <Cell
+                key={entry.name}
+                fill={COLORS[entry.name as keyof typeof COLORS]}
+                className="transition-all duration-300 outline-none cursor-pointer hover:opacity-90"
+              />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} cursor={false} />
+        </PieChart>
+      </ResponsiveContainer>
+    </>
+  )}
+</div>
 
       {/* 3. Static Legend Grid: Now always shows all 3 options */}
       <div className="mt-6 grid grid-cols-3 gap-3">
