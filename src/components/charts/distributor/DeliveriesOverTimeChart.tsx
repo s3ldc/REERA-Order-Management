@@ -14,6 +14,7 @@ import { useQuery } from "convex/react";
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useAuth } from "@/context/AuthContext";
 import dayjs from "dayjs";
+import { Activity, Truck } from "lucide-react";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -65,10 +66,18 @@ const DeliveriesOverTimeChart = () => {
     <ChartCard title="Performance Trends">
       <div className="h-[300px] w-full mt-4 -ml-4">
         {data.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center">
-            <span className="text-2xl mb-2">📈</span>
-            <p className="text-xs text-muted-foreground font-medium tracking-tight">
-              No delivery history available
+          <div className="h-full flex flex-col items-center justify-center text-center p-6 -ml-4">
+            <div className="bg-muted p-5 rounded-full mb-4 border border-border">
+              <Activity className="w-10 h-10 text-muted-foreground/40 stroke-[1.5]" />
+            </div>
+
+            <h3 className="text-sm font-bold text-foreground tracking-tight">
+              No dispatch activity yet
+            </h3>
+
+            <p className="text-[11px] text-muted-foreground mt-1 max-w-[200px] leading-relaxed">
+              Assigned orders and delivery progress will appear here once you
+              begin processing shipments.
             </p>
           </div>
         ) : (
