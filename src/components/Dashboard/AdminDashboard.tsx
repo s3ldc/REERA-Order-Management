@@ -469,7 +469,7 @@ const AdminDashboard: React.FC = () => {
                             onClick={() => setActiveOrder(order)}
                             className="group flex items-center gap-1 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
                           >
-                            <Calendar className="w-4 h-4" />
+                            <CalendarIcon className="w-4 h-4" />
                             <span className="hidden group-hover:inline text-xs font-medium">
                               Timeline
                             </span>
