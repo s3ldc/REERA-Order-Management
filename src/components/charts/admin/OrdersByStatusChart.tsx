@@ -165,14 +165,14 @@ export default function OrdersByStatusChart({ orders }: Props) {
               className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
                 isSelected
                   ? "bg-card border-border shadow-sm ring-1 ring-primary/20"
-                  : "bg-muted/40 border border-border/40"
+                  : "bg-muted/30 border border-border/40 hover:bg-muted/50"
               }`}
             >
               <div
-                className="h-1.5 w-6 rounded-full mb-2"
+                className="h-1 w-6 rounded-full mb-2"
                 style={{ backgroundColor: COLORS[status] }}
               />
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter">
                 {status}
               </span>
               <span className="text-sm font-black text-foreground">

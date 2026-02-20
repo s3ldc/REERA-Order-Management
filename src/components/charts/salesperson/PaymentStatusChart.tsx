@@ -172,7 +172,7 @@ const PaymentStatusChart = () => {
               className={`flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
                 isSelected
                   ? "bg-card border-border shadow-sm ring-1 ring-border"
-                  : "bg-muted/30 border-border/40"
+                  : "bg-muted/30 border border-border/40 hover:bg-muted/50"
               }`}
             >
               <div
