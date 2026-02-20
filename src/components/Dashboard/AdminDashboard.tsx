@@ -59,6 +59,8 @@ const AdminDashboard: React.FC = () => {
     status: "all",
   });
   const [activeOrder, setActiveOrder] = useState<Doc<"orders"> | null>(null);
+  const [fromOpen, setFromOpen] = useState(false);
+  const [toOpen, setToOpen] = useState(false);
   type OrderStatus = "Pending" | "Dispatched" | "Delivered";
   type PaymentStatus = "Paid" | "Unpaid";
 
@@ -312,7 +314,7 @@ const AdminDashboard: React.FC = () => {
                 Start Date
               </Label>
 
-              <Popover>
+              <Popover open={fromOpen} onOpenChange={setFromOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -329,9 +331,10 @@ const AdminDashboard: React.FC = () => {
                   <Calendar
                     mode="single"
                     selected={filters.dateFrom}
-                    onSelect={(date) =>
-                      setFilters({ ...filters, dateFrom: date })
-                    }
+                    onSelect={(date) => {
+                      setFilters({ ...filters, dateFrom: date });
+                      setFromOpen(false); // ✅ CLOSES CALENDAR
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
@@ -343,7 +346,7 @@ const AdminDashboard: React.FC = () => {
                 End Date
               </Label>
 
-              <Popover>
+              <Popover open={toOpen} onOpenChange={setToOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -360,9 +363,10 @@ const AdminDashboard: React.FC = () => {
                   <Calendar
                     mode="single"
                     selected={filters.dateTo}
-                    onSelect={(date) =>
-                      setFilters({ ...filters, dateTo: date })
-                    }
+                    onSelect={(date) => {
+                      setFilters({ ...filters, dateTo: date });
+                      setToOpen(false); // ✅ CLOSES
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
