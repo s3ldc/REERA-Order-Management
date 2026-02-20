@@ -36,6 +36,13 @@ import { useMutation, useQuery } from "convex/react";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { api } from "../../../convex/_generated/api";
 import type { Doc } from "../../../convex/_generated/dataModel";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -44,16 +51,22 @@ const AdminDashboard: React.FC = () => {
   const updatePaymentStatus = useMutation(api.orders.updatePaymentStatus);
   const { toast } = useToast();
   const [showUserModal, setShowUserModal] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{
+    status: string;
+    dateFrom?: Date;
+    dateTo?: Date;
+  }>({
     status: "all",
-    dateFrom: "",
-    dateTo: "",
   });
   const [activeOrder, setActiveOrder] = useState<Doc<"orders"> | null>(null);
   type OrderStatus = "Pending" | "Dispatched" | "Delivered";
   type PaymentStatus = "Paid" | "Unpaid";
 
-  const initialFilters = { status: "all", dateFrom: "", dateTo: "" };
+  const initialFilters = {
+    status: "all",
+    dateFrom: undefined,
+    dateTo: undefined,
+  };
 
   const handleClearFilters = () => {
     setFilters(initialFilters);
@@ -63,16 +76,17 @@ const AdminDashboard: React.FC = () => {
     orders?.filter((order) => {
       if (filters.status !== "all" && order.status !== filters.status)
         return false;
-      if (
-        filters.dateFrom &&
-        new Date(order._creationTime) < new Date(filters.dateFrom)
-      )
-        return false;
-      if (
-        filters.dateTo &&
-        new Date(order._creationTime) > new Date(filters.dateTo)
-      )
-        return false;
+
+      const orderDate = new Date(order._creationTime);
+
+      if (filters.dateFrom && orderDate < filters.dateFrom) return false;
+
+      if (filters.dateTo) {
+        const endOfDay = new Date(filters.dateTo);
+        endOfDay.setHours(23, 59, 59, 999);
+        if (orderDate > endOfDay) return false;
+      }
+
       return true;
     }) || [];
 
@@ -297,28 +311,62 @@ const AdminDashboard: React.FC = () => {
               <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 Start Date
               </Label>
-              <Input
-                type="date"
-                value={filters.dateFrom}
-                onChange={(e) =>
-                  setFilters({ ...filters, dateFrom: e.target.value })
-                }
-                className="h-11 rounded-xl border-border bg-muted font-medium text-foreground focus:bg-background transition-all shadow-none"
-              />
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full h-11 justify-between rounded-xl bg-muted border-border text-foreground font-medium"
+                  >
+                    {filters.dateFrom
+                      ? format(filters.dateFrom, "dd-MM-yyyy")
+                      : "dd-mm-yyyy"}
+                    <CalendarIcon className="h-4 w-4 opacity-60" />
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent className="w-auto p-0 bg-card border-border">
+                  <Calendar
+                    mode="single"
+                    selected={filters.dateFrom}
+                    onSelect={(date) =>
+                      setFilters({ ...filters, dateFrom: date })
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="space-y-3">
               <Label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                 End Date
               </Label>
-              <Input
-                type="date"
-                value={filters.dateTo}
-                onChange={(e) =>
-                  setFilters({ ...filters, dateTo: e.target.value })
-                }
-                className="h-11 rounded-xl border-border bg-muted font-medium text-foreground pr-10"
-              />
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full h-11 justify-between rounded-xl bg-muted border-border text-foreground font-medium"
+                  >
+                    {filters.dateTo
+                      ? format(filters.dateTo, "dd-MM-yyyy")
+                      : "dd-mm-yyyy"}
+                    <CalendarIcon className="h-4 w-4 opacity-60" />
+                  </Button>
+                </PopoverTrigger>
+
+                <PopoverContent className="w-auto p-0 bg-card border-border">
+                  <Calendar
+                    mode="single"
+                    selected={filters.dateTo}
+                    onSelect={(date) =>
+                      setFilters({ ...filters, dateTo: date })
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </CardContent>
