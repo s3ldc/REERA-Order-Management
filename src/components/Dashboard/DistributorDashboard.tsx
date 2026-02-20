@@ -203,19 +203,20 @@ const DistributorDashboard: React.FC = () => {
         </CardHeader>
         <CardContent className="p-0">
           {assignedOrders.length === 0 ? (
-           <div className="text-center py-24">
-  <div className="bg-muted w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-    <Truck className="w-10 h-10 text-muted-foreground/40" />
-  </div>
+            <div className="text-center py-24">
+              <div className="bg-muted w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Truck className="w-10 h-10 text-muted-foreground/40" />
+              </div>
 
-  <p className="text-foreground font-bold text-lg">
-    No Assigned Orders
-  </p>
+              <p className="text-foreground font-bold text-lg">
+                No Assigned Orders
+              </p>
 
-  <p className="text-muted-foreground">
-    Orders assigned to you will appear here once a salesperson dispatches them.
-  </p>
-</div>
+              <p className="text-muted-foreground">
+                Orders assigned to you will appear here once a salesperson
+                dispatches them.
+              </p>
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
