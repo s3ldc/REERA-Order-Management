@@ -56,7 +56,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground transition-colors duration-500 ease-in-out;
+    @apply bg-background text-foreground;
   }
 }
 
@@ -99,4 +99,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
+}
+
+/* View Transition setup */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
 }
