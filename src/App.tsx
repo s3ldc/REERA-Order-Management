@@ -13,27 +13,68 @@ import ProfileDrawer from "./components/ProfileDrawer";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
 // import AppSkeleton from "./components/AppSkeleton";
 import { Sun, Moon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const getInitialTheme = (): "light" | "dark" => {
-  const saved = localStorage.getItem("theme");
-  return saved === "light" ? "light" : "dark";
-};
+    const saved = localStorage.getItem("theme");
+    return saved === "light" ? "light" : "dark";
+  };
 
-const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
+  const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
+  const themeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-  document.documentElement.classList.toggle("dark", theme === "dark");
-  localStorage.setItem("theme", theme);
-}, [theme]);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const toggleTheme = () => {
-  setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-};
+    const newTheme = theme === "dark" ? "light" : "dark";
+
+    if (!("startViewTransition" in document)) {
+      setTheme(newTheme);
+      return;
+    }
+
+    const button = themeButtonRef.current;
+    if (!button) {
+      setTheme(newTheme);
+      return;
+    }
+
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    const transition = (document as any).startViewTransition(() => {
+      setTheme(newTheme);
+    });
+
+    transition.ready.then(() => {
+      const maxRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y),
+      );
+
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${maxRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 700,
+          easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        },
+      );
+    });
+  };
 
   if (loading) {
     return <AppShellSkeleton />;
@@ -113,6 +154,7 @@ const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
             </div>
 
             <Button
+              ref={themeButtonRef}
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
