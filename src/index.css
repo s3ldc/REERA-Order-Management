@@ -117,29 +117,4 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 }
 
 /* Circle reveal animation */
-@keyframes reveal-dark {
-  from {
-    clip-path: circle(0px at var(--x) var(--y));
-  }
-  to {
-    clip-path: circle(150% at var(--x) var(--y));
-  }
-}
 
-@keyframes reveal-light {
-  from {
-    clip-path: circle(150% at var(--x) var(--y));
-  }
-  to {
-    clip-path: circle(0px at var(--x) var(--y));
-  }
-}
-
-/* Apply animation to the new theme layer */
-.dark::view-transition-new(root) {
-  animation: reveal-dark 500ms ease-in-out forwards;
-}
-
-:root:not(.dark)::view-transition-new(root) {
-  animation: reveal-light 500ms ease-in-out forwards;
-}
