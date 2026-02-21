@@ -100,3 +100,46 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+
+/* View Transition setup */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* Circle reveal animation */
+@keyframes reveal-dark {
+  from {
+    clip-path: circle(0px at var(--x) var(--y));
+  }
+  to {
+    clip-path: circle(150% at var(--x) var(--y));
+  }
+}
+
+@keyframes reveal-light {
+  from {
+    clip-path: circle(150% at var(--x) var(--y));
+  }
+  to {
+    clip-path: circle(0px at var(--x) var(--y));
+  }
+}
+
+/* Apply animation to the new theme layer */
+.dark::view-transition-new(root) {
+  animation: reveal-dark 500ms ease-in-out forwards;
+}
+
+:root:not(.dark)::view-transition-new(root) {
+  animation: reveal-light 500ms ease-in-out forwards;
+}

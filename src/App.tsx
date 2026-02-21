@@ -19,26 +19,21 @@ const AppContent: React.FC = () => {
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const getInitialTheme = (): "light" | "dark" => {
+  const saved = localStorage.getItem("theme");
+  return saved === "light" ? "light" : "dark";
+};
+
+const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle("dark", savedTheme === "dark");
-    } else {
-      document.documentElement.classList.add("dark"); // default dark
-    }
-  }, []);
+  document.documentElement.classList.toggle("dark", theme === "dark");
+  localStorage.setItem("theme", theme);
+}, [theme]);
 
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-  };
+  setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+};
 
   if (loading) {
     return <AppShellSkeleton />;
