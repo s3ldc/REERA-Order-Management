@@ -11,7 +11,6 @@ import { LogOut, UserCircle, Zap } from "lucide-react";
 import ProfileDrawer from "./components/ProfileDrawer";
 // import { getAvatarUrl } from "./lib/getAvatarUrl";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
-// import AppSkeleton from "./components/AppSkeleton";
 import { Sun, Moon } from "lucide-react";
 import { useEffect, useRef } from "react";
 
