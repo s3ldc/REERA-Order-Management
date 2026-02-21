@@ -79,7 +79,6 @@ const AppContent: React.FC = () => {
     return <AppShellSkeleton />;
   }
 
-
   if (!user) {
     return showSignup ? (
       <Signup onBackToLogin={() => setShowSignup(false)} />
@@ -96,7 +95,7 @@ const AppContent: React.FC = () => {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Premium Sticky Header */}
       <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Left: Branding */}
           <div className="flex items-center gap-4">
             <div className="bg-primary p-2 rounded-xl">
@@ -114,9 +113,10 @@ const AppContent: React.FC = () => {
           </div>
 
           {/* Right: User Profile & Logout */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 pr-6 border-r border-border hidden sm:flex">
-              <div className="text-right">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <div className="flex items-center gap-3 sm:pr-6 sm:border-r sm:border-border">
+              {/* User Info — Desktop Only */}
+              <div className="hidden sm:block text-right">
                 <p className="text-sm font-bold text-foreground leading-none">
                   {user.name || user.email?.split("@")[0]}
                 </p>
@@ -125,9 +125,10 @@ const AppContent: React.FC = () => {
                 </Badge>
               </div>
 
+              {/* Avatar — Always Visible */}
               <button
                 onClick={() => setProfileOpen(true)}
-                className="relative h-10 w-10 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
+                className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
               >
                 {user.avatar ? (
                   <img
@@ -136,7 +137,7 @@ const AppContent: React.FC = () => {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <UserCircle className="w-6 h-6 text-primary" />
+                  <UserCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 )}
               </button>
             </div>
