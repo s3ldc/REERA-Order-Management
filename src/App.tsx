@@ -137,7 +137,7 @@ const AppContent: React.FC = () => {
 
               <button
                 onClick={() => setProfileOpen(true)}
-                className="h-10 w-10 rounded-full border border-border bg-muted flex items-center justify-center"
+                className="relative h-10 w-10 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
               >
                 {user.avatar ? (
                   <img
