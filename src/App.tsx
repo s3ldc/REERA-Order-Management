@@ -13,8 +13,10 @@ import ProfileDrawer from "./components/ProfileDrawer";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
 import { Sun, Moon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { Menu, X } from "lucide-react";
 
 const AppContent: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -96,28 +98,36 @@ const AppContent: React.FC = () => {
       {/* Premium Sticky Header */}
       <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md border-b border-border">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Left: Branding */}
-          <div className="flex items-center gap-4">
+          {/* Left Section */}
+          <div className="flex items-center gap-3">
+            {/* Hamburger — Mobile Only */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="sm:hidden p-2 rounded-lg hover:bg-muted transition"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
             <div className="bg-primary p-2 rounded-xl">
               <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
 
             <div className="flex flex-col">
-              <h1 className="text-sm font-black text-foreground uppercase tracking-tighter leading-none">
+              <h1 className="text-sm font-black uppercase leading-none">
                 B2B Order Hub
               </h1>
-              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
+              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1 hidden sm:block">
                 Enterprise v2.0
               </span>
             </div>
           </div>
 
-          {/* Right: User Profile & Logout */}
+          {/* Right Section */}
           <div className="flex items-center gap-3 sm:gap-6">
-            <div className="flex items-center gap-3 sm:pr-6 sm:border-r sm:border-border">
-              {/* User Info — Desktop Only */}
-              <div className="hidden sm:block text-right">
-                <p className="text-sm font-bold text-foreground leading-none">
+            {/* Desktop Profile */}
+            <div className="hidden sm:flex items-center gap-3 pr-6 border-r border-border">
+              <div className="text-right">
+                <p className="text-sm font-bold">
                   {user.name || user.email?.split("@")[0]}
                 </p>
                 <Badge className="mt-1 h-4 text-[9px] bg-muted text-muted-foreground border-none font-bold uppercase tracking-tight">
@@ -125,29 +135,28 @@ const AppContent: React.FC = () => {
                 </Badge>
               </div>
 
-              {/* Avatar — Always Visible */}
               <button
                 onClick={() => setProfileOpen(true)}
-                className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
+                className="h-10 w-10 rounded-full border border-border bg-muted flex items-center justify-center"
               >
                 {user.avatar ? (
                   <img
                     src={user.avatar}
-                    alt={user.name}
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <UserCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                  <UserCircle className="w-6 h-6 text-primary" />
                 )}
               </button>
             </div>
 
+            {/* Theme Toggle */}
             <Button
               ref={themeButtonRef}
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="rounded-xl text-muted-foreground hover:bg-muted transition-all"
+              className="rounded-xl"
             >
               {theme === "dark" ? (
                 <Sun className="w-4 h-4" />
@@ -156,18 +165,50 @@ const AppContent: React.FC = () => {
               )}
             </Button>
 
+            {/* Logout — Desktop Only */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="group text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all font-bold text-xs flex items-center gap-2"
+              className="hidden sm:flex font-bold text-xs items-center gap-2"
             >
-              <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <LogOut className="w-4 h-4" />
               Logout
             </Button>
           </div>
         </div>
       </header>
+
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Overlay */}
+          <div
+            className="flex-1 bg-black/40"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Sidebar */}
+          <div className="w-72 bg-card border-l border-border p-6 flex flex-col">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-bold text-lg">Menu</h2>
+              <button onClick={() => setMobileMenuOpen(false)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 flex-1">
+              <button className="block text-left w-full">Overview</button>
+              <button className="block text-left w-full">Analytics</button>
+              <button className="block text-left w-full">Orders</button>
+            </div>
+
+            <div className="pt-6 border-t border-border space-y-3">
+              <button onClick={() => setProfileOpen(true)}>Profile</button>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
