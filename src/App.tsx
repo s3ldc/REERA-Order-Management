@@ -219,10 +219,16 @@ const AppContent: React.FC = () => {
                   className="block w-full text-left py-2 px-3 rounded-lg 
                  hover:bg-muted transition font-medium"
                   onClick={() => {
+                    if (item === "Users") {
+                      setShowUserModal(true);
+                      setMobileMenuOpen(false);
+                      return;
+                    }
+
                     const id = item.toLowerCase().replace(/\s/g, "");
-                    document.getElementById(id)?.scrollIntoView({
-                      behavior: "smooth",
-                    });
+                    document
+                      .getElementById(id)
+                      ?.scrollIntoView({ behavior: "smooth" });
                     setMobileMenuOpen(false);
                   }}
                 >
