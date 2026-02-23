@@ -27,6 +27,19 @@ const AppContent: React.FC = () => {
 
   const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
   const themeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const menuItems = {
+    Salesperson: ["Overview", "Analytics", "Orders", "Create Order"],
+    Distributor: ["Overview", "Analytics", "Deliveries"],
+    Admin: ["Overview", "Analytics", "Orders", "Users", "Filters"],
+  };
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -183,12 +196,15 @@ const AppContent: React.FC = () => {
         <div className="fixed inset-0 z-50 flex">
           {/* Overlay */}
           <div
-            className="flex-1 bg-black/40"
+            className="flex-1 bg-black/40 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
 
-          {/* Sidebar */}
-          <div className="w-72 bg-card border-l border-border p-6 flex flex-col">
+          {/* Animated Sidebar */}
+          <div
+            className="w-72 bg-card border-l border-border p-6 flex flex-col 
+                    animate-in slide-in-from-right duration-300"
+          >
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-bold text-lg">Menu</h2>
               <button onClick={() => setMobileMenuOpen(false)}>
@@ -196,10 +212,23 @@ const AppContent: React.FC = () => {
               </button>
             </div>
 
-            <div className="space-y-4 flex-1">
-              <button className="block text-left w-full">Overview</button>
-              <button className="block text-left w-full">Analytics</button>
-              <button className="block text-left w-full">Orders</button>
+            <div className="space-y-2 flex-1">
+              {menuItems[user.role as keyof typeof menuItems]?.map((item) => (
+                <button
+                  key={item}
+                  className="block w-full text-left py-2 px-3 rounded-lg 
+                 hover:bg-muted transition font-medium"
+                  onClick={() => {
+                    const id = item.toLowerCase().replace(/\s/g, "");
+                    document.getElementById(id)?.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  {item}
+                </button>
+              ))}
             </div>
 
             <div className="pt-6 border-t border-border space-y-3">
