@@ -158,7 +158,6 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-10 bg-background text-foreground min-h-screen">
       {/* Header Section */}
-      <section id="overview">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border">
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
@@ -251,10 +250,8 @@ const AdminDashboard: React.FC = () => {
           </Card>
         ))}
       </div>
-      </section>
 
       {/* Charts Section */}
-      <section id="analytics">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <OrdersByStatusChart orders={orders} />
         <PaymentStatusChart orders={orders} />
@@ -264,11 +261,9 @@ const AdminDashboard: React.FC = () => {
         <OrdersOverTimeChart orders={orders} />
         {/* <OrdersByRoleChart orders={orders} /> */}
       </div>
-      </section>
 
       {/* Advanced Filters */}
-      <section id="filters">
-      <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden">
+      <Card className="border-borderw-sm bg-card rounded-2xl overflow-hidden">
         <CardHeader className="border-b border-border py-5 px-8 bg-card">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-foreground font-bold">
@@ -380,10 +375,8 @@ const AdminDashboard: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-      </section>
 
       {/* Order Management Table */}
-      <section id="orders">
       <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden">
         <CardHeader className="bg-card border-b border-border p-8">
           <CardTitle className="text-xl font-bold text-foreground">
@@ -525,7 +518,6 @@ const AdminDashboard: React.FC = () => {
           )}
         </CardContent>
       </Card>
-      </section>
 
       {/* User Management Modal */}
       {showUserModal && (

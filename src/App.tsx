@@ -13,10 +13,8 @@ import ProfileDrawer from "./components/ProfileDrawer";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton";
 import { Sun, Moon } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
 
 const AppContent: React.FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout, loading } = useAuth();
   const [showSignup, setShowSignup] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -27,19 +25,6 @@ const AppContent: React.FC = () => {
 
   const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
   const themeButtonRef = useRef<HTMLButtonElement | null>(null);
-  const menuItems = {
-    Salesperson: ["Overview", "Analytics", "Orders", "Create Order"],
-    Distributor: ["Overview", "Analytics", "Deliveries"],
-    Admin: ["Overview", "Analytics", "Orders", "Users", "Filters"],
-  };
-
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [mobileMenuOpen]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -94,6 +79,7 @@ const AppContent: React.FC = () => {
     return <AppShellSkeleton />;
   }
 
+
   if (!user) {
     return showSignup ? (
       <Signup onBackToLogin={() => setShowSignup(false)} />
@@ -110,37 +96,28 @@ const AppContent: React.FC = () => {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Premium Sticky Header */}
       <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Left Section */}
-          <div className="flex items-center gap-3">
-            {/* Hamburger — Mobile Only */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="sm:hidden p-2 rounded-lg hover:bg-muted transition"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-
+        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
+          {/* Left: Branding */}
+          <div className="flex items-center gap-4">
             <div className="bg-primary p-2 rounded-xl">
               <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
 
             <div className="flex flex-col">
-              <h1 className="text-sm font-black uppercase leading-none">
+              <h1 className="text-sm font-black text-foreground uppercase tracking-tighter leading-none">
                 B2B Order Hub
               </h1>
-              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1 hidden sm:block">
+              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 Enterprise v2.0
               </span>
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="flex items-center gap-3 sm:gap-6">
-            {/* Desktop Profile */}
-            <div className="hidden sm:flex items-center gap-3 pr-6 border-r border-border">
+          {/* Right: User Profile & Logout */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 pr-6 border-r border-border hidden sm:flex">
               <div className="text-right">
-                <p className="text-sm font-bold">
+                <p className="text-sm font-bold text-foreground leading-none">
                   {user.name || user.email?.split("@")[0]}
                 </p>
                 <Badge className="mt-1 h-4 text-[9px] bg-muted text-muted-foreground border-none font-bold uppercase tracking-tight">
@@ -155,6 +132,7 @@ const AppContent: React.FC = () => {
                 {user.avatar ? (
                   <img
                     src={user.avatar}
+                    alt={user.name}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -163,13 +141,12 @@ const AppContent: React.FC = () => {
               </button>
             </div>
 
-            {/* Theme Toggle */}
             <Button
               ref={themeButtonRef}
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="rounded-xl"
+              className="rounded-xl text-muted-foreground hover:bg-muted transition-all"
             >
               {theme === "dark" ? (
                 <Sun className="w-4 h-4" />
@@ -178,72 +155,18 @@ const AppContent: React.FC = () => {
               )}
             </Button>
 
-            {/* Logout — Desktop Only */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="hidden sm:flex font-bold text-xs items-center gap-2"
+              className="group text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all font-bold text-xs flex items-center gap-2"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Logout
             </Button>
           </div>
         </div>
       </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex">
-          {/* Overlay */}
-          <div
-            className="flex-1 bg-black/40 backdrop-blur-sm"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-
-          {/* Animated Sidebar */}
-          <div
-            className="w-72 bg-card border-l border-border p-6 flex flex-col 
-                    animate-in slide-in-from-right duration-300"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-bold text-lg">Menu</h2>
-              <button onClick={() => setMobileMenuOpen(false)}>
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-2 flex-1">
-              {menuItems[user.role as keyof typeof menuItems]?.map((item) => (
-                <button
-                  key={item}
-                  className="block w-full text-left py-2 px-3 rounded-lg 
-                 hover:bg-muted transition font-medium"
-                  onClick={() => {
-                    if (item === "Users") {
-                      setShowUserModal(true);
-                      setMobileMenuOpen(false);
-                      return;
-                    }
-
-                    const id = item.toLowerCase().replace(/\s/g, "");
-                    document
-                      .getElementById(id)
-                      ?.scrollIntoView({ behavior: "smooth" });
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-
-            <div className="pt-6 border-t border-border space-y-3">
-              <button onClick={() => setProfileOpen(true)}>Profile</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
