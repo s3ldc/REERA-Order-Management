@@ -101,7 +101,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#020617] flex flex-col lg:flex-row overflow-hidden font-sans pt-safe pb-safe selection:bg-indigo-500/30">
+    <div className="h-[100dvh] w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
       {/* Left Decoration: Brand & Social Proof */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-slate-800/50">
         <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-cyan-500/5" />
