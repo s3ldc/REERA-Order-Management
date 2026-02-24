@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import {
   motion,
@@ -30,7 +30,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
     <input
       type={type}
       className={cn(
-        "flex h-12 sm:h-12 text-base sm:text-sm w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-sm text-white transition-all outline-none",
+        "flex h-12 sm:h-12 text-base sm:text-sm w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-white transition-all outline-none",
         "placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10",
         className,
       )}
@@ -54,7 +54,15 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
   const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
-  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+  const media = window.matchMedia("(min-width: 1024px)");
+  setIsDesktop(media.matches);
+  const listener = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+  media.addEventListener("change", listener);
+  return () => media.removeEventListener("change", listener);
+}, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -130,7 +138,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
       </div>
 
       {/* Right Content: Login Form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 sm:p-10 relative">
+      <div className="flex-1 flex items-center justify-center px-6 pt-12 pb-8 sm:p-10 relative">
         {/* Animated Background Mesh */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <div className="absolute bottom-[10%] left-[10%] w-[300px] h-[300px] bg-indigo-500/20 rounded-full blur-[80px]" />
@@ -140,7 +148,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-md"
+          className="w-full max-w-sm sm:max-w-md"
           style={{ perspective: 1200 }}
         >
           <motion.div
@@ -149,11 +157,11 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
               onMouseMove: handleMouseMove,
               onMouseLeave: handleMouseLeave,
             })}
-            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl"
+            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-800/60 shadow-2xl shadow-indigo-500/10"
           >
             {/* Form Header */}
             <div className="mb-8">
-              <div className="lg:hidden flex items-center gap-2 mb-8">
+              <div className="lg:hidden flex items-center gap-2 mb-6">
                 <Zap className="w-5 h-5 text-indigo-400" />
                 <span className="font-bold text-white">Core OS</span>
               </div>
@@ -228,7 +236,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 text-base sm:text-sm rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
+                className="w-full h-12 text-[15px] sm:text-sm rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
