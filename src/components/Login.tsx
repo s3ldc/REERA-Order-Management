@@ -30,7 +30,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
     <input
       type={type}
       className={cn(
-        "flex h-12 w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-sm text-white transition-all outline-none",
+        "flex h-12 sm:h-12 text-base sm:text-sm w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-sm text-white transition-all outline-none",
         "placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10",
         className,
       )}
@@ -54,6 +54,7 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
   const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -66,33 +67,33 @@ const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
     mouseY.set(0);
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError(null);
-  setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
-  try {
-    const result = await loginAction({
-      email,
-      password,
-    });
+    try {
+      const result = await loginAction({
+        email,
+        password,
+      });
 
-    if (!result) {
-      setError("Invalid credentials provided.");
-      setIsLoading(false);
-      return;
+      if (!result) {
+        setError("Invalid credentials provided.");
+        setIsLoading(false);
+        return;
+      }
+
+      await login(email, password); // update AuthContext
+    } catch (err) {
+      setError("Authentication failed.");
     }
 
-    await login(email, password); // update AuthContext
-  } catch (err) {
-    setError("Authentication failed.");
-  }
-
-  setIsLoading(false);
-};
+    setIsLoading(false);
+  };
 
   return (
-    <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen w-full bg-[#020617] flex flex-col lg:flex-row overflow-hidden font-sans pt-safe pb-safe selection:bg-indigo-500/30">
       {/* Left Decoration: Brand & Social Proof */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-slate-800/50">
         <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-cyan-500/5" />
@@ -129,7 +130,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
 
       {/* Right Content: Login Form */}
-      <div className="flex-1 flex items-center justify-center p-6 relative">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 sm:p-10 relative">
         {/* Animated Background Mesh */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <div className="absolute bottom-[10%] left-[10%] w-[300px] h-[300px] bg-indigo-500/20 rounded-full blur-[80px]" />
@@ -143,18 +144,24 @@ const handleSubmit = async (e: React.FormEvent) => {
           style={{ perspective: 1200 }}
         >
           <motion.div
-            style={{ rotateX, rotateY }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-10 border border-slate-800 shadow-2xl"
+            style={isDesktop ? { rotateX, rotateY } : {}}
+            {...(isDesktop && {
+              onMouseMove: handleMouseMove,
+              onMouseLeave: handleMouseLeave,
+            })}
+            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl"
           >
             {/* Form Header */}
             <div className="mb-8">
+              <div className="lg:hidden flex items-center gap-2 mb-8">
+  <Zap className="w-5 h-5 text-indigo-400" />
+  <span className="font-bold text-white">Core OS</span>
+</div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-bold uppercase tracking-widest mb-4">
                 <ShieldCheck className="w-3 h-3" />
                 Secure Terminal
               </div>
-              <h3 className="text-3xl font-bold text-white tracking-tight">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 Identity Access
               </h3>
               <p className="text-slate-500 text-sm mt-2 font-medium">
@@ -221,7 +228,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
+                className="w-full h-12 text-base sm:text-sm rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
