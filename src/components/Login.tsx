@@ -8,7 +8,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onShowSignup }) => {
   return (
-    <AuthLayout>
+    <AuthLayout variant="login">
       <LoginForm onShowSignup={onShowSignup} />
     </AuthLayout>
   );

@@ -1,19 +1,15 @@
-import React from "react";
 import AuthBrandPanel from "./AuthBrandPanel";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
+  variant: "login" | "signup";
 }
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children, variant }) => {
   return (
-    <div className="h-[100dvh] w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
-      
-      {/* Left Brand Panel (Desktop Only) */}
-      <AuthBrandPanel />
-
-      {/* Right Content */}
-      <div className="flex-1 flex items-center justify-center px-6 pt-12 pb-8 sm:p-10 relative">
+    <div className="h-[100dvh] w-full bg-[#020617] flex overflow-hidden">
+      <AuthBrandPanel variant={variant} />
+      <div className="flex-1 flex items-center justify-center px-6 sm:p-10 relative">
         {children}
       </div>
     </div>

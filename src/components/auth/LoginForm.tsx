@@ -28,7 +28,7 @@ function Input({
     <input
       type={type}
       className={cn(
-        "flex h-12 w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-white transition-all outline-none",
+        "flex h-12 sm:h-12 text-base sm:text-sm w-full rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-2 text-white transition-all outline-none",
         "placeholder:text-slate-500 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10",
         className
       )}
@@ -48,7 +48,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowSignup }) => {
   const [error, setError] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  // 3D motion logic (desktop only)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
@@ -123,23 +122,24 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowSignup }) => {
             Secure Terminal
           </div>
 
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Identity Access
           </h3>
 
-          <p className="text-slate-500 text-sm mt-2">
+          <p className="text-slate-500 text-sm mt-2 font-medium">
             Please authenticate to continue.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
-          <div>
-            <label className="text-slate-400 text-xs font-bold uppercase ml-1">
+          <div className="space-y-2">
+            <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">
               Work Email
             </label>
-            <div className="relative mt-2">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+
+            <div className="relative group">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
               <Input
                 type="email"
                 placeholder="name@company.com"
@@ -152,12 +152,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowSignup }) => {
           </div>
 
           {/* Password */}
-          <div>
-            <label className="text-slate-400 text-xs font-bold uppercase ml-1">
+          <div className="space-y-2">
+            <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">
               Password
             </label>
-            <div className="relative mt-2">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+
+            <div className="relative group">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
@@ -169,7 +170,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowSignup }) => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors"
               >
                 {showPassword ? (
                   <EyeOff className="w-4 h-4" />
@@ -180,18 +181,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowSignup }) => {
             </div>
           </div>
 
-          {/* Error */}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-bold text-center">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-bold text-center"
+            >
               {error}
-            </div>
+            </motion.div>
           )}
 
-          {/* Submit */}
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold flex items-center justify-center gap-2"
+            className="w-full h-12 text-[15px] sm:text-sm rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -204,14 +207,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onShowSignup }) => {
           </Button>
         </form>
 
-        {/* Footer */}
-        <div className="mt-8 pt-6 border-t border-slate-800 text-center">
-          <p className="text-xs text-slate-500">
+        <div className="mt-8 pt-8 border-t border-slate-800 text-center">
+          <p className="text-xs text-slate-500 font-medium">
             New to the platform?{" "}
             <button
               type="button"
               onClick={onShowSignup}
-              className="text-indigo-400 hover:text-indigo-300 font-bold"
+              className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors ml-1"
             >
               Request Credentials
             </button>

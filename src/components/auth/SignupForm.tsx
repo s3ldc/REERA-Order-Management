@@ -135,7 +135,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
-            <label className="text-slate-400 text-xs font-bold uppercase ml-1">
+            <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">
               Full Name
             </label>
             <div className="relative mt-2">
@@ -155,7 +155,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
 
           {/* Email */}
           <div>
-            <label className="text-slate-400 text-xs font-bold uppercase ml-1">
+            <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">
               Work Email
             </label>
             <div className="relative mt-2">
@@ -175,7 +175,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
 
           {/* Password */}
           <div>
-            <label className="text-slate-400 text-xs font-bold uppercase ml-1">
+            <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">
               Password
             </label>
             <div className="relative mt-2">
@@ -206,7 +206,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
 
           {/* Role */}
           <div>
-            <label className="text-slate-400 text-xs font-bold uppercase ml-1">
+            <label className="text-slate-400 text-[10px] font-black uppercase ml-1 tracking-wider">
               Operational Role
             </label>
             <div className="relative mt-2">
@@ -216,7 +216,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, role: e.target.value as Role })
                 }
-                className="flex h-11 w-full rounded-xl border border-slate-800 bg-slate-900/50 pl-12 pr-4 py-2 text-sm text-white outline-none"
+                className="flex h-11 w-full rounded-xl border border-slate-800 bg-slate-900/50 pl-12 pr-4 py-2 text-sm text-white transition-all outline-none appearance-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 font-bold"
               >
                 <option className="bg-slate-900" value="Salesperson">
                   Salesperson

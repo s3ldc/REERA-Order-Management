@@ -7,7 +7,7 @@ interface SignupProps {
 
 const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   return (
-    <AuthLayout>
+    <AuthLayout variant="signup">
       <SignupForm onBackToLogin={onBackToLogin} />
     </AuthLayout>
   );
