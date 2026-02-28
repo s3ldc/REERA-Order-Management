@@ -1,11 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import pb from "../lib/pocketbase";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import {
   UserPlus,
   Mail,
@@ -16,7 +11,6 @@ import {
   User,
   Briefcase,
   Zap,
-  ShieldCheck,
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
@@ -56,6 +50,15 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { signUp } = useAuth();
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(media.matches);
+    const listener = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, []);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -73,34 +76,30 @@ const Signup: React.FC<SignupProps> = ({ onBackToLogin }) => {
     mouseY.set(0);
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError(null);
-  setSuccess(null);
-  setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+    setIsLoading(true);
 
-  const success = await signUp(
-    formData.email,
-    formData.password,
-    {
+    const success = await signUp(formData.email, formData.password, {
       name: formData.name,
       role: formData.role,
+    });
+
+    if (!success) {
+      setError("Credential registration failed");
+      setIsLoading(false);
+      return;
     }
-  );
 
-  if (!success) {
-    setError("Credential registration failed");
+    setSuccess("Account created successfully. Redirecting...");
+    setTimeout(onBackToLogin, 1500);
     setIsLoading(false);
-    return;
-  }
-
-  setSuccess("Account created successfully. Redirecting...");
-  setTimeout(onBackToLogin, 1500);
-  setIsLoading(false);
-};
+  };
 
   return (
-    <div className="min-h-screen w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
+    <div className="h-[100dvh] w-full bg-[#020617] flex overflow-hidden font-sans selection:bg-indigo-500/30">
       {/* Left Decoration - Brand Side */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-slate-800/50">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-emerald-500/5" />
@@ -136,7 +135,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
 
       {/* Right Content - Form Side */}
-      <div className="flex-1 flex items-center justify-center p-6 relative overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center px-6 pt-12 pb-8 sm:p-10 relative">
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <div className="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-emerald-500/20 rounded-full blur-[80px]" />
         </div>
@@ -148,10 +147,12 @@ const handleSubmit = async (e: React.FormEvent) => {
           style={{ perspective: 1200 }}
         >
           <motion.div
-            style={{ rotateX, rotateY }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-10 border border-slate-800 shadow-2xl"
+            style={isDesktop ? { rotateX, rotateY } : {}}
+            {...(isDesktop && {
+              onMouseMove: handleMouseMove,
+              onMouseLeave: handleMouseLeave,
+            })}
+            className="bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-800/60 shadow-2xl shadow-indigo-500/10"
           >
             <div className="mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-4">
