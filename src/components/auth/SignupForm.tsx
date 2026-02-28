@@ -9,6 +9,7 @@ import {
   ArrowRight,
   User,
   Briefcase,
+  Zap,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
@@ -118,16 +119,21 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
       >
         {/* Header */}
         <div className="mb-8">
+            <div className="lg:hidden flex items-center gap-2 mb-6">
+                        <Zap className="w-5 h-5 text-indigo-400" />
+                        <span className="font-bold text-white">Core OS</span>
+                      </div>
+
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-4">
             <UserPlus className="w-3 h-3" />
             New Registration
           </div>
 
-          <h3 className="text-3xl font-bold text-white">
+          <h3 className="text-3xl font-bold text-white tracking-tight">
             Create Profile
           </h3>
 
-          <p className="text-slate-500 text-sm mt-2">
+          <p className="text-slate-500 text-sm mt-2 font-medium">
             Initialize your system credentials.
           </p>
         </div>
@@ -257,12 +263,12 @@ const SignupForm: React.FC<SignupFormProps> = ({ onBackToLogin }) => {
         </form>
 
         <div className="mt-8 pt-6 border-t border-slate-800 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 font-medium">
             Already registered?{" "}
             <button
               type="button"
               onClick={onBackToLogin}
-              className="text-indigo-400 hover:text-indigo-300 font-bold"
+              className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors ml-1"
             >
               Access Terminal
             </button>
