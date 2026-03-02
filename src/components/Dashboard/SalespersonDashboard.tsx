@@ -54,16 +54,16 @@ const SalespersonDashboard: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
   useEffect(() => {
-  if (showForm) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
+    if (showForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
 
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [showForm]);
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showForm]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -368,7 +368,7 @@ const SalespersonDashboard: React.FC = () => {
                           distributor_id: e.target.value,
                         })
                       }
-                      className="w-full border border-border rounded-xl px-4 h-11 bg-background text-sm focus:ring-2 focus:ring-ring outline-none"
+                      className="w-full border border-border rounded-xl px-4 h-11 bg-background text-sm focus:ring-2 focus:ring-ring outline-none  appearance-none"
                       required
                     >
                       <option value="">Choose a distributor</option>
