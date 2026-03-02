@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -52,6 +52,18 @@ const SalespersonDashboard: React.FC = () => {
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+
+  useEffect(() => {
+  if (showForm) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [showForm]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -253,7 +265,7 @@ const SalespersonDashboard: React.FC = () => {
       {/* Modern Form Overlay */}
       {showForm && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6">
-          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-card text-card-foreground border border-border shadow-2xl rounded-3xl ...">
+          <Card className="w-full max-w-2xl bg-card text-card-foreground border border-border shadow-2xl rounded-3xl">
             <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-6 px-8">
               <div>
                 <CardTitle className="text-2xl font-bold text-foreground">
