@@ -151,11 +151,11 @@ const SalespersonDashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-10 min-h-screen text-foreground">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8 min-h-screen text-foreground">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-border">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
             Analytics Overview
           </h1>
           <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
@@ -173,7 +173,7 @@ const SalespersonDashboard: React.FC = () => {
            hover:opacity-90 
            shadow-lg shadow-[0_0_20px_hsl(var(--primary)/0.4)] 
            transition-all hover:scale-[1.02] active:scale-[0.98] 
-           h-11 px-6 rounded-xl flex items-center gap-2"
+           h-11 px-6 rounded-xl flex items-center gap-2 w-full md:w-auto"
         >
           <Plus className="w-5 h-5" />
           Create New Order
@@ -184,7 +184,7 @@ const SalespersonDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="bg-card border border-border rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -203,7 +203,7 @@ const SalespersonDashboard: React.FC = () => {
 
         <Card className="bg-card border border-border rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-amber-500" />
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -222,7 +222,7 @@ const SalespersonDashboard: React.FC = () => {
 
         <Card className="bg-card border border-border rounded-2xl overflow-hidden relative group">
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -241,7 +241,7 @@ const SalespersonDashboard: React.FC = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
         <OrdersByStatusChart />
         <PaymentStatusChart />
       </div>
@@ -252,8 +252,8 @@ const SalespersonDashboard: React.FC = () => {
 
       {/* Modern Form Overlay */}
       {showForm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-2xl bg-card text-card-foreground border border-border shadow-2xl rounded-3xl ...">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6">
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-card text-card-foreground border border-border shadow-2xl rounded-3xl ...">
             <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-6 px-8">
               <div>
                 <CardTitle className="text-2xl font-bold text-foreground">
@@ -272,7 +272,7 @@ const SalespersonDashboard: React.FC = () => {
                 <X className="w-5 h-5 text-muted-foreground" />
               </Button>
             </CardHeader>
-            <CardContent className="p-8">
+            <CardContent className="p-6 sm:p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -386,7 +386,7 @@ hover:opacity-90 transition-all"
       )}
 
       {/* Orders Table Section */}
-      <Card className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+      <Card className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm ">
         <CardHeader className="bg-card border-b border-border p-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -401,11 +401,10 @@ hover:opacity-90 transition-all"
         </CardHeader>
         <CardContent className="p-0">
           {myOrders.length === 0 ? (
-            <div className="text-center py-24">
+            <div className="text-center py-12 sm:py-24">
               <div className="bg-muted w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Package className="w-10 h-10 text-muted-foreground/40" />
               </div>
-              No orders found
               <p className="text-foreground font-bold text-lg">
                 No orders found
               </p>
@@ -414,7 +413,70 @@ hover:opacity-90 transition-all"
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <>
+              {/* ✅ Mobile Layout (Cards) */}
+              <div className="md:hidden space-y-4 p-4">
+                {myOrders.map((order) => (
+                  <Card
+                    key={order._id}
+                    className="border border-border rounded-xl p-4 shadow-sm"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="font-bold text-foreground">
+                          {order.spa_name}
+                        </div>
+                        <div className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                          <MapPin className="w-3 h-3" />
+                          {order.address}
+                        </div>
+                      </div>
+
+                      <div className="text-xs font-semibold">
+                        {order.status}
+                      </div>
+                    </div>
+
+                    <div className="mt-3 text-sm space-y-1">
+                      <div>
+                        <span className="font-medium">Product:</span>{" "}
+                        {order.product_name}
+                      </div>
+                      <div>
+                        <span className="font-medium">Qty:</span>{" "}
+                        {order.quantity}
+                      </div>
+                      <div>
+                        <span className="font-medium">Payment:</span>{" "}
+                        {order.payment_status}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-2">
+                        {new Date(order._creationTime).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          },
+                        )}
+                      </div>
+                    </div>
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setSelectedOrder(order)}
+                      className="mt-3 w-full"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      View Timeline
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+
+              {/* ✅ Desktop Layout (Table) */}
+              <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
@@ -506,6 +568,8 @@ hover:opacity-90 transition-all"
                 </tbody>
               </table>
             </div>
+
+            </>
           )}
         </CardContent>
       </Card>
