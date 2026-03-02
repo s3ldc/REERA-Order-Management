@@ -414,161 +414,189 @@ hover:opacity-90 transition-all"
             </div>
           ) : (
             <>
-              {/* ✅ Mobile Layout (Cards) */}
-              <div className="md:hidden space-y-4 p-4">
+              {/* ✅ Mobile Layout (Cards - Themed to Match Table) */}
+              <div className="md:hidden space-y-3 p-4">
                 {myOrders.map((order) => (
                   <Card
                     key={order._id}
-                    className="border border-border rounded-xl p-4 shadow-sm"
+                    className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm"
                   >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="font-bold text-foreground">
-                          {order.spa_name}
+                    <div className="p-4 space-y-3">
+                      {/* Top Row */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="font-bold text-foreground">
+                            {order.spa_name}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1 italic">
+                            <MapPin className="w-3 h-3" />
+                            {order.address}
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                          <MapPin className="w-3 h-3" />
-                          {order.address}
+
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(order.status)}
+                          <span className="text-xs font-bold text-foreground">
+                            {order.status}
+                          </span>
                         </div>
                       </div>
 
-                      <div className="text-xs font-semibold">
-                        {order.status}
-                      </div>
-                    </div>
-
-                    <div className="mt-3 text-sm space-y-1">
-                      <div>
-                        <span className="font-medium">Product:</span>{" "}
+                      {/* Product Badge (Same as Table) */}
+                      <div className="text-sm font-semibold text-foreground bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
+                        <Package className="w-3.5 h-3.5" />
                         {order.product_name}
                       </div>
-                      <div>
-                        <span className="font-medium">Qty:</span>{" "}
-                        {order.quantity}
+
+                      {/* Quantity + Payment */}
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="font-bold text-foreground">
+                          Qty: {order.quantity}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              order.payment_status === "Paid"
+                                ? "bg-emerald-500"
+                                : "bg-muted-foreground/40"
+                            }`}
+                          />
+                          <span
+                            className={`text-xs font-bold uppercase ${
+                              order.payment_status === "Paid"
+                                ? "text-emerald-500"
+                                : "text-muted-foreground"
+                            }`}
+                          >
+                            {order.payment_status}
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <span className="font-medium">Payment:</span>{" "}
-                        {order.payment_status}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-2">
-                        {new Date(order._creationTime).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          },
-                        )}
+
+                      {/* Footer Row */}
+                      <div className="flex justify-between items-center pt-2 border-t border-border">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setSelectedOrder(order)}
+                          className="flex items-center gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
+                        >
+                          <Calendar className="w-4 h-4" />
+                          <span className="text-xs font-medium">Timeline</span>
+                        </Button>
+
+                        <div className="text-xs font-bold text-foreground whitespace-nowrap">
+                          {new Date(order._creationTime).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </div>
                       </div>
                     </div>
-
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setSelectedOrder(order)}
-                      className="mt-3 w-full"
-                    >
-                      <Calendar className="w-4 h-4 mr-2" />
-                      View Timeline
-                    </Button>
                   </Card>
                 ))}
               </div>
 
               {/* ✅ Desktop Layout (Table) */}
               <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
-                    <th className="py-5 px-8">Client & Location</th>
-                    <th className="py-5 px-4">Product Specs</th>
-                    <th className="py-5 px-4 text-center">Qty</th>
-                    <th className="py-5 px-4">Status</th>
-                    <th className="py-5 px-4">Payment</th>
-                    <th className="py-5 px-4 text-right pr-8">Date Created</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {myOrders.map((order) => (
-                    <tr
-                      key={order._id}
-                      className="group hover:bg-muted/40 transition-all duration-200"
-                    >
-                      <td className="py-6 px-8">
-                        <div className="font-bold text-foreground">
-                          {order.spa_name}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1 font-medium italic">
-                          <MapPin className="w-3 h-3" /> {order.address}
-                        </div>
-                      </td>
-                      <td className="py-6 px-4">
-                        <div className="text-sm font-semibold text-foreground bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
-                          <Package className="w-3.5 h-3.5" />{" "}
-                          {order.product_name}
-                        </div>
-                      </td>
-                      <td className="py-6 px-4 text-center font-bold text-foreground">
-                        {order.quantity}
-                      </td>
-                      <td className="py-6 px-4">
-                        <div className="flex items-center gap-2">
-                          {getStatusIcon(order.status)}
-                          <span className="text-sm font-bold text-foreground">
-                            {order.status}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="py-6 px-4">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className={`w-2 h-2 rounded-full ${order.payment_status === "Paid" ? "bg-emerald-500" : "bg-muted-foreground/40"}`}
-                          />
-                          <span
-                            className={`text-xs font-bold uppercase ${order.payment_status === "Paid" ? "text-emerald-500" : "text-muted-foreground"}`}
-                          >
-                            {order.payment_status}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="py-6 px-4 pr-8">
-                        <div className="flex items-center justify-end gap-3">
-                          {/* Timeline calendar icon */}
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => setSelectedOrder(order)}
-                            className="group flex items-center gap-2 
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
+                      <th className="py-5 px-8">Client & Location</th>
+                      <th className="py-5 px-4">Product Specs</th>
+                      <th className="py-5 px-4 text-center">Qty</th>
+                      <th className="py-5 px-4">Status</th>
+                      <th className="py-5 px-4">Payment</th>
+                      <th className="py-5 px-4 text-right pr-8">
+                        Date Created
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {myOrders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="group hover:bg-muted/40 transition-all duration-200"
+                      >
+                        <td className="py-6 px-8">
+                          <div className="font-bold text-foreground">
+                            {order.spa_name}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1 font-medium italic">
+                            <MapPin className="w-3 h-3" /> {order.address}
+                          </div>
+                        </td>
+                        <td className="py-6 px-4">
+                          <div className="text-sm font-semibold text-foreground bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
+                            <Package className="w-3.5 h-3.5" />{" "}
+                            {order.product_name}
+                          </div>
+                        </td>
+                        <td className="py-6 px-4 text-center font-bold text-foreground">
+                          {order.quantity}
+                        </td>
+                        <td className="py-6 px-4">
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(order.status)}
+                            <span className="text-sm font-bold text-foreground">
+                              {order.status}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-6 px-4">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={`w-2 h-2 rounded-full ${order.payment_status === "Paid" ? "bg-emerald-500" : "bg-muted-foreground/40"}`}
+                            />
+                            <span
+                              className={`text-xs font-bold uppercase ${order.payment_status === "Paid" ? "text-emerald-500" : "text-muted-foreground"}`}
+                            >
+                              {order.payment_status}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-6 px-4 pr-8">
+                          <div className="flex items-center justify-end gap-3">
+                            {/* Timeline calendar icon */}
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setSelectedOrder(order)}
+                              className="group flex items-center gap-2 
            text-foreground/80 
            hover:text-foreground 
            hover:bg-muted/60 
            rounded-lg px-3"
-                          >
-                            <Calendar className="w-4 h-4" />
-                            <span className="hidden group-hover:inline text-xs font-medium">
-                              Timeline
-                            </span>
-                          </Button>
+                            >
+                              <Calendar className="w-4 h-4" />
+                              <span className="hidden group-hover:inline text-xs font-medium">
+                                Timeline
+                              </span>
+                            </Button>
 
-                          {/* Creation date */}
-                          <div className="text-sm font-bold text-foreground whitespace-nowrap">
-                            {new Date(order._creationTime).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              },
-                            )}
+                            {/* Creation date */}
+                            <div className="text-sm font-bold text-foreground whitespace-nowrap">
+                              {new Date(order._creationTime).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                },
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </>
           )}
         </CardContent>
