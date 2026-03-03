@@ -397,99 +397,115 @@ const AdminDashboard: React.FC = () => {
           ) : (
             <>
               {/* ✅ MOBILE CARDS (Refined) */}
-              <div className="md:hidden divide-y divide-border">
+              <div className="md:hidden space-y-3 p-4">
                 {filteredOrders.map((order) => (
-                  <div key={order._id} className="p-4 space-y-3">
-                    {/* Top Row */}
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="font-semibold text-foreground text-base">
-                          {order.spa_name}
+                  <Card
+                    key={order._id}
+                    className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm"
+                  >
+                    <div className="p-4 space-y-3">
+                      {/* Top Row */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="font-bold text-foreground">
+                            {order.spa_name}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1 italic">
+                            {order.product_name}
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {order.product_name}
+
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(order.status)}
+                          <span className="text-xs font-bold text-foreground">
+                            {order.status}
+                          </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-xs font-bold">
-                        {getStatusIcon(order.status)}
-                        <span>{order.status}</span>
+                      {/* Quantity + Payment */}
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="font-bold text-foreground">
+                          Qty: {order.quantity}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              order.payment_status === "Paid"
+                                ? "bg-emerald-500"
+                                : "bg-muted-foreground/40"
+                            }`}
+                          />
+                          <span
+                            className={`text-xs font-bold uppercase ${
+                              order.payment_status === "Paid"
+                                ? "text-emerald-500"
+                                : "text-muted-foreground"
+                            }`}
+                          >
+                            {order.payment_status}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Qty + Payment */}
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="font-semibold">Qty: {order.quantity}</div>
-
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`w-2 h-2 rounded-full ${
-                            order.payment_status === "Paid"
-                              ? "bg-emerald-500"
-                              : "bg-muted-foreground/40"
-                          }`}
-                        />
-                        <span
-                          className={`text-xs font-bold uppercase ${
-                            order.payment_status === "Paid"
-                              ? "text-emerald-500"
-                              : "text-muted-foreground"
-                          }`}
-                        >
-                          {order.payment_status}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Date */}
-                    <div className="text-xs text-muted-foreground font-medium">
-                      {new Date(order._creationTime).toLocaleDateString(
-                        undefined,
-                        {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        },
-                      )}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex flex-col gap-2 pt-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => setActiveOrder(order)}
-                        className="w-full h-9 rounded-lg"
-                      >
-                        Timeline
-                      </Button>
-
-                      {order.status !== "Delivered" && (
+                      {/* Footer */}
+                      <div className="flex justify-between items-center pt-2 border-t border-border">
                         <Button
                           size="sm"
-                          onClick={() =>
-                            handleStatusUpdate(order._id, order.status)
-                          }
-                          className="w-full h-9 rounded-lg bg-primary text-primary-foreground"
+                          variant="ghost"
+                          onClick={() => setActiveOrder(order)}
+                          className="flex items-center gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
                         >
-                          Move to {getNextStatus(order.status)}
+                          <CalendarIcon className="w-4 h-4" />
+                          <span className="text-xs font-medium">Timeline</span>
                         </Button>
-                      )}
 
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                          handlePaymentToggle(order._id, order.payment_status)
-                        }
-                        className="w-full h-9 rounded-lg"
-                      >
-                        {order.payment_status === "Paid"
-                          ? "Mark Unpaid"
-                          : "Mark Paid"}
-                      </Button>
+                        <div className="text-xs font-bold text-foreground whitespace-nowrap">
+                          {new Date(order._creationTime).toLocaleDateString(
+                            undefined,
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Admin Actions */}
+                      <div className="flex flex-col gap-2 pt-2">
+                        {order.status !== "Delivered" && (
+                          <Button
+                            size="sm"
+                            onClick={() =>
+                              handleStatusUpdate(order._id, order.status)
+                            }
+                            className="w-full bg-primary text-primary-foreground rounded-lg"
+                          >
+                            Move to {getNextStatus(order.status)}
+                          </Button>
+                        )}
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            handlePaymentToggle(order._id, order.payment_status)
+                          }
+                          className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+                                order.payment_status === "Paid"
+                                  ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                                  : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                              }`}
+                        >
+                          {order.payment_status === "Paid"
+                            ? "Mark Unpaid"
+                            : "Mark Paid"}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
 
