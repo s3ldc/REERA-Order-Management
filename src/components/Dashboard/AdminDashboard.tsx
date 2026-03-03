@@ -494,10 +494,10 @@ const AdminDashboard: React.FC = () => {
                             handlePaymentToggle(order._id, order.payment_status)
                           }
                           className={`h-9 px-4 rounded-lg font-bold transition-all border ${
-                                order.payment_status === "Paid"
-                                  ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
-                                  : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
-                              }`}
+                            order.payment_status === "Paid"
+                              ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                              : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                          }`}
                         >
                           {order.payment_status === "Paid"
                             ? "Mark Unpaid"
