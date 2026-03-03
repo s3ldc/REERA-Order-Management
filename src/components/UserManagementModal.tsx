@@ -74,15 +74,17 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent
         className="
-  w-[95vw] 
-  max-w-5xl 
-  border-none 
-  shadow-2xl 
-  bg-background 
-  p-0
-  rounded-3xl
-  
-"
+    w-[95vw]
+    max-w-5xl
+    max-h-[85vh]
+    border-none
+    shadow-2xl
+    bg-background
+    p-0
+    rounded-3xl 
+    flex
+    flex-col
+  "
       >
         {/* Header */}
         <DialogHeader className="p-5 sm:p-8 bg-card border-b border-border rounded-t-3xl sticky top-0 z-10">
@@ -112,7 +114,7 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
           </div>
         </DialogHeader>
 
-        <div className="p-5 sm:p-8 space-y-6 sm:space-y-8">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-6 sm:space-y-8">
           {/* Top Actions */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
