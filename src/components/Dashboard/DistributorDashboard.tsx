@@ -148,7 +148,7 @@ const DistributorDashboard: React.FC = () => {
                 className={`absolute top-0 left-0 w-1 h-full ${stat.color}`}
               />
 
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -177,7 +177,7 @@ const DistributorDashboard: React.FC = () => {
 
       {/* Charts Section */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
         <OrdersByStatusChart />
         <PaymentStatusChart />
       </div>
