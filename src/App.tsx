@@ -79,7 +79,6 @@ const AppContent: React.FC = () => {
     return <AppShellSkeleton />;
   }
 
-
   if (!user) {
     return showSignup ? (
       <Signup onBackToLogin={() => setShowSignup(false)} />
@@ -96,28 +95,29 @@ const AppContent: React.FC = () => {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Premium Sticky Header */}
       <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
-          {/* Left: Branding */}
-          <div className="flex items-center gap-4">
-            <div className="bg-primary p-2 rounded-xl">
-              <Zap className="w-5 h-5 text-primary-foreground" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          {/* LEFT SIDE */}
+          <div className="flex items-center gap-3">
+            <div className="bg-primary p-2 rounded-xl shrink-0">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
             </div>
 
             <div className="flex flex-col">
-              <h1 className="text-sm font-black text-foreground uppercase tracking-tighter leading-none">
+              <h1 className="text-xs sm:text-sm font-black uppercase tracking-tight leading-none">
                 B2B Order Hub
               </h1>
-              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
+              <span className="hidden sm:block text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 Enterprise v2.0
               </span>
             </div>
           </div>
 
-          {/* Right: User Profile & Logout */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 pr-6 border-r border-border hidden sm:flex">
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Desktop User Info */}
+            <div className="hidden md:flex items-center gap-3 pr-4 border-r border-border">
               <div className="text-right">
-                <p className="text-sm font-bold text-foreground leading-none">
+                <p className="text-sm font-bold leading-none">
                   {user.name || user.email?.split("@")[0]}
                 </p>
                 <Badge className="mt-1 h-4 text-[9px] bg-muted text-muted-foreground border-none font-bold uppercase tracking-tight">
@@ -127,7 +127,7 @@ const AppContent: React.FC = () => {
 
               <button
                 onClick={() => setProfileOpen(true)}
-                className="relative h-10 w-10 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
+                className="relative h-9 w-9 rounded-full overflow-hidden border border-border hover:ring-2 hover:ring-primary transition bg-muted flex items-center justify-center"
               >
                 {user.avatar ? (
                   <img
@@ -136,17 +136,34 @@ const AppContent: React.FC = () => {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <UserCircle className="w-6 h-6 text-primary" />
+                  <UserCircle className="w-5 h-5 text-primary" />
                 )}
               </button>
             </div>
 
+            {/* Mobile Avatar */}
+            <button
+              onClick={() => setProfileOpen(true)}
+              className="md:hidden relative h-9 w-9 rounded-full overflow-hidden border border-border bg-muted flex items-center justify-center"
+            >
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <UserCircle className="w-5 h-5 text-primary" />
+              )}
+            </button>
+
+            {/* Theme Toggle */}
             <Button
               ref={themeButtonRef}
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={toggleTheme}
-              className="rounded-xl text-muted-foreground hover:bg-muted transition-all"
+              className="rounded-xl"
             >
               {theme === "dark" ? (
                 <Sun className="w-4 h-4" />
@@ -155,14 +172,15 @@ const AppContent: React.FC = () => {
               )}
             </Button>
 
+            {/* Logout */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="group text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all font-bold text-xs flex items-center gap-2"
+              className="group text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all"
             >
-              <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              Logout
+              <LogOut className="w-4 h-4 sm:mr-2 group-hover:-translate-x-1 transition-transform" />
+              <span className="hidden sm:inline text-xs font-bold">Logout</span>
             </Button>
           </div>
         </div>
