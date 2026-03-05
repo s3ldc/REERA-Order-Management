@@ -15,6 +15,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useEffect } from "react";
 
 dayjs.extend(relativeTime);
 
@@ -30,6 +31,14 @@ const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
     }) ?? [];
 
   const loading = events === undefined;
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   const getEventConfig = (type: string, message: string) => {
     const lowerType = type.toLowerCase();
@@ -76,9 +85,9 @@ const OrderTimelineDrawer: React.FC<Props> = ({ order, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end">
+    <div className="fixed inset-0 z-[100] flex justify-end overflow-hidden">
       <div
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+        className="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity duration-500 ease-in-out"
         onClick={onClose}
       />
 
