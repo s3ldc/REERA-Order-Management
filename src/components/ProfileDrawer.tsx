@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   UserCircle,
@@ -19,6 +19,17 @@ interface ProfileDrawerProps {
 }
 
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ open, onClose }) => {
+
+  useEffect(() => {
+  if (!open) return;
+
+  document.body.style.overflow = "hidden";
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [open]);
+
   const { user, refreshUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
 
