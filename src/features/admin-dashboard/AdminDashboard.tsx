@@ -22,6 +22,7 @@ import type { Id } from "../../../convex/_generated/dataModel";
 import { useToast } from "../../hooks/useToast";
 
 import type { OrderStatus, PaymentStatus } from "./utils/orderHelpers";
+import type { Filters } from "./types";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -29,10 +30,8 @@ const AdminDashboard: React.FC = () => {
 
   const { orders, moveOrderStatus, togglePayment } = useAdminOrders();
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     status: "all",
-    dateFrom: undefined as Date | undefined,
-    dateTo: undefined as Date | undefined,
   });
 
   const [showUserModal, setShowUserModal] = useState(false);
@@ -92,7 +91,6 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
-
       <DashboardHeader
         user={user}
         onManageUsers={() => setShowUserModal(true)}
@@ -133,7 +131,6 @@ const AdminDashboard: React.FC = () => {
           onClose={() => setActiveOrder(null)}
         />
       )}
-
     </div>
   );
 };
