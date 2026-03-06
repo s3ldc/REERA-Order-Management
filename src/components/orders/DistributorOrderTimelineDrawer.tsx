@@ -17,6 +17,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Doc, Id } from "../../../convex/_generated/dataModel";
+import { useEffect } from "react";
 
 dayjs.extend(relativeTime);
 
@@ -35,6 +36,14 @@ const DistributorOrderTimelineDrawer: React.FC<Props> = ({
   });
 
   const loading = events === undefined;
+
+  useEffect(() => {
+  document.body.style.overflow = "hidden";
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, []);
 
   const visibleEvents =
     events?.filter(

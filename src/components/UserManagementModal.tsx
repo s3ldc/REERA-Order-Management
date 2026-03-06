@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,14 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
   const users = useQuery(api.users.getAllNonAdminUsers) ?? [];
   const deleteUser = useMutation(api.users.deleteUser);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const handleDeleteUser = async (userId: Id<"users">) => {
     try {
       await deleteUser({ userId });
@@ -45,17 +54,16 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
 
   const getRoleBadge = (role: string) => {
     const variants = {
-      Admin: "bg-purple-100 text-purple-700 border-purple-200",
-      Salesperson: "bg-blue-100 text-blue-700 border-blue-200",
-      Distributor: "bg-emerald-100 text-emerald-700 border-emerald-200",
+      Salesperson:
+        "bg-blue-500/15 text-blue-400 border-blue-500/30 dark:bg-blue-500/20 dark:text-blue-300",
+      Distributor:
+        "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-300",
     };
 
     return (
       <Badge
         variant="outline"
-        className={`font-bold border shadow-sm ${
-          variants[role as keyof typeof variants]
-        }`}
+        className={`font-bold border ${variants[role as keyof typeof variants]}`}
       >
         {role}
       </Badge>
@@ -64,35 +72,49 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-none shadow-2xl bg-background p-0">
+      <DialogContent
+        className="
+    w-[95vw]
+    max-w-5xl
+    max-h-[85vh]
+    border-none
+    shadow-2xl
+    bg-background
+    p-0
+    rounded-3xl 
+    flex
+    flex-col
+  "
+      >
         {/* Header */}
-        <DialogHeader className="p-8 bg-card border-b border-border rounded-t-3xl sticky top-0 z-10">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-4">
-              <div className="bg-primary p-3 rounded-2xl shadow-md shadow-primary/20">
-                <Users className="w-6 h-6 text-primary-foreground" />
+        <DialogHeader className="p-5 sm:p-8 bg-card border-b border-border rounded-t-3xl sticky top-0 z-10">
+          <div className="flex justify-between items-start gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="bg-primary p-2.5 sm:p-3 rounded-2xl shadow-md shadow-primary/20">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
               </div>
               <div>
-                <DialogTitle className="text-2xl font-bold text-foreground">
+                <DialogTitle className="text-lg sm:text-2xl font-bold text-foreground">
                   User Intelligence
                 </DialogTitle>
-                <DialogDescription className="text-muted-foreground font-medium">
+                <DialogDescription className="text-xs sm:text-sm text-muted-foreground font-medium">
                   Review and manage institutional access roles
                 </DialogDescription>
               </div>
             </div>
+
             <Button
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="rounded-full hover:bg-muted"
+              className="rounded-full hover:bg-muted h-9 w-9"
             >
-              <X className="w-5 h-5 text-muted-foreground" />
+              <X className="w-4 h-4 text-muted-foreground" />
             </Button>
           </div>
         </DialogHeader>
 
-        <div className="p-8 space-y-8">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-6 sm:space-y-8">
           {/* Top Actions */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
@@ -109,15 +131,30 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
           </div>
 
           {/* Users List */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {users.length > 0 ? (
               users.map((user: Doc<"users">) => (
                 <div
                   key={user._id}
-                  className="group flex items-center justify-between p-5 bg-card border border-border rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1"
+                  className="
+    group
+    flex
+    flex-col sm:flex-row
+    sm:items-center
+    sm:justify-between
+    gap-4
+    p-5
+    bg-card
+    border
+    border-border
+    rounded-2xl
+    transition-all
+    hover:shadow-md
+  "
                 >
+                  {/* LEFT SECTION */}
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-2xl overflow-hidden border border-border bg-muted flex items-center justify-center">
+                    <div className="h-12 w-12 rounded-xl overflow-hidden border border-border bg-muted flex items-center justify-center">
                       {user.avatar ? (
                         <img
                           src={user.avatar}
@@ -125,28 +162,36 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <UserCircle2 className="w-8 h-8 text-slate-300" />
+                        <UserCircle2 className="w-7 h-7 text-muted-foreground" />
                       )}
                     </div>
 
                     <div>
-                      <p className="font-bold text-foreground leading-none mb-1.5">
+                      <p className="font-semibold text-foreground text-sm sm:text-base">
                         {user.name}
                       </p>
-                      <p className="text-[11px] text-muted-foreground font-medium flex items-center gap-1.5 tracking-tight">
-                        <Mail className="w-3 h-3" /> {user.email}
+                      <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
+                        <Mail className="w-3 h-3" />
+                        {user.email}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  {/* RIGHT SECTION */}
+                  <div className="flex items-center justify-between sm:justify-end gap-3">
                     {getRoleBadge(user.role)}
 
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => handleDeleteUser(user._id)}
-                      className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all"
+                      className="
+        h-8 w-8
+        text-muted-foreground
+        hover:text-destructive
+        hover:bg-destructive/10
+        transition-all
+      "
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

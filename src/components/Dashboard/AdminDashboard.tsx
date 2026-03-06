@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
   Card,
@@ -10,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Badge } from "../ui/badge";
 import {
   Package,
   Truck,
@@ -19,8 +17,6 @@ import {
   Users,
   Filter,
   BarChart3,
-  Search,
-  ArrowRight,
   Clock,
   RotateCcw,
 } from "lucide-react";
@@ -156,11 +152,11 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-10 bg-background text-foreground min-h-screen">
+    <div className=" max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-6 space-y-8 bg-background text-foreground min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
             System Control
           </h1>
           <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
@@ -189,6 +185,7 @@ const AdminDashboard: React.FC = () => {
     flex 
     items-center 
     gap-2
+    w-full md:w-auto
   "
         >
           <Users className="w-5 h-5" />
@@ -229,8 +226,11 @@ const AdminDashboard: React.FC = () => {
             iconBg: "bg-blue-500/10",
           },
         ].map((stat, i) => (
-          <Card key={i} className="bg-card border border-border rounded-2xl">
-            <CardContent className="p-6">
+          <Card
+            key={i}
+            className="bg-card border border-border rounded-2xl overflow-hidden relative group"
+          >
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
@@ -252,7 +252,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 w-full">
         <OrdersByStatusChart orders={orders} />
         <PaymentStatusChart orders={orders} />
       </div>
@@ -264,7 +264,7 @@ const AdminDashboard: React.FC = () => {
 
       {/* Advanced Filters */}
       <Card className="border-borderw-sm bg-card rounded-2xl overflow-hidden">
-        <CardHeader className="border-b border-border py-5 px-8 bg-card">
+        <CardHeader className="border-b border-border py-5 px-6  bg-card">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-foreground font-bold">
               <Filter className="w-4 h-4 text-indigo-500" />
@@ -388,53 +388,47 @@ const AdminDashboard: React.FC = () => {
         </CardHeader>
         <CardContent className="p-0">
           {filteredOrders.length === 0 ? (
-            <div className="text-center py-20">
+            <div className="text-center py-12 sm:py-20">
               <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
               <p className="text-muted-foreground font-medium">
                 No results match your current filters.
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
-                    <th className="py-5 px-8">Account / Product</th>
-                    <th className="py-5 px-4 text-center">Qty</th>
-                    <th className="py-5 px-4">Status</th>
-                    <th className="py-5 px-4">Payment</th>
-                    <th className="py-5 px-4">Creation Date</th>
-                    <th className="py-5 px-8 text-right">
-                      Operational Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filteredOrders.map((order) => (
-                    <tr
-                      key={order._id}
-                      className="group hover:bg-muted/80 transition-all duration-200"
-                    >
-                      <td className="py-6 px-8">
-                        <div className="font-bold text-foreground">
-                          {order.spa_name}
+            <>
+              {/* ✅ MOBILE CARDS (Refined) */}
+              <div className="md:hidden space-y-3 p-4">
+                {filteredOrders.map((order) => (
+                  <Card
+                    key={order._id}
+                    className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm"
+                  >
+                    <div className="p-4 space-y-3">
+                      {/* Top Row */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="font-bold text-foreground">
+                            {order.spa_name}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1 italic">
+                            {order.product_name}
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1 font-medium">
-                          {order.product_name}
-                        </div>
-                      </td>
-                      <td className="py-6 px-4 text-center font-bold text-foreground">
-                        {order.quantity}
-                      </td>
-                      <td className="py-6 px-4">
+
                         <div className="flex items-center gap-2">
                           {getStatusIcon(order.status)}
-                          <span className="text-sm font-bold text-foreground">
+                          <span className="text-xs font-bold text-foreground">
                             {order.status}
                           </span>
                         </div>
-                      </td>
-                      <td className="py-6 px-4">
+                      </div>
+
+                      {/* Quantity + Payment */}
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="font-bold text-foreground">
+                          Qty: {order.quantity}
+                        </div>
+
                         <div className="flex items-center gap-2">
                           <div
                             className={`w-2 h-2 rounded-full ${
@@ -446,75 +440,197 @@ const AdminDashboard: React.FC = () => {
                           <span
                             className={`text-xs font-bold uppercase ${
                               order.payment_status === "Paid"
-                                ? "text-emerald-600"
+                                ? "text-emerald-500"
                                 : "text-muted-foreground"
                             }`}
                           >
                             {order.payment_status}
                           </span>
                         </div>
-                      </td>
-                      <td className="py-6 px-4 text-sm font-bold text-foreground">
-                        {new Date(order._creationTime).toLocaleDateString(
-                          undefined,
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          },
-                        )}
-                      </td>
-                      <td className="py-6 px-8 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      </div>
+
+                      {/* Footer */}
+                      <div className="flex justify-between items-center pt-2 border-t border-border">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setActiveOrder(order)}
+                          className="flex items-center gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
+                        >
+                          <CalendarIcon className="w-4 h-4" />
+                          <span className="text-xs font-medium">Timeline</span>
+                        </Button>
+
+                        <div className="text-xs font-bold text-foreground whitespace-nowrap">
+                          {new Date(order._creationTime).toLocaleDateString(
+                            undefined,
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Admin Actions */}
+                      <div className="flex flex-col gap-2 pt-2">
+                        {order.status !== "Delivered" && (
                           <Button
-                            title="View order timeline"
                             size="sm"
-                            variant="ghost"
-                            onClick={() => setActiveOrder(order)}
-                            className="group flex items-center gap-1 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
+                            onClick={() =>
+                              handleStatusUpdate(order._id, order.status)
+                            }
+                            className="w-full bg-primary text-primary-foreground rounded-lg"
                           >
-                            <CalendarIcon className="w-4 h-4" />
-                            <span className="hidden group-hover:inline text-xs font-medium">
-                              Timeline
-                            </span>
+                            Move to {getNextStatus(order.status)}
                           </Button>
-                          {order.status !== "Delivered" && (
+                        )}
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            handlePaymentToggle(order._id, order.payment_status)
+                          }
+                          className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+                            order.payment_status === "Paid"
+                              ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                              : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                          }`}
+                        >
+                          {order.payment_status === "Paid"
+                            ? "Mark Unpaid"
+                            : "Mark Paid"}
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {/* ✅ DESKTOP TABLE */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
+                      <th className="py-5 px-8">Account / Product</th>
+                      <th className="py-5 px-4 text-center">Qty</th>
+                      <th className="py-5 px-4">Status</th>
+                      <th className="py-5 px-4">Payment</th>
+                      <th className="py-5 px-4">Creation Date</th>
+                      <th className="py-5 px-8 text-right">
+                        Operational Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {filteredOrders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="group hover:bg-muted/80 transition-all duration-200"
+                      >
+                        <td className="py-6 px-8">
+                          <div className="font-bold text-foreground">
+                            {order.spa_name}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1 font-medium">
+                            {order.product_name}
+                          </div>
+                        </td>
+                        <td className="py-6 px-4 text-center font-bold text-foreground">
+                          {order.quantity}
+                        </td>
+                        <td className="py-6 px-4">
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(order.status)}
+                            <span className="text-sm font-bold text-foreground">
+                              {order.status}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-6 px-4">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={`w-2 h-2 rounded-full ${
+                                order.payment_status === "Paid"
+                                  ? "bg-emerald-500"
+                                  : "bg-muted-foreground/40"
+                              }`}
+                            />
+                            <span
+                              className={`text-xs font-bold uppercase ${
+                                order.payment_status === "Paid"
+                                  ? "text-emerald-600"
+                                  : "text-muted-foreground"
+                              }`}
+                            >
+                              {order.payment_status}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-6 px-4 text-sm font-bold text-foreground">
+                          {new Date(order._creationTime).toLocaleDateString(
+                            undefined,
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </td>
+                        <td className="py-6 px-8 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button
+                              title="View order timeline"
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setActiveOrder(order)}
+                              className="group flex items-center gap-1 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
+                            >
+                              <CalendarIcon className="w-4 h-4" />
+                              <span className="hidden group-hover:inline text-xs font-medium">
+                                Timeline
+                              </span>
+                            </Button>
+                            {order.status !== "Delivered" && (
+                              <Button
+                                size="sm"
+                                onClick={() =>
+                                  handleStatusUpdate(order._id, order.status)
+                                }
+                                className="h-9 px-4 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all font-bold border-none"
+                              >
+                                Move to {getNextStatus(order.status)}
+                              </Button>
+                            )}
                             <Button
                               size="sm"
+                              variant="outline"
                               onClick={() =>
-                                handleStatusUpdate(order._id, order.status)
+                                handlePaymentToggle(
+                                  order._id,
+                                  order.payment_status,
+                                )
                               }
-                              className="h-9 px-4 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all font-bold border-none"
+                              className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+                                order.payment_status === "Paid"
+                                  ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                                  : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                              }`}
                             >
-                              Move to {getNextStatus(order.status)}
+                              {order.payment_status === "Paid"
+                                ? "Mark Unpaid"
+                                : "Mark Paid"}
                             </Button>
-                          )}
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              handlePaymentToggle(
-                                order._id,
-                                order.payment_status,
-                              )
-                            }
-                            className={`h-9 px-4 rounded-lg font-bold transition-all border ${
-                              order.payment_status === "Paid"
-                                ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
-                                : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
-                            }`}
-                          >
-                            {order.payment_status === "Paid"
-                              ? "Mark Unpaid"
-                              : "Mark Paid"}
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>
