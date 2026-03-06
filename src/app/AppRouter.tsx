@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import SalespersonDashboard from "../components/Dashboard/SalespersonDashboard";
 import DistributorDashboard from "../components/Dashboard/DistributorDashboard";
-import AdminDashboard from "../components/Dashboard/AdminDashboard";
+import AdminDashboard from "../features/admin-dashboard/AdminDashboard";
 
 const AppRouter: React.FC = () => {
   const { user } = useAuth();
