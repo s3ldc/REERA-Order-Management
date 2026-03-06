@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import Login from "./Login";
 import SalespersonDashboard from "./Dashboard/SalespersonDashboard";
 import DistributorDashboard from "./Dashboard/DistributorDashboard";
-import AdminDashboard from "./Dashboard/AdminDashboard";
+import AdminDashboard from "../features/admin-dashboard/AdminDashboard";
 
 
 const AppContent: React.FC = () => {

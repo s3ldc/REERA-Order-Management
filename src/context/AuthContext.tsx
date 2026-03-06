@@ -5,13 +5,10 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-// import pb from "../lib/pocketbase";
-import { ConvexReactClient } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import type { Doc } from "../../convex/_generated/dataModel";
-import type { Id } from "../../convex/_generated/dataModel";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+import { useConvex } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import type { Doc, Id } from "../../convex/_generated/dataModel";
 
 type User = Doc<"users">;
 
@@ -24,24 +21,28 @@ interface AuthContextType {
     email: string,
     password: string,
     userData: { name: string; role: "Salesperson" | "Distributor" },
-  ) => Promise<boolean>; // 👈 ADD THIS
-  refreshUser: () => Promise<void>; // Optional, only if you implement it
+  ) => Promise<boolean>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const SESSION_KEY = "session_user_id";
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const convex = useConvex();
+
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const normalizeAvatar = (avatar: unknown): string | undefined =>
-    typeof avatar === "string" && avatar.length > 0 ? avatar : undefined;
-
+  /**
+   * Restore session on page refresh
+   */
   useEffect(() => {
     const restoreSession = async () => {
-      const storedId = localStorage.getItem("session_user_id");
+      const storedId = localStorage.getItem(SESSION_KEY);
 
       if (!storedId) {
         setLoading(false);
@@ -50,18 +51,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       try {
         const user = await convex.query(api.users.getUserById, {
-          id: storedId as any,
+          id: storedId as Id<"users">,
         });
 
         if (!user) {
-          localStorage.removeItem("session_user_id");
+          localStorage.removeItem(SESSION_KEY);
           setUser(null);
         } else {
           setUser(user);
         }
       } catch (error) {
         console.error("Session restore failed", error);
-        localStorage.removeItem("session_user_id");
+        localStorage.removeItem(SESSION_KEY);
         setUser(null);
       }
 
@@ -69,41 +70,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     restoreSession();
-  }, []);
+  }, [convex]);
 
-  // Restore session on page refresh
-  // useEffect(() => {
-  //   const restoreSession = async () => {
-  //     if (pb.authStore.isValid && pb.authStore.model) {
-  //       const model = pb.authStore.model as any;
-
-  //       try {
-  //         const fullUser = await pb.collection("users").getOne(model.id);
-
-  //         const mappedUser: User = {
-  //           id: fullUser.id,
-  //           email: fullUser.email,
-  //           name: fullUser.name || fullUser.email,
-  //           role: fullUser.role,
-  //           avatar: normalizeAvatar(fullUser.avatar),
-  //         };
-
-  //         setUser(mappedUser);
-  //       } catch (err) {
-  //         console.error("Failed to restore session", err);
-  //         pb.authStore.clear();
-  //         setUser(null);
-  //       }
-  //     }
-
-  //     setLoading(false);
-  //   };
-
-  //   restoreSession();
-  // }, []);
-
-  // --- LOGIN ---
-  const login = async (email: string, password: string): Promise<boolean> => {
+  /**
+   * Login
+   */
+  const login = async (
+    email: string,
+    password: string,
+  ): Promise<boolean> => {
     try {
       const result = await convex.action(api.auth.login, {
         email,
@@ -112,7 +87,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       if (!result) return false;
 
-      // 🔥 Fetch full user document
       const fullUser = await convex.query(api.users.getUserById, {
         id: result._id as Id<"users">,
       });
@@ -120,7 +94,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (!fullUser) return false;
 
       setUser(fullUser);
-      localStorage.setItem("session_user_id", fullUser._id);
+      localStorage.setItem(SESSION_KEY, fullUser._id);
 
       return true;
     } catch (err) {
@@ -129,13 +103,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // --- LOGOUT ---
+  /**
+   * Logout
+   */
   const logout = () => {
-    localStorage.removeItem("session_user_id");
+    localStorage.removeItem(SESSION_KEY);
     setUser(null);
   };
 
-  // --- SIGN UP (Salesperson / Distributor only) ---
+  /**
+   * Signup
+   */
   const signUp = async (
     email: string,
     password: string,
@@ -157,28 +135,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  /**
+   * Refresh user
+   */
   const refreshUser = async () => {
-    const storedId = localStorage.getItem("session_user_id");
+    const storedId = localStorage.getItem(SESSION_KEY);
     if (!storedId) return;
 
     const userData = await convex.query(api.users.getUserById, {
-      id: storedId as any,
+      id: storedId as Id<"users">,
     });
 
-    if (!userData) return;
-
-    setUser(userData);
+    if (userData) {
+      setUser(userData);
+    }
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        loading,
         login,
         logout,
         signUp,
-        loading, 
-        refreshUser, 
+        refreshUser,
       }}
     >
       {children}
@@ -186,10 +167,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+/**
+ * Hook
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth must be used within AuthProvider");
   }
+
   return context;
 };
