@@ -7,7 +7,6 @@ import DashboardHeader from "./components/DashboardHeader";
 import StatsCards from "./components/StatsCards";
 import FiltersPanel from "./components/FiltersPanel";
 import OrdersTable from "./components/OrdersTable";
-import MobileOrdersList from "./components/MobileOrdersList";
 
 import OrdersByStatusChart from "../../components/charts/admin/OrdersByStatusChart";
 import PaymentStatusChart from "../../components/charts/admin/PaymentStatusChart";
@@ -106,13 +105,6 @@ const AdminDashboard: React.FC = () => {
       <OrdersOverTimeChart orders={orders} />
 
       <FiltersPanel filters={filters} setFilters={setFilters} />
-
-      <MobileOrdersList
-        orders={filteredOrders}
-        onTimeline={(o) => setActiveOrder(o)}
-        onMoveStatus={handleMoveStatus}
-        onTogglePayment={handleTogglePayment}
-      />
 
       <OrdersTable
         orders={filteredOrders}

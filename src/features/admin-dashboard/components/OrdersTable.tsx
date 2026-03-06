@@ -10,6 +10,7 @@ import { Button } from "../../../components/ui/button";
 import { Package, Calendar as CalendarIcon } from "lucide-react";
 
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
+import MobileOrdersList from "./MobileOrdersList";
 
 interface Props {
   orders: Doc<"orders">[];
@@ -52,17 +53,25 @@ const OrdersTable: React.FC<Props> = ({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="p-0">
-        {orders.length === 0 ? (
-          <div className="text-center py-20">
-            <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-muted-foreground">
-              No results match your filters.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto hidden md:block">
-            <table className="w-full text-left">
+     <CardContent className="p-0">
+  {orders.length === 0 ? (
+    <div className="text-center py-20">
+      <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+      <p className="text-muted-foreground">No results match your filters.</p>
+    </div>
+  ) : (
+    <>
+      {/* Mobile Orders */}
+      <MobileOrdersList
+        orders={orders}
+        onTimeline={onTimeline}
+        onMoveStatus={onMoveStatus}
+        onTogglePayment={onTogglePayment}
+      />
+
+      {/* Desktop Table */}
+      <div className="overflow-x-auto hidden md:block">
+        <table className="w-full text-left">
               <thead>
                 <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
                   <th className="py-5 px-8">Account / Product</th>
@@ -184,6 +193,7 @@ const OrdersTable: React.FC<Props> = ({
               </tbody>
             </table>
           </div>
+          </>
         )}
       </CardContent>
     </Card>
