@@ -70,7 +70,7 @@ const OrdersTable: React.FC<Props> = ({
                   <th className="py-5 px-4">Status</th>
                   <th className="py-5 px-4">Payment</th>
                   <th className="py-5 px-4">Creation Date</th>
-                  <th className="py-5 px-8 text-right">Actions</th>
+                  <th className="py-5 px-8 text-right">Operational Actions</th>
                 </tr>
               </thead>
 
@@ -78,55 +78,75 @@ const OrdersTable: React.FC<Props> = ({
                 {orders.map((order) => (
                   <tr
                     key={order._id}
-                    className="hover:bg-muted/80 transition-all"
+                    className="group hover:bg-muted/80 transition-all duration-200"
                   >
                     <td className="py-6 px-8">
                       <div className="font-bold text-foreground">
                         {order.spa_name}
                       </div>
 
-                      <div className="text-xs text-muted-foreground mt-1">
+                      <div className="text-xs text-muted-foreground mt-1 font-medium">
                         {order.product_name}
                       </div>
                     </td>
 
-                    <td className="py-6 px-4 text-center font-bold">
+                    <td className="py-6 px-4 text-center font-bold text-foreground">
                       {order.quantity}
                     </td>
 
                     <td className="py-6 px-4">
                       <div className="flex items-center gap-2">
                         {getStatusIcon(order.status)}
-                        <span className="font-bold">{order.status}</span>
+                        <span className="text-sm font-bold text-foreground">
+                          {order.status}
+                        </span>
                       </div>
                     </td>
 
                     <td className="py-6 px-4">
-                      <span
-                        className={`text-xs font-bold uppercase
-                        ${
-                          order.payment_status === "Paid"
-                            ? "text-emerald-500"
-                            : "text-muted-foreground"
-                        }
-                      `}
-                      >
-                        {order.payment_status}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            order.payment_status === "Paid"
+                              ? "bg-emerald-500"
+                              : "bg-muted-foreground/40"
+                          }`}
+                        />
+                        <span
+                          className={`text-xs font-bold uppercase ${
+                            order.payment_status === "Paid"
+                              ? "text-emerald-600"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          {order.payment_status}
+                        </span>
+                      </div>
                     </td>
 
-                    <td className="py-6 px-4 font-bold">
-                      {new Date(order._creationTime).toLocaleDateString()}
+                    <td className="py-6 px-4 text-sm font-bold text-foreground">
+                      {new Date(order._creationTime).toLocaleDateString(
+                        undefined,
+                        {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        },
+                      )}
                     </td>
 
                     <td className="py-6 px-8 text-right">
-                      <div className="flex justify-end gap-2">
+                      <div className="flex items-center justify-end gap-2">
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => onTimeline(order)}
+                          className="group flex items-center gap-1 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
                         >
                           <CalendarIcon className="w-4 h-4" />
+                          <span className="hidden group-hover:inline text-xs font-medium">
+                            Timeline
+                          </span>
                         </Button>
 
                         {order.status !== "Delivered" && (
@@ -135,7 +155,7 @@ const OrdersTable: React.FC<Props> = ({
                             onClick={() =>
                               onMoveStatus(order._id, order.status)
                             }
-                            className="bg-primary/10 text-primary"
+                            className="h-9 px-4 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all font-bold border-none"
                           >
                             Move to {getNextStatus(order.status)}
                           </Button>
@@ -147,6 +167,11 @@ const OrdersTable: React.FC<Props> = ({
                           onClick={() =>
                             onTogglePayment(order._id, order.payment_status)
                           }
+                          className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+                            order.payment_status === "Paid"
+                              ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                              : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                          }`}
                         >
                           {order.payment_status === "Paid"
                             ? "Mark Unpaid"
