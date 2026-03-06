@@ -1,9 +1,15 @@
 import React from "react";
 import { Card } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
-import { Package, Calendar as CalendarIcon } from "lucide-react";
+import {
+  Package,
+  Calendar as CalendarIcon,
+  Truck,
+  CheckCircle,
+} from "lucide-react";
 
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
+import { OrderStatus } from "../utils/orderHelpers";
 
 interface Props {
   orders: Doc<"orders">[];
@@ -22,6 +28,19 @@ const MobileOrdersList: React.FC<Props> = ({
     if (status === "Pending") return "Dispatched";
     if (status === "Dispatched") return "Delivered";
     return status;
+  };
+
+  const getStatusIcon = (status: OrderStatus) => {
+    switch (status) {
+      case "Pending":
+        return <Package className="w-5 h-5 text-amber-600" />;
+      case "Dispatched":
+        return <Truck className="w-5 h-5 text-blue-600" />;
+      case "Delivered":
+        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
+      default:
+        return <Package className="w-5 h-5 text-muted-foreground" />;
+    }
   };
 
   return (
@@ -44,22 +63,38 @@ const MobileOrdersList: React.FC<Props> = ({
                 </div>
               </div>
 
-              <span className="text-xs font-bold">{order.status}</span>
+              <div className="flex items-center gap-2">
+                {getStatusIcon(order.status)}
+                <span className="text-xs font-bold text-foreground">
+                  {order.status}
+                </span>
+              </div>
             </div>
 
             {/* QUANTITY + PAYMENT */}
             <div className="flex justify-between items-center text-sm">
-              <div className="font-bold">Qty: {order.quantity}</div>
+              <div className="font-bold text-foreground">
+                Qty: {order.quantity}
+              </div>
 
-              <span
-                className={`text-xs font-bold uppercase ${
-                  order.payment_status === "Paid"
-                    ? "text-emerald-500"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {order.payment_status}
-              </span>
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    order.payment_status === "Paid"
+                      ? "bg-emerald-500"
+                      : "bg-muted-foreground/40"
+                  }`}
+                />
+                <span
+                  className={`text-xs font-bold uppercase ${
+                    order.payment_status === "Paid"
+                      ? "text-emerald-500"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {order.payment_status}
+                </span>
+              </div>
             </div>
 
             {/* FOOTER */}
@@ -68,14 +103,18 @@ const MobileOrdersList: React.FC<Props> = ({
                 size="sm"
                 variant="ghost"
                 onClick={() => onTimeline(order)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
               >
                 <CalendarIcon className="w-4 h-4" />
-                <span className="text-xs">Timeline</span>
+                <span className="text-xs font-medium">Timeline</span>
               </Button>
 
-              <div className="text-xs font-bold">
-                {new Date(order._creationTime).toLocaleDateString()}
+              <div className="text-xs font-bold text-foreground whitespace-nowrap">
+                {new Date(order._creationTime).toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </div>
             </div>
 
@@ -95,6 +134,11 @@ const MobileOrdersList: React.FC<Props> = ({
                 size="sm"
                 variant="outline"
                 onClick={() => onTogglePayment(order._id, order.payment_status)}
+                className={`h-9 px-4 rounded-lg font-bold transition-all border ${
+                  order.payment_status === "Paid"
+                    ? "border-emerald-500/40 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20"
+                    : "border-muted-foreground/30 text-muted-foreground bg-muted/30 hover:bg-muted/50"
+                }`}
               >
                 {order.payment_status === "Paid" ? "Mark Unpaid" : "Mark Paid"}
               </Button>
