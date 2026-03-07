@@ -1,13 +1,13 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
-import { Button } from "../ui/button";
+import { Button } from "../../components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "../../components/ui/card";
 import {
   Package,
   Truck,
@@ -17,11 +17,11 @@ import {
   ArrowRightCircle,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
-import OrdersByStatusChart from "../charts/distributor/OrdersByStatusChart";
-import PaymentStatusChart from "../charts/distributor/PaymentStatusChart";
-import DeliveriesOverTimeChart from "../charts/distributor/DeliveriesOverTimeChart";
+import OrdersByStatusChart from "../../components/charts/distributor/OrdersByStatusChart";
+import PaymentStatusChart from "../../components/charts/distributor/PaymentStatusChart";
+import DeliveriesOverTimeChart from "../../components/charts/distributor/DeliveriesOverTimeChart";
 import { Calendar } from "lucide-react";
-import DistributorOrderTimelineDrawer from "../orders/DistributorOrderTimelineDrawer";
+import DistributorOrderTimelineDrawer from "../../components/orders/DistributorOrderTimelineDrawer";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Doc, Id } from "../../../convex/_generated/dataModel";

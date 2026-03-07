@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import Login from "./Login";
 import SalespersonDashboard from "./Dashboard/SalespersonDashboard";
-import DistributorDashboard from "./Dashboard/DistributorDashboard";
+import DistributorDashboard from "../features/distributor-dashboard/DistributorDashboard";
 import AdminDashboard from "../features/admin-dashboard/AdminDashboard";
 
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import SalespersonDashboard from "../components/Dashboard/SalespersonDashboard";
-import DistributorDashboard from "../components/Dashboard/DistributorDashboard";
+import DistributorDashboard from "../features/distributor-dashboard/DistributorDashboard";
 import AdminDashboard from "../features/admin-dashboard/AdminDashboard";
 
 const AppRouter: React.FC = () => {
