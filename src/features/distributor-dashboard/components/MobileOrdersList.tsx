@@ -3,11 +3,11 @@ import { Card } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import {
   Package,
-  MapPin,
-  Calendar,
-  Clock,
+  Calendar as CalendarIcon,
   Truck,
   CheckCircle,
+  Clock,
+  MapPin,
   ArrowRightCircle,
 } from "lucide-react";
 
@@ -24,7 +24,6 @@ const MobileOrdersList: React.FC<Props> = ({
   onTimeline,
   onMoveStatus,
 }) => {
-
   const getNextStatus = (status: any) => {
     if (status === "Pending") return "Dispatched";
     if (status === "Dispatched") return "Delivered";
@@ -53,7 +52,7 @@ const MobileOrdersList: React.FC<Props> = ({
         >
           <div className="p-4 space-y-3">
 
-            {/* Top Row */}
+            {/* TOP ROW */}
             <div className="flex justify-between items-start">
               <div>
                 <div className="font-bold text-foreground">
@@ -74,13 +73,13 @@ const MobileOrdersList: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* Product Badge */}
+            {/* PRODUCT */}
             <div className="text-sm font-semibold text-foreground bg-muted rounded-md px-2.5 py-1 inline-flex items-center gap-2">
               <Package className="w-3.5 h-3.5" />
               {order.product_name}
             </div>
 
-            {/* Qty + Payment */}
+            {/* QUANTITY + PAYMENT */}
             <div className="flex justify-between items-center text-sm">
               <div className="font-bold text-foreground">
                 Qty: {order.quantity}
@@ -107,7 +106,7 @@ const MobileOrdersList: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* Footer */}
+            {/* FOOTER */}
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <Button
                 size="sm"
@@ -115,12 +114,12 @@ const MobileOrdersList: React.FC<Props> = ({
                 onClick={() => onTimeline(order)}
                 className="flex items-center gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/60 rounded-lg px-3"
               >
-                <Calendar className="w-4 h-4" />
+                <CalendarIcon className="w-4 h-4" />
                 <span className="text-xs font-medium">Timeline</span>
               </Button>
 
-              <div className="text-xs font-bold text-foreground">
-                {new Date(order._creationTime).toLocaleDateString("en-US", {
+              <div className="text-xs font-bold text-foreground whitespace-nowrap">
+                {new Date(order._creationTime).toLocaleDateString(undefined, {
                   month: "short",
                   day: "numeric",
                   year: "numeric",
@@ -128,14 +127,12 @@ const MobileOrdersList: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* Status Button */}
+            {/* ACTION */}
             {order.status !== "Delivered" && (
               <Button
                 size="sm"
                 onClick={() => onMoveStatus(order._id, order.status)}
-                className="w-full bg-primary text-primary-foreground 
-                           hover:opacity-90 shadow-lg shadow-primary/30
-                           rounded-lg h-9 font-bold transition-all"
+                className="w-full bg-primary text-primary-foreground rounded-lg"
               >
                 Mark {getNextStatus(order.status)}
                 <ArrowRightCircle className="w-4 h-4 ml-2" />

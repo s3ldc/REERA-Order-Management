@@ -66,11 +66,6 @@ const DistributorDashboard: React.FC = () => {
       <div className="space-y-4">
 
         {/* Mobile */}
-        <MobileOrdersList
-          orders={assignedOrders}
-          onTimeline={(o) => setActiveOrder(o)}
-          onMoveStatus={handleStatusUpdate}
-        />
 
         {/* Desktop */}
         <OrdersTable
