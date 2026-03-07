@@ -5,7 +5,6 @@ import { useToast } from "../../hooks/useToast";
 import DashboardHeader from "./components/DashboardHeader";
 import StatsCards from "./components/StatsCards";
 import OrdersTable from "./components/OrdersTable";
-import MobileOrdersList from "./components/MobileOrdersList";
 
 import OrdersByStatusChart from "../../components/charts/distributor/OrdersByStatusChart";
 import PaymentStatusChart from "../../components/charts/distributor/PaymentStatusChart";
@@ -23,20 +22,20 @@ const DistributorDashboard: React.FC = () => {
   const { toast } = useToast();
 
   const { orders: assignedOrders, moveOrderStatus } = useDistributorOrders(
-    user?._id as Id<"users">
+    user?._id as Id<"users">,
   );
 
   const [activeOrder, setActiveOrder] = useState<Doc<"orders"> | null>(null);
 
   const handleStatusUpdate = async (
     orderId: Id<"orders">,
-    status: OrderStatus
+    status: OrderStatus,
   ) => {
     const nextStatus = await moveOrderStatus(
       orderId,
       status,
       user!._id as Id<"users">,
-      user?.role || "Distributor"
+      user?.role || "Distributor",
     );
 
     if (!nextStatus) return;
@@ -49,7 +48,6 @@ const DistributorDashboard: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-6 space-y-8 min-h-screen bg-background text-foreground">
-
       <DashboardHeader user={user} />
 
       <StatsCards orders={assignedOrders} />
@@ -64,7 +62,6 @@ const DistributorDashboard: React.FC = () => {
 
       {/* Orders Section */}
       <div className="space-y-4">
-
         {/* Mobile */}
 
         {/* Desktop */}
@@ -73,7 +70,6 @@ const DistributorDashboard: React.FC = () => {
           onTimeline={(o) => setActiveOrder(o)}
           onMoveStatus={handleStatusUpdate}
         />
-
       </div>
 
       {activeOrder && (

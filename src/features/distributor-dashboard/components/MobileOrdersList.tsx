@@ -33,13 +33,13 @@ const MobileOrdersList: React.FC<Props> = ({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "Pending":
-        return <Clock className="w-5 h-5 text-amber-600" />;
+        return <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
       case "Dispatched":
-        return <Truck className="w-5 h-5 text-blue-600" />;
+        return <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
       case "Delivered":
-        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
-      default:
-        return <Package className="w-5 h-5 text-muted-foreground" />;
+        return (
+          <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+        );
     }
   };
 
@@ -51,7 +51,6 @@ const MobileOrdersList: React.FC<Props> = ({
           className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm"
         >
           <div className="p-4 space-y-3">
-
             {/* TOP ROW */}
             <div className="flex justify-between items-start">
               <div>
@@ -132,13 +131,14 @@ const MobileOrdersList: React.FC<Props> = ({
               <Button
                 size="sm"
                 onClick={() => onMoveStatus(order._id, order.status)}
-                className="w-full bg-primary text-primary-foreground rounded-lg"
+                className="w-full bg-primary text-primary-foreground 
+                  hover:opacity-90 shadow-lg shadow-primary/30 
+                  rounded-lg h-9 font-bold transition-all"
               >
                 Mark {getNextStatus(order.status)}
                 <ArrowRightCircle className="w-4 h-4 ml-2" />
               </Button>
             )}
-
           </div>
         </Card>
       ))}
