@@ -1,6 +1,23 @@
 import React from "react";
 import { Button } from "../../../components/ui/button";
-import { Package, MapPin, CheckCircle, Truck, Clock, Calendar } from "lucide-react";
+import {
+  Package,
+  MapPin,
+  CheckCircle,
+  Truck,
+  Clock,
+  Calendar,
+  ArrowRightCircle,
+} from "lucide-react";
+
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "../../../components/ui/card";
+
 import type { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 interface Props {
@@ -24,24 +41,44 @@ const OrdersTable: React.FC<Props> = ({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "Pending":
-        return <Clock className="w-5 h-5 text-amber-600" />;
+        return <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />;
       case "Dispatched":
-        return <Truck className="w-5 h-5 text-blue-600" />;
+        return <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
       case "Delivered":
-        return <CheckCircle className="w-5 h-5 text-emerald-600" />;
+        return (
+          <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+        );
       default:
         return <Package className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   return (
-    <div className="hidden md:block overflow-x-auto">
-      <table className="w-full text-left">
+  <Card className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+
+    <CardHeader className="bg-card border-b border-border p-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <CardTitle className="text-xl font-bold text-foreground">
+            Delivery Pipeline
+          </CardTitle>
+
+          <CardDescription className="text-muted-foreground font-medium">
+            Manage and track your assigned deliveries
+          </CardDescription>
+        </div>
+      </div>
+    </CardHeader>
+
+    <CardContent className="p-0">
+
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full text-left">
         <thead>
           <tr className="bg-muted/40 text-muted-foreground uppercase text-[11px] font-bold tracking-widest">
             <th className="py-5 px-8">Destination (Spa)</th>
-            <th className="py-5 px-4">Product</th>
-            <th className="py-5 px-4 text-center">Qty</th>
+            <th className="py-5 px-4">Product Specs</th>
+            <th className="py-5 px-4 text-center">QTY</th>
             <th className="py-5 px-4">Status</th>
             <th className="py-5 px-4">Payment</th>
             <th className="py-5 px-4">Date Assigned</th>
@@ -61,8 +98,7 @@ const OrdersTable: React.FC<Props> = ({
                 </div>
 
                 <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1 font-medium italic">
-                  <MapPin className="w-3 h-3" />
-                  {order.address}
+                  <MapPin className="w-3 h-3" /> {order.address}
                 </div>
               </td>
 
@@ -141,9 +177,10 @@ const OrdersTable: React.FC<Props> = ({
                                  rounded-lg h-9 px-4 font-bold transition-all"
                     >
                       Mark {getNextStatus(order.status)}
+                      <ArrowRightCircle className="w-4 h-4 ml-2" />
                     </Button>
                   ) : (
-                    <div className="flex items-center text-emerald-500 gap-1 font-bold text-sm">
+                    <div className="flex items-center justify-end text-emerald-500 gap-1 font-bold text-sm">
                       <CheckCircle className="w-4 h-4" /> Delivered
                     </div>
                   )}
@@ -153,9 +190,12 @@ const OrdersTable: React.FC<Props> = ({
             </tr>
           ))}
         </tbody>
-      </table>
-    </div>
-  );
+     </table>
+      </div>
+
+    </CardContent>
+  </Card>
+);
 };
 
 export default OrdersTable;

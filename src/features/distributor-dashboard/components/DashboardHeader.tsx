@@ -16,7 +16,7 @@ const DashboardHeader: React.FC<Props> = ({ user }) => {
 
         <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
           <Truck className="w-4 h-4 text-primary" />
-          Welcome back{" "}
+          Welcome back,{" "}
           <span className="text-foreground font-bold">
             {user?.name || user?.email}
           </span>
