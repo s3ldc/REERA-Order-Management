@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
 import {
   Plus,
   Package,
@@ -25,9 +25,8 @@ import {
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import OrdersByStatusChart from "@/components/charts/salesperson/OrdersByStatusChart";
-import PaymentStatusChart from "../charts/salesperson/PaymentStatusChart";
+import PaymentStatusChart from "@/components/charts/salesperson/PaymentStatusChart";
 import OrdersOverTimeChart from "@/components/charts/salesperson/OrdersOverTimeChart";
-import SalespersonOrderTimelineDrawer from "../orders/SalespersonOrderTimelineDrawer";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
