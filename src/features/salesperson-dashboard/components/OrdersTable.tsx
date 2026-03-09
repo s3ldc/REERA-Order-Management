@@ -41,13 +41,16 @@ const OrdersTable: React.FC<Props> = ({ orders, onTimeline }) => {
   return (
     <Card className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
       <CardHeader className="bg-card border-b border-border p-8">
-        <CardTitle className="text-xl font-bold text-foreground">
-          Recent Activity
-        </CardTitle>
-
-        <CardDescription className="text-muted-foreground font-medium">
-          Tracking your most recent order submissions
-        </CardDescription>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <CardTitle className="text-xl font-bold text-foreground">
+              Recent Activity
+            </CardTitle>
+            <CardDescription className="text-muted-foreground font-medium">
+              Tracking your most recent order submissions
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
 
       <CardContent className="p-0">
@@ -78,7 +81,7 @@ const OrdersTable: React.FC<Props> = ({ orders, onTimeline }) => {
                     <th className="py-5 px-4 text-center">Qty</th>
                     <th className="py-5 px-4">Status</th>
                     <th className="py-5 px-4">Payment</th>
-                    <th className="py-5 px-8 text-right">Date Created</th>
+                    <th className="py-5 px-4 text-right pr-8">Date Created</th>
                   </tr>
                 </thead>
 
@@ -142,7 +145,7 @@ const OrdersTable: React.FC<Props> = ({ orders, onTimeline }) => {
                         </div>
                       </td>
 
-                      <td className="py-6 px-8 text-right">
+                      <td className="py-6 px-4 pr-8">
                         <div className="flex items-center justify-end gap-3">
                           <Button
                             size="sm"
