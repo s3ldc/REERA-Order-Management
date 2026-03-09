@@ -13,15 +13,18 @@ import OrdersOverTimeChart from "../../components/charts/salesperson/OrdersOverT
 import SalespersonOrderTimelineDrawer from "../../components/orders/SalespersonOrderTimelineDrawer";
 
 import { useSalespersonOrders } from "./hooks/useSalespersonOrders";
-
-import { Card } from "../../components/ui/card";
+import { useCreateOrder } from "./hooks/useCreateOrder";
+import CreateOrderModal from "./components/CreateOrderModal";
 
 const SalespersonDashboard: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const { orders: myOrders, distributors, createNewOrder } =
-    useSalespersonOrders(user?._id);
+  // Orders hook
+  const { orders: myOrders, distributors } = useSalespersonOrders(user?._id);
+
+  // Create order hook
+  const { createNewOrder } = useCreateOrder();
 
   const [showForm, setShowForm] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -71,12 +74,8 @@ const SalespersonDashboard: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 space-y-8 min-h-screen text-foreground">
-
       {/* Header */}
-      <DashboardHeader
-        user={user}
-        onCreateOrder={() => setShowForm(true)}
-      />
+      <DashboardHeader user={user} onCreateOrder={() => setShowForm(true)} />
 
       {/* Stats */}
       <StatsCards orders={myOrders} />
@@ -97,6 +96,16 @@ const SalespersonDashboard: React.FC = () => {
         onTimeline={(order) => setSelectedOrder(order)}
       />
 
+      {showForm && (
+        <CreateOrderModal
+          distributors={distributors}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          onClose={() => setShowForm(false)}
+        />
+      )}
+
       {/* Timeline Drawer */}
       {selectedOrder && (
         <SalespersonOrderTimelineDrawer
@@ -104,7 +113,6 @@ const SalespersonDashboard: React.FC = () => {
           onClose={() => setSelectedOrder(null)}
         />
       )}
-
     </div>
   );
 };

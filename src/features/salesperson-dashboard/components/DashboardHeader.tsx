@@ -10,7 +10,7 @@ interface Props {
 
 const DashboardHeader: React.FC<Props> = ({ user, onCreateOrder }) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-border">
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-border">
       <div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
           Analytics Overview
@@ -27,23 +27,11 @@ const DashboardHeader: React.FC<Props> = ({ user, onCreateOrder }) => {
 
       <Button
         onClick={onCreateOrder}
-        className="
-          bg-primary
-          text-primary-foreground
-          hover:bg-primary/90
-          shadow-lg
-          shadow-primary/25
-          transition-all
-          hover:scale-[1.02]
-          active:scale-[0.98]
-          h-11
-          px-6
-          rounded-xl
-          flex
-          items-center
-          gap-2
-          w-full md:w-auto
-        "
+        className="bg-primary text-primary-foreground 
+           hover:opacity-90 
+           shadow-lg shadow-[0_0_20px_hsl(var(--primary)/0.4)] 
+           transition-all hover:scale-[1.02] active:scale-[0.98] 
+           h-11 px-6 rounded-xl flex items-center gap-2 w-full md:w-auto"
       >
         <Plus className="w-5 h-5" />
         Create New Order
