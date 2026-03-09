@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
 
@@ -28,6 +28,18 @@ const SalespersonDashboard: React.FC = () => {
 
   const [showForm, setShowForm] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showForm]);
 
   const [formData, setFormData] = useState({
     spa_name: "",

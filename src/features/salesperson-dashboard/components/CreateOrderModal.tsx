@@ -12,6 +12,7 @@ import {
 import { X } from "lucide-react";
 
 import type { Id } from "../../../../convex/_generated/dataModel";
+import { useEffect, useState } from "react";
 
 interface Props {
   distributors: any[];
@@ -36,8 +37,7 @@ const CreateOrderModal: React.FC<Props> = ({
 }) => {
   return (
     <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6">
-      <Card className="w-full max-w-2xl bg-card border border-border shadow-2xl rounded-3xl">
-
+      <Card className="w-full max-w-2xl bg-card text-card-foreground border border-border shadow-2xl rounded-3xl">
         <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-6 px-8">
           <div>
             <CardTitle className="text-2xl font-bold text-foreground">
@@ -61,9 +61,7 @@ const CreateOrderModal: React.FC<Props> = ({
 
         <CardContent className="p-6 sm:p-8">
           <form onSubmit={onSubmit} className="space-y-6">
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <div className="space-y-2">
                 <Label>Spa/Salon Name</Label>
 
@@ -75,7 +73,8 @@ const CreateOrderModal: React.FC<Props> = ({
                       spa_name: e.target.value,
                     })
                   }
-                  placeholder="Zen Retreat"
+                  placeholder="e.g. Zen Retreat"
+                  className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                   required
                 />
               </div>
@@ -91,7 +90,8 @@ const CreateOrderModal: React.FC<Props> = ({
                       address: e.target.value,
                     })
                   }
-                  placeholder="Street, City"
+                  placeholder="Street, City, Zip"
+                  className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                   required
                 />
               </div>
@@ -107,7 +107,8 @@ const CreateOrderModal: React.FC<Props> = ({
                       product_name: e.target.value,
                     })
                   }
-                  placeholder="Product name"
+                  placeholder="Search products..."
+                  className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                   required
                 />
               </div>
@@ -116,15 +117,17 @@ const CreateOrderModal: React.FC<Props> = ({
                 <Label>Quantity</Label>
 
                 <Input
+                  id="quantity"
                   type="number"
                   min="1"
-                  value={formData.quantity}
+                  value={formData.quantity === 0 ? "" : formData.quantity}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
                       quantity: Number(e.target.value),
                     })
                   }
+                  className="rounded-xl h-11 border-border bg-background focus:ring-ring focus:border-ring"
                   required
                 />
               </div>
@@ -140,7 +143,7 @@ const CreateOrderModal: React.FC<Props> = ({
                       distributor_id: e.target.value,
                     })
                   }
-                  className="w-full border border-border rounded-xl px-4 h-11 bg-background text-sm"
+                  className="w-full border border-border rounded-xl px-4 h-11 bg-background text-sm focus:ring-2 focus:ring-ring outline-none  appearance-none"
                   required
                 >
                   <option value="">Choose a distributor</option>
@@ -152,21 +155,21 @@ const CreateOrderModal: React.FC<Props> = ({
                   ))}
                 </select>
               </div>
-
             </div>
 
             <div className="flex gap-3 pt-4">
               <Button
                 type="submit"
-                className="flex-1 bg-primary text-primary-foreground h-12 rounded-xl font-bold"
+                className="flex-1 bg-primary text-primary-foreground 
+h-12 rounded-xl text-lg font-bold
+shadow-lg shadow-[0_0_25px_hsl(var(--primary)/0.4)]
+hover:opacity-90 transition-all"
               >
                 Confirm Order
               </Button>
             </div>
-
           </form>
         </CardContent>
-
       </Card>
     </div>
   );
